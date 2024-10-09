@@ -6,7 +6,7 @@ import { ROUTES } from "../constants/routes";
 const IndexPage = () => {
   const router = useRouter()
   useEffect(() => {
-    router.push(ROUTES.DASHBOARD_ROLE_LIST)
+    router.push(ROUTES.DASHBOARD_USER_LIST)
   }, [router])
   return (
     <div>Đang tải...</div>

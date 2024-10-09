@@ -7,6 +7,7 @@ export const userAuthSlice = createSlice({
     companies: [],
     email: null,
     currentUser: {
+      id: null,
       name: null,
     },
   },

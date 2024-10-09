@@ -4,6 +4,10 @@ export function getRoles(params: object) {
   return api.get('api/roles', { params: params});
 }
 
+export function getAll() {
+  return api.get('api/roles/all');
+}
+
 export function getRole(id: number) {
   return api.get(`api/roles/${id}`);
 }

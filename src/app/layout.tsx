@@ -20,6 +20,7 @@ const customTheme = {
     // Seed Token
     // colorPrimary: '#00b96b',
     colorPrimary: 'rgb(20 184 166)',
+    // colorPrimary: "red",
     // borderRadius: 2,
 
     // Alias Token
@@ -39,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       </head>
       <body className={inter.className} suppressHydrationWarning={true}>
       <Provider store={store}>

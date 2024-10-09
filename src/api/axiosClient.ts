@@ -35,8 +35,11 @@ axiosClient.interceptors.response.use(
     switch (status) {
       case 401:
         localStorage.removeItem('access_token')
+        break
         // toast.error('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.')
         // window.location.href = '/login/email'
+      case 400:
+        toast.error(error.response.data.message)
     }
 
     return Promise.reject(error.response);

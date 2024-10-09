@@ -136,3 +136,19 @@ a {
 .d-block {
   display: block !important;
 }
+
+.ant-picker-dropdown {
+  max-width: 100vw;  /* Đảm bảo popup không vượt quá chiều rộng của màn hình */
+  left: 0;  /* Giữ popup trong màn hình nếu bị tràn */
+  right: 0; /* Đảm bảo popup nằm hoàn toàn trong viewport */
+}
+
+.ant-picker {
+  width: 100%;
+}
+
+@media (max-width: 576px) {
+  .ant-picker {
+    font-size: 14px; /* Tối ưu font cho màn hình nhỏ */
+  }
+}

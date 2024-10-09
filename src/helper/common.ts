@@ -26,6 +26,14 @@ export const getActiveMenuByRoute = (pathname: string) => {
       regex: /^\/dashboard\/users$/,
       path: ROUTES.DASHBOARD_USER_LIST
     },
+    {
+      regex: /^\/dashboard\/users\/create$/,
+      path: ROUTES.DASHBOARD_USER_LIST
+    },
+    {
+      regex: /^\/dashboard\/users\/\d+\/edit$/,
+      path: ROUTES.DASHBOARD_USER_LIST
+    },
   ]
 
   const route = matchRoutes.find((route) => {
@@ -34,3 +42,22 @@ export const getActiveMenuByRoute = (pathname: string) => {
 
   return route ? route.path : null
 }
+
+
+export const validateMessages = {
+  required: 'Vui lòng nhập.',
+  types: {
+    email: 'Định dạng email không hợp lệ.',
+    number: 'Phải là một số.',
+  },
+  string: {
+    max: 'Không được vượt quá ${max} ký tự.',
+    min: 'Tối thiểu ${min} ký tự.',
+  },
+  number: {
+    range: '${label} must be between ${min} and ${max}',
+  },
+  pattern: {
+    mismatch: 'Không đúng định dạng.'
+  }
+};

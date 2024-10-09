@@ -31,21 +31,21 @@ const ListRoles = () => {
   const [errors, setErrors] = useState<Record<string, any>>({})
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false)
-  const [loadingCreate, setLoadingCreate] = useState<boolean>(false)
+  const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false)
   const [permissionGroups, setPermissionGroups] = useState<PermissionGroupInterface[]>([]);
 
   const onFinish = async (values: any) => {
     const permissionIds = permissionGroups.flatMap(group => group.checkedValues);
 
     try {
-      setLoadingCreate(true)
+      setLoadingSubmit(true)
       await createRole({...values, permission_ids: permissionIds})
       toast.success('Tạo thành công!')
       router.push(ROUTES.DASHBOARD_ROLE_LIST)
     } catch (error: any) {
       setErrors(error?.data?.errors as Record<string, string>);
     } finally {
-      setLoadingCreate(false)
+      setLoadingSubmit(false)
     }
   };
 
@@ -154,8 +154,8 @@ const ListRoles = () => {
 
           <Form.Item {...tailLayout}>
             <Space>
-              <Button size="large" disabled={loadingCreate} type="primary" htmlType="submit">
-                { loadingCreate ? <SpinLoading /> : <PlusCircleOutlined /> }
+              <Button size="large" disabled={loadingSubmit} type="primary" htmlType="submit">
+                { loadingSubmit ? <SpinLoading /> : <PlusCircleOutlined /> }
                 Tạo
               </Button>
               <Button size="large" htmlType="button" onClick={onReset}>

@@ -6,9 +6,10 @@ type PropsType = {
   toName?: string,
   fromPlaceholder?: string,
   toPlaceholder?: string,
+  type?: string
 }
 
-const RangeDatePicker = ({ fromName, toName, fromPlaceholder, toPlaceholder }: PropsType) => {
+const RangeDatePicker = ({ fromName, toName, fromPlaceholder, toPlaceholder, type }: PropsType) => {
   return (
     <Space.Compact block>
       <Form.Item
@@ -16,9 +17,11 @@ const RangeDatePicker = ({ fromName, toName, fromPlaceholder, toPlaceholder }: P
         noStyle
       >
         <DatePicker
+          getPopupContainer={(triggerNode) => (triggerNode.parentNode as HTMLElement) || document.body}
           style={{ width: '100%' }}
           size="large"
-          showTime
+          inputReadOnly={true}
+          showTime={type === "datetime"}
           placeholder={fromPlaceholder || "Bắt đầu"}
         />
       </Form.Item>
@@ -38,9 +41,11 @@ const RangeDatePicker = ({ fromName, toName, fromPlaceholder, toPlaceholder }: P
         noStyle
       >
         <DatePicker
+          getPopupContainer={(triggerNode) => (triggerNode.parentNode as HTMLElement) || document.body}
           style={{ width: '100%' }}
           size="large"
-          showTime
+          inputReadOnly={true}
+          showTime={type === "datetime"}
           placeholder={toPlaceholder || "Kết thúc"}
         />
       </Form.Item>

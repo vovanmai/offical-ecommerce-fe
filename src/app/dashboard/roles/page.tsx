@@ -168,7 +168,7 @@ const ListRoles = () => {
       sorter: true,
       render: (text, record) => {
         return (
-          <Tag color={text === ROLE.TYPE_DEFAULT ? 'magenta' : 'green'}>{ text === ROLE.TYPE_DEFAULT ? 'Mặc định' : 'Tuỳ chỉnh' }</Tag>
+          <Tag color={text === ROLE.TYPE.DEFAULT ? 'magenta' : 'green'}>{ text === ROLE.TYPE.DEFAULT ? 'Mặc định' : 'Tuỳ chỉnh' }</Tag>
         )
       }
     },

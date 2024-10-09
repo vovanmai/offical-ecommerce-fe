@@ -1,6 +1,6 @@
 'use client'
 import {Card, Button, Form, Space, Input } from "antd"
-import { UnorderedListOutlined, ClearOutlined, EditOutlined } from "@ant-design/icons"
+import {UnorderedListOutlined, ClearOutlined, EditOutlined, PlusCircleOutlined} from "@ant-design/icons"
 import Link from 'next/link'
 import React, {useEffect, useState} from "react"
 import withAuth from "@/hooks/withAuth"
@@ -13,6 +13,7 @@ import { groupBy } from "lodash"
 import { toast } from 'react-toastify'
 import {ROLE} from "@/constants/common"
 import Breadcrumb from "@/components/Breadcrumb"
+import SpinLoading from "@/components/SpinLoading";
 
 type ActionType = 'list' | 'edit' | 'create' | 'delete' | 'detail'
 interface PermissionItem {
@@ -36,17 +37,21 @@ const ListRoles = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [permissionGroups, setPermissionGroups] = useState<PermissionGroupInterface[]>([]);
   const [disabledForm, setDisabledForm] = useState(false)
+  const [loadingSubmit, setLoadingSubmit] = useState(false)
 
   const onFinish = async (values: any) => {
     const permissionIds = permissionGroups.flatMap(group => group.checkedValues);
 
     try {
+      setLoadingSubmit(true)
       const id = Number(params.id);
       await updateRole(id, {...values, permission_ids: permissionIds})
       toast.success('Cập nhật thành công!')
       router.push(ROUTES.DASHBOARD_ROLE_LIST)
     } catch (error: any) {
       setErrors(error?.data?.errors as Record<string, string>);
+    } finally {
+      setLoadingSubmit(false)
     }
   };
 
@@ -105,7 +110,7 @@ const ListRoles = () => {
       try {
         setLoading(true)
         const role = await fetchRoleDetail();
-        setDisabledForm(role?.type === ROLE.TYPE_DEFAULT)
+        setDisabledForm(role?.type === ROLE.TYPE.DEFAULT)
         form.setFieldsValue({ name: role.name });
         const permissions = await fetchPermissions();
         const groupedPermissions = groupPermissions(permissions, role.permissions);
@@ -172,12 +177,12 @@ const ListRoles = () => {
 
           <Form.Item {...tailLayout}>
             <Space>
-              <Button size="large" type="primary" htmlType="submit">
-                <EditOutlined /> Cập nhật           </Button>
-              <Button size="large" htmlType="button" onClick={onReset}>
-                <ClearOutlined />
-                Xoá
+              <Button size="large" disabled={disabledForm ? disabledForm : loadingSubmit} type="primary" htmlType="submit">
+                { loadingSubmit ? <SpinLoading /> : <EditOutlined /> }
+                Cập nhật
               </Button>
+              <Button size="large" htmlType="button" onClick={onReset}>
+                <ClearOutlined />Xoá</Button>
             </Space>
           </Form.Item>
         </Form>
