@@ -5,7 +5,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined, LoginOutlined, InfoCircleOutlined
 import React, {useEffect} from "react";
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectCurrentUser } from "@/store/user/auth/authSlice";
-import { logout as requestLogout } from '@/api/user/auth'
+import { logout as requestLogout } from '@/api/admin/auth'
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { getProfile as requestProfile} from "@/api/user/auth/index"
@@ -36,7 +36,7 @@ const LayoutHeader = ({collapsed, toggleSider}: {collapsed: boolean, toggleSider
 
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('admin_token');
     if (!token) {
       return
     }
@@ -54,9 +54,9 @@ const LayoutHeader = ({collapsed, toggleSider}: {collapsed: boolean, toggleSider
   const logout = async () => {
     try {
       await requestLogout()
-      localStorage.removeItem('access_token')
+      localStorage.removeItem('admin_token')
       toast.success('Đăng xuất thành công.')
-      router.push('/login/email')
+      router.push('/admin/login')
     } catch (error) {
 
     }

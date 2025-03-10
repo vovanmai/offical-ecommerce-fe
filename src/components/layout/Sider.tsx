@@ -4,7 +4,7 @@ const { Sider } = Layout
 import React, {CSSProperties, useEffect, useState} from "react"
 import { useRouter, usePathname } from "next/navigation"
 type MenuItem = Required<MenuProps>['items'][number]
-import { getActiveMenuByRoute } from "../../helper/common"
+import { getActiveAdminMenuByRoute } from "../../helper/common"
 
 const LayoutSider = ({collapsed, menus}: {collapsed: boolean, menus: MenuItem[]}) => {
   const router = useRouter()
@@ -12,7 +12,7 @@ const LayoutSider = ({collapsed, menus}: {collapsed: boolean, menus: MenuItem[]}
   const [selectedMenu, setSelectedMenu] = useState<string[]>([])
 
   useEffect(() => {
-    const menu = getActiveMenuByRoute(pathname)
+    const menu = getActiveAdminMenuByRoute(pathname)
     if (menu) {
       setSelectedMenu([menu])
     }
@@ -40,7 +40,7 @@ const LayoutSider = ({collapsed, menus}: {collapsed: boolean, menus: MenuItem[]}
   }
 
   return (
-    <Sider theme="light" style={siderStyle} trigger={null} collapsible collapsed={collapsed}>
+    <Sider theme="light" width="230" style={siderStyle} trigger={null} collapsible collapsed={collapsed}>
       <div style={{color: 'green', display: "flex", alignItems: "center", justifyContent: "center", height: 64, borderBottom: '1px solid rgba(5, 5, 5, 0.06)', borderRight: '1px solid rgba(5, 5, 5, 0.06)'}}>
         <span style={{fontSize: 30, fontWeight: "bold"}}>XD</span>
       </div>

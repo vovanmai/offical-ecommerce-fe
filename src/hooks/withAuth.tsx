@@ -11,7 +11,7 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
     const searchParams = useSearchParams()
 
     useEffect(() => {
-      const token = localStorage.getItem('access_token');
+      const token = localStorage.getItem('admin_token');
       if (!token) {
         const params = Array.from(searchParams.entries());
         const queryParams = Object.fromEntries(params);

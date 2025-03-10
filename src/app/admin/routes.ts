@@ -5,7 +5,3 @@ export const ROUTES = {
   DASHBOARD_USER_LIST: '/admin/users',
   DASHBOARD_USER_CREATE: '/admin/users/create',
 };
-
-export const ADMIN_ROUTES = {
-  CATEGORY_PRODUCT_LIST: '/admin/categories',
-};

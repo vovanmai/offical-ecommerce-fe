@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 export const getAccessToken = () => {
-  if (localStorage.getItem('access_token')) {
-    return `Bearer ${localStorage.getItem('access_token')}`
+  if (localStorage.getItem('admin_token')) {
+    return `Bearer ${localStorage.getItem('admin_token')}`
   }
   return null
 };
