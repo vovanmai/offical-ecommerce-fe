@@ -12,8 +12,7 @@ import SpinLoading from '@/components/SpinLoading'
 
 import { login as requestLogin } from "@/api/admin/auth/index"
 
-import { useAppSelector } from '@/store/hooks'
-import {ROUTES} from "@/constants/routes";
+import { ROUTES } from "@/constants/routes";
 
 export default function Login() {
   const [form] = Form.useForm();
@@ -22,6 +21,13 @@ export default function Login() {
   } = theme.useToken();
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    const adminToken = localStorage.getItem('admin_token')
+    if(adminToken) {
+      router.push('/admin/categories')
+    }
+  }, [router])
 
   const onFinish = async (values: any) => {
     try {

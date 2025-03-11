@@ -18,7 +18,7 @@ const Breadcrumb = ({ items }: PropsType) => {
   return (
     <AntBreadcrumb
       items={breadcrumbItems}
-      style={{ marginBottom: 10 }}
+      style={{ marginBottom: 15 }}
     />
   )
 }

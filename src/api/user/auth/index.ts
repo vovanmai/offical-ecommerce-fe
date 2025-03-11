@@ -9,7 +9,7 @@ export function login(data: object) {
 }
 
 export function getProfile() {
-  return api.get('api/me');
+  return api.get('api/admin/me');
 }
 
 export function logout() {

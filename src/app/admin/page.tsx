@@ -1,12 +1,12 @@
 'use client'
 import { useEffect } from "react";
 import { useRouter } from "next/navigation"
-import { ROUTES } from "@/constants/routes";
+import { ADMIN_ROUTES } from "@/constants/routes";
 
 const Dashboard = () => {
   const router = useRouter()
   useEffect(() => {
-    router.push(ROUTES.DASHBOARD_ROLE_LIST)
+    router.push(ADMIN_ROUTES.CATEGORY_PRODUCT_LIST)
   }, [router])
   return (
     <div>Đang tải...</div>

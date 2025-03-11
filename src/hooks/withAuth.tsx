@@ -18,7 +18,7 @@ const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
         const queryString = qs.stringify(queryParams)
         sessionStorage.setItem('redirect', `${pathname}?${queryString}`)
         toast.error('Vui lòng đăng nhập.')
-        router.push('/login/email');
+        router.push('/admin/login');
       }
     }, [router, pathname, searchParams]);
 

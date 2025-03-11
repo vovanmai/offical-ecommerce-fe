@@ -34,7 +34,7 @@ axiosClient.interceptors.response.use(
     const status = error.response && error.response.status
     switch (status) {
       case 401:
-        localStorage.removeItem('access_token')
+        localStorage.removeItem('admin_token')
         break
         // toast.error('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.')
         // window.location.href = '/login/email'
