@@ -41,3 +41,21 @@ export const validateMessages = {
     mismatch: 'Không đúng định dạng.'
   }
 };
+
+export const flattenCategories = (categories, prefix: string = '', ignoreIds: number[] = []) => {
+  let result: { value: number; label: string }[] = [];
+
+  categories.forEach(category => {
+    if (!ignoreIds.includes(category.id)) {
+      result.push({
+        value: category.id,
+        label: prefix + category.name
+      });
+    }
+    if (category.children && category.children.length > 0) {
+      result = result.concat(flattenCategories(category.children, prefix + '------ ', ignoreIds));
+    }
+  });
+
+  return result;
+};

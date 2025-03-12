@@ -39,7 +39,7 @@ const DashboardLayoutUser = ({ children }: DashboardLayoutUserProps) => {
             collapsed={collapsed}
             toggleSider={toggleSider}
           />
-          <Content style={{ margin: '10px 12px 0px 12px' }}>
+          <Content style={{ margin: '10px 15px 0px 15px' }}>
             {children}
           </Content>
           <LayoutFooter/>

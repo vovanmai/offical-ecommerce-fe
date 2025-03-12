@@ -1,165 +1,57 @@
 'use client'
-import {Card, Button, Table, Tooltip, Space, theme, Row, Col } from "antd"
-import { PlusCircleOutlined, BarsOutlined, DeleteOutlined } from "@ant-design/icons"
-import { useRouter, useSearchParams } from "next/navigation"
+import {Card, Select, Radio, Button, Table, Tooltip, theme, Row, Col, Form, Space, Input } from "antd"
+import { PlusCircleOutlined, ClearOutlined, DeleteOutlined } from "@ant-design/icons"
 import React, { useEffect, useState } from "react"
-import { getAll } from '@/api/admin/category'
-import { removeEmptyFields } from "@/helper/common"
+import { flattenCategories } from "@/helper/common"
+
 import withAuth from "@/hooks/withAuth";
-import { toast } from 'react-toastify'
-import ConfirmModal from "@/components/ConfirmModal"
 import Breadcrumb from "@/components/Breadcrumb"
-import Nestable from 'react-nestable'
-import {
-  AiOutlineDrag,
-  AiFillCaretRight,
-  AiFillCaretDown
-} from "react-icons/ai";
-
-import type { GetProp, TableProps } from 'antd';
-import { USER } from "@/constants/common";
-type ColumnsType<T extends object = object> = TableProps<T>['columns'];
-type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>;
-
-interface DataType {
-  id: number
-  name: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-}
+import { validateMessages } from "@/helper/common"
+import SpinLoading from "@/components/SpinLoading"
+import NestableCategory from "@/components/admin/NestableCategory"
+import { getAll } from '@/api/admin/category'
+const { TextArea } = Input;
 
 const Page = () => {
   const {
     token: { colorPrimary },
   } = theme.useToken();
-  
-  const styles = {
-    position: "relative",
-    background: "WhiteSmoke",
-    display: "flex"
-  };
-  const cssCenter = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  };
-  const handlerStyles = {
-    width: "2rem",
-    height: "100%",
-    cursor: "pointer",
-  
-    borderRight: "1px solid Gainsboro"
-  };
-  
-  const items = [
-    {
-      id: 0,
-      text: "Lot A",
-      children: [
-        {
-          id: 4,
-          text: "Ouvrage",
-  
-          children: [
-            {
-              id: 12,
-              text: "Une ressource",
-              amount: 1
-            },
-            {
-              id: 13,
-              text: "La main d'œuvre",
-              amount: 1
-            }
-          ]
-        }
-      ]
-    },
-  
-    {
-      id: 3,
-      text: "Lot B",
-  
-      children: [
-        {
-          id: 1,
-          text: "Super Ouvrage",
-  
-          children: [
-            {
-              id: "2-1",
-              text: "Ressource 1",
-              amount: 1
-            },
-            {
-              id: "2-2",
-              text: "Ouvrage",
-  
-              children: [
-                { id: "toto", text: "Ressource truc", amount: 1 },
-                { id: "toto2", text: "Ressource autre", amount: 1 }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ];
-
-  const [collapseAll, setCollapseAll] = useState(false);
-  const Handler = () => {
-    return (
-      <div style={{ ...cssCenter, ...handlerStyles }}>
-        <AiOutlineDrag />
-      </div>
-    );
-  };
-  const Collapser = ({ isCollapsed }: {isCollapsed: boolean}) => {
-    return (
-      <div style={{ ...cssCenter, ...handlerStyles }}>
-        {isCollapsed ? <AiFillCaretRight /> : <AiFillCaretDown />}
-      </div>
-    );
-  };
-  
-  const renderItem = (props: any) => {
-    const { item, index, collapseIcon, handler } = props;
-  
-    return (
-      <div
-        style={{ ...styles, fontWeight: item.children.length ? "400" : "400" }}
-      >
-        {handler}
-        {collapseIcon}
-  
-        <div
-          style={{
-            padding: ".5rem",
-            flex: 1
-          }}
-        >
-          {item.text}
-        </div>
-        <div
-          style={{
-            padding: ".5rem",
-            width: "4rem"
-          }}
-        >
-          123 €
-        </div>
-      </div>
-    );
-  };
-
-  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, any>>({})
+  const [form] = Form.useForm()
+  const [loadingCreate, setLoadingCreate] = useState<boolean>(false)
   const [categories, setCategories] = useState([])
-
-
+  
+  const layout = {
+    labelCol: { span: 4 },
+    wrapperCol: { span: 20 },
+  };
+  const onReset = () => {
+    form.resetFields();
+    setErrors({})
+  };
+  const onFinish = async (values: any) => {
+      try {
+        
+      } catch (error: any) {
+        setErrors(error?.data?.errors as Record<string, string>);
+      } finally {
+      }
+    };
+  const tailLayout = {
+    wrapperCol: { offset: 4, span: 20 },
+  };
+  const rules: any = {
+    name: [
+      { required: true },
+      { max: 50 },
+    ],
+    description: [
+      { required: false },
+      { max: 255 },
+    ],
+  }
 
   const getCategories = async () => {
-    setLoading(true);
     try {
       const response = await getAll();
       const { data } = response;
@@ -167,9 +59,8 @@ const Page = () => {
     } catch (error) {
       console.error('Fetch error:', error);
     } finally {
-      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     getCategories()
@@ -181,17 +72,87 @@ const Page = () => {
       <Row gutter={[16, 16]}>
         <Col span={10}>
           <Card title="Danh sách" bordered={false}>
-          <Nestable
-            items={categories}
-            renderItem={renderItem}
-            handler={<Handler />}
-            renderCollapseIcon={({ isCollapsed }) => (
-              <Collapser isCollapsed={isCollapsed} />
-            )}
-            collapsed={false}
-            maxDepth={2}
-            //onChange={(items) => console.log(items)}
-          />
+            <NestableCategory categories={categories} />
+          </Card>
+        </Col>
+        <Col span={14}>
+          <Card title="Tạo mới" bordered={false}>
+              <Form
+                validateMessages={validateMessages}
+                {...layout}
+                form={form}
+                initialValues={{ active: 1, parent_id: null }}
+                onFinish={onFinish}
+                style={{ width: '100%' }}
+              >
+                <Form.Item
+                  name="name"
+                  label="Tên"
+                  rules={rules.name}
+                  validateStatus={ errors?.name ? 'error' : undefined}
+                  help={errors?.name ? errors?.name : undefined}
+                >
+                  <Input size="large" />
+                </Form.Item>
+
+                <Form.Item
+                  name="active"
+                  label="Trạng thái"
+                  rules={rules.active}
+                >
+                  <Radio.Group
+                    options={[
+                      {
+                        value: 1,
+                        label: "Active"
+                      },
+                      {
+                        value: false,
+                        label: "Active"
+                      },
+                    ]}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="parent_id"
+                  label="Danh mục cha"
+                  rules={rules.parent_id}
+                >
+                  <Select
+                    size="large"
+                    showSearch
+                    placeholder="---Chọn---"
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={flattenCategories(categories)}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="description"
+                  label="Mô tả"
+                  rules={rules.description}
+                  validateStatus={ errors?.description ? 'error' : undefined}
+                  help={errors?.description ? errors?.description : undefined}
+                >
+                  <TextArea allowClear style={{ height: 100, resize: 'none' }} />
+                </Form.Item>
+
+                <Form.Item {...tailLayout}>
+                  <Space>
+                    <Button size="large" disabled={loadingCreate} type="primary" htmlType="submit">
+                      { loadingCreate ? <SpinLoading /> : <PlusCircleOutlined /> }
+                      Tạo
+                    </Button>
+                    <Button size="large" htmlType="button" onClick={onReset}>
+                      <ClearOutlined />
+                      Xoá
+                    </Button>
+                  </Space>
+                </Form.Item>
+            </Form>
           </Card>
         </Col>
       </Row>
