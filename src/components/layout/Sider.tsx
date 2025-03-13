@@ -42,7 +42,7 @@ const LayoutSider = ({collapsed, menus}: {collapsed: boolean, menus: MenuItem[]}
   return (
     <Sider theme="light" width="230" style={siderStyle} trigger={null} collapsible collapsed={collapsed}>
       <div style={{color: 'green', display: "flex", alignItems: "center", justifyContent: "center", height: 64, borderBottom: '1px solid rgba(5, 5, 5, 0.06)', borderRight: '1px solid rgba(5, 5, 5, 0.06)'}}>
-        <span style={{fontSize: 30, fontWeight: "bold"}}>XD</span>
+        <span style={{fontSize: 18, fontWeight: "bold"}}>{collapsed ? 'Admin' : 'Admin Management'}</span>
       </div>
       <div style={menuStyle}>
         <Menu
