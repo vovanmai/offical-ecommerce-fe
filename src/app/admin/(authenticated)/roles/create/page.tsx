@@ -10,9 +10,9 @@ import { getAll } from "@/api/user/permission"
 import { createRole } from '@/api/user/role'
 import {useRouter} from "next/navigation"
 import { groupBy } from "lodash"
-import { toast } from 'react-toastify'
 import SpinLoading from "@/components/SpinLoading"
 import Breadcrumb from "@/components/Breadcrumb"
+import { toast } from 'react-toastify'
 
 type ActionType = 'list' | 'edit' | 'create' | 'delete' | 'detail'
 interface PermissionItem {

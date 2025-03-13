@@ -12,8 +12,8 @@ export function getRole(id: number) {
   return api.get(`api/roles/${id}`);
 }
 
-export function createRole(data: object) {
-  return api.post('api/roles', data);
+export function create(data: object) {
+  return api.post('api/admin/categories', data);
 }
 
 export function updateRole(id: number, data: object) {

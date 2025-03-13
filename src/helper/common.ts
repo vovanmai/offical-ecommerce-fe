@@ -42,20 +42,11 @@ export const validateMessages = {
   }
 };
 
-export const flattenCategories = (categories, prefix: string = '', ignoreIds: number[] = []) => {
-  let result: { value: number; label: string }[] = [];
-
-  categories.forEach(category => {
-    if (!ignoreIds.includes(category.id)) {
-      result.push({
-        value: category.id,
-        label: prefix + category.name
-      });
+export const getCategoryOptions = (categories: any) => {
+  return categories.filter((item: any) => item.parent_id === null).map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
     }
-    if (category.children && category.children.length > 0) {
-      result = result.concat(flattenCategories(category.children, prefix + '------ ', ignoreIds));
-    }
-  });
-
-  return result;
-};
+  })
+}

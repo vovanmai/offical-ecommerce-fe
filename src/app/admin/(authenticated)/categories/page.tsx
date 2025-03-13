@@ -2,14 +2,14 @@
 import {Card, Select, Radio, Button, Table, Tooltip, theme, Row, Col, Form, Space, Input } from "antd"
 import { PlusCircleOutlined, ClearOutlined, DeleteOutlined } from "@ant-design/icons"
 import React, { useEffect, useState } from "react"
-import { flattenCategories } from "@/helper/common"
-
+import { getCategoryOptions } from "@/helper/common"
+import { toast } from 'react-toastify'
 import withAuth from "@/hooks/withAuth";
 import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
 import SpinLoading from "@/components/SpinLoading"
 import NestableCategory from "@/components/admin/NestableCategory"
-import { getAll } from '@/api/admin/category'
+import { getAll, create as createCategory } from '@/api/admin/category'
 const { TextArea } = Input;
 
 const Page = () => {
@@ -29,14 +29,6 @@ const Page = () => {
     form.resetFields();
     setErrors({})
   };
-  const onFinish = async (values: any) => {
-      try {
-        
-      } catch (error: any) {
-        setErrors(error?.data?.errors as Record<string, string>);
-      } finally {
-      }
-    };
   const tailLayout = {
     wrapperCol: { offset: 4, span: 20 },
   };
@@ -44,6 +36,12 @@ const Page = () => {
     name: [
       { required: true },
       { max: 50 },
+    ],
+    active: [
+      { required: true },
+    ],
+    parent_id: [
+      { required: false },
     ],
     description: [
       { required: false },
@@ -62,6 +60,21 @@ const Page = () => {
     }
   };
 
+  const onFinish = async (values: any) => {
+      try {
+        console.log(values)
+        setLoadingCreate(true)
+        const response = await createCategory(values)
+        setCategories(response.data)
+        form.resetFields()
+        toast.success('Tạo thành công!')
+      } catch (error: any) {
+        setErrors(error?.data?.errors as Record<string, string>);
+      } finally {
+        setLoadingCreate(false)
+      }
+    };
+
   useEffect(() => {
     getCategories()
   }, [])
@@ -70,18 +83,18 @@ const Page = () => {
     <div>
       <Breadcrumb items={[{title: 'Danh mục sản phẩm'}]} />
       <Row gutter={[16, 16]}>
-        <Col span={10}>
+        <Col span={9}>
           <Card title="Danh sách" bordered={false}>
             <NestableCategory categories={categories} />
           </Card>
         </Col>
-        <Col span={14}>
+        <Col span={15}>
           <Card title="Tạo mới" bordered={false}>
               <Form
                 validateMessages={validateMessages}
                 {...layout}
                 form={form}
-                initialValues={{ active: 1, parent_id: null }}
+                initialValues={{ active: 1, parent_id: null, name: null, description: null }}
                 onFinish={onFinish}
                 style={{ width: '100%' }}
               >
@@ -107,8 +120,8 @@ const Page = () => {
                         label: "Active"
                       },
                       {
-                        value: false,
-                        label: "Active"
+                        value: 0,
+                        label: "Inactive"
                       },
                     ]}
                   />
@@ -126,7 +139,7 @@ const Page = () => {
                     filterOption={(input, option) =>
                       (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                     }
-                    options={flattenCategories(categories)}
+                    options={getCategoryOptions(categories)}
                   />
                 </Form.Item>
 

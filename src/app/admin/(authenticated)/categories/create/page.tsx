@@ -160,6 +160,19 @@ const Page = () => {
     }
   }
 
+  const getCategories = async () => {
+      setLoading(true);
+      try {
+        const response = await getAll();
+        const { data } = response;
+        setCategories(data);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
   return (
     <div>
       <Breadcrumb items={[{title: 'Người dùng'}]} />

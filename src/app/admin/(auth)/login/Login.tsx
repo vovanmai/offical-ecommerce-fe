@@ -5,14 +5,10 @@ import { useRouter } from 'next/navigation'
 import { Button, Form, Input, Select, theme } from 'antd'
 import {
   LoginOutlined,
-  EditOutlined
 } from '@ant-design/icons'
 import { toast } from 'react-toastify'
 import SpinLoading from '@/components/SpinLoading'
-
 import { login as requestLogin } from "@/api/admin/auth/index"
-
-import { ROUTES } from "@/constants/routes";
 
 export default function Login() {
   const [form] = Form.useForm();
@@ -41,7 +37,7 @@ export default function Login() {
         sessionStorage.removeItem('redirect')
         router.push(redirect)
       } else {
-        router.push(ROUTES.DASHBOARD_USER_LIST);
+        router.push('/admin/categories');
       }
     } catch (error) {
       console.log(error)
