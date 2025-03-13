@@ -9,7 +9,7 @@ import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
 import SpinLoading from "@/components/SpinLoading"
 import NestableCategory from "@/components/admin/NestableCategory"
-import { getAll, create as createCategory } from '@/api/admin/category'
+import { getAll, create as createCategory, updateOrder } from '@/api/admin/category'
 const { TextArea } = Input;
 
 const Page = () => {
@@ -37,7 +37,7 @@ const Page = () => {
       { required: true },
       { max: 50 },
     ],
-    active: [
+    status: [
       { required: true },
     ],
     parent_id: [
@@ -62,7 +62,6 @@ const Page = () => {
 
   const onFinish = async (values: any) => {
       try {
-        console.log(values)
         setLoadingCreate(true)
         const response = await createCategory(values)
         setCategories(response.data)
@@ -79,13 +78,23 @@ const Page = () => {
     getCategories()
   }, [])
 
+  const updateCategoryOrder = async (data: Array<object>) => {
+    try {
+      console.log(data)
+      const response = await updateOrder({categories: data})
+      toast.success('Cập nhật thành công!')
+    } catch (error: any) {
+    } finally {
+    }
+  }
+
   return (
     <div>
       <Breadcrumb items={[{title: 'Danh mục sản phẩm'}]} />
       <Row gutter={[16, 16]}>
         <Col span={9}>
           <Card title="Danh sách" bordered={false}>
-            <NestableCategory categories={categories} />
+            <NestableCategory categories={categories} onChange={updateCategoryOrder} />
           </Card>
         </Col>
         <Col span={15}>
@@ -94,7 +103,7 @@ const Page = () => {
                 validateMessages={validateMessages}
                 {...layout}
                 form={form}
-                initialValues={{ active: 1, parent_id: null, name: null, description: null }}
+                initialValues={{ status: 1, parent_id: null, name: null, description: null }}
                 onFinish={onFinish}
                 style={{ width: '100%' }}
               >
@@ -109,9 +118,9 @@ const Page = () => {
                 </Form.Item>
 
                 <Form.Item
-                  name="active"
+                  name="status"
                   label="Trạng thái"
-                  rules={rules.active}
+                  rules={rules.status}
                 >
                   <Radio.Group
                     options={[
@@ -120,7 +129,7 @@ const Page = () => {
                         label: "Active"
                       },
                       {
-                        value: 0,
+                        value: 2,
                         label: "Inactive"
                       },
                     ]}

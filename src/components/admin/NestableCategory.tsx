@@ -8,6 +8,7 @@ import {
 import dynamic from 'next/dynamic';
 const Nestable = dynamic(() => import('react-nestable'), { ssr: false });
 import Link from 'next/link'
+import { Tooltip } from 'antd';
 
 // Định nghĩa cssCenter bên ngoài
 const cssCenter = {
@@ -30,7 +31,7 @@ const styles = {
 };
 
 const NestableCategory = (props: any) => {
-  const { categories } = props
+  const { categories, onChange } = props
   const [loading, setLoading] = useState<boolean>(false)
 
   const renderItem = (props: any) => {
@@ -42,10 +43,14 @@ const NestableCategory = (props: any) => {
         {collapseIcon}
         <div style={{ padding: ".5rem", flex: 1 }}>
           
-          <Link href="/dashboard">{item.text}</Link>
+          <Link href="/admin/categories">
+            <Tooltip title={`ID: ${item.id}`}>
+              <span>{item.text}</span>
+            </Tooltip>
+          </Link>
         </div>
-        <div style={{ padding: ".5rem", width: "4rem" }}>
-          123 €
+        <div style={{padding: 10}}>
+          <span>Sản phẩm: 180</span>
         </div>
       </div>
     );
@@ -68,7 +73,7 @@ const NestableCategory = (props: any) => {
   };
 
   const handleChange = (items: any) => {
-    console.log(items)
+    onChange(items.items)
   };
 
   return (
