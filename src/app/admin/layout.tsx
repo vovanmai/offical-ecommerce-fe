@@ -6,53 +6,50 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ConfigProvider } from 'antd';
 import viVN from 'antd/locale/vi_VN';
 
-
-const inter = Inter({ subsets: ["latin"] });
-
 import AppProvider from '@/context/AppProvider'
-import store from '@/store/store'
+import store from '@/store/admin/store'
 import { Provider } from 'react-redux'
+import { useAppSelector } from '@/store/admin/hooks'
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const customTheme = {
-  token: {
-    // Seed Token
-    // colorPrimary: '#00b96b',
-    colorPrimary: 'rgb(20 184 166)',
-    // colorPrimary: "red",
-    // borderRadius: 2,
-
-    // Alias Token
-    // colorBgContainer: '#f6ffed',
-  },
-}
+import { getPrimaryColor } from "@/store/admin/appSlice"
 
 import 'dayjs/locale/vi'
-const locale = {
-  ...viVN,
+
+function ThemeWrapper({ children }: { children: React.ReactNode }) {
+  const primaryColor = useAppSelector(getPrimaryColor);
+
+  const customTheme = {
+    token: {
+      colorPrimary: primaryColor,
+    },
+  };
+
+  return (
+    <ConfigProvider theme={customTheme} locale={viVN}>
+      <AppProvider>
+        {children}
+        <ToastContainer />
+      </AppProvider>
+    </ConfigProvider>
+  );
 }
+
+const inter = Inter({ subsets: ["latin"] }); // ✅ Định nghĩa ở module scope
+
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <body className={inter.className} suppressHydrationWarning={true}>
-        <Provider store={store}>
-          <AntdRegistry>
-            <ConfigProvider
-              theme={customTheme}
-              locale={locale}
-            >
-              <AppProvider>
-                {children}
-                <ToastContainer />
-              </AppProvider>
-            </ConfigProvider>
-          </AntdRegistry>
-        </Provider>
-      </body>
+      <Provider store={store}>
+        <AntdRegistry>
+          <ThemeWrapper>{children}</ThemeWrapper>
+        </AntdRegistry>
+      </Provider>
+    </body>
   );
 }

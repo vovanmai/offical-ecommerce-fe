@@ -6,21 +6,18 @@ export const appSlice = createSlice({
   initialState: {
     theme: {
     },
-    router: null,
+    colorPrimary: 'rgb(20 184 166)',
   },
   reducers: {
     setTheme: (state, action) => {
       state.theme = {...state.theme, ...action.payload}
-    },
-    setRouter: (state, action) => {
-      state.router = action.payload
-    },
+    }
   },
 })
 
-export const { setTheme, setRouter } = appSlice.actions
+export const { setTheme } = appSlice.actions
 
 export const getTheme = (state: RootState) => state.app.theme
-export const getRouter = (state: RootState) => state.app.router
+export const getPrimaryColor = (state: RootState) => state.app.colorPrimary
 
 export default appSlice.reducer

@@ -29,8 +29,11 @@ const styles = {
   background: "WhiteSmoke",
   display: "flex"
 };
+import { useAppSelector } from '@/store/admin/hooks'
+import { getPrimaryColor } from "@/store/admin/appSlice"
 
 const NestableCategory = (props: any) => {
+  const primaryColor = useAppSelector(getPrimaryColor);
   const { categories, onChange } = props
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -43,7 +46,7 @@ const NestableCategory = (props: any) => {
         {collapseIcon}
         <div style={{ padding: ".5rem", flex: 1 }}>
           
-          <Link href={`/admin/categories/${item.id}/edit`}>
+          <Link href={`/admin/categories/${item.id}/edit`} style={{color: primaryColor}}>
             <Tooltip title={`ID: ${item.id}`}>
               <span>{item.text}</span>
             </Tooltip>
