@@ -1,219 +1,225 @@
 'use client'
 
-import {Card, Button, Form, Space, Input, Select} from "antd"
-import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
-import Link from 'next/link'
-import React, {useEffect, useState} from "react"
-import withAuth from "@/hooks/withAuth"
-import { ROUTES } from "@/constants/routes"
-import { getAll } from "@/api/user/role"
-import { updateUser } from '@/api/user/user'
-import {useParams, useRouter} from "next/navigation"
+import {Card, Select, Radio, Button, Table, Tooltip, theme, Row, Col, Form, Space, Input } from "antd"
+import { PlusCircleOutlined, ClearOutlined, DeleteOutlined } from "@ant-design/icons"
+import React, { useEffect, useState, useMemo } from "react"
+import { buildCategoryTree, getCategoryOptions } from "@/helper/common"
 import { toast } from 'react-toastify'
-import SpinLoading from "@/components/SpinLoading"
+import withAuth from "@/hooks/withAuth";
 import Breadcrumb from "@/components/Breadcrumb"
-import { validateMessages } from "@/helper/common";
-import {getUser} from "../../../../../../api/user/user";
-
-type RoleType = {
-  value: number,
-  label: string
-}
+import { validateMessages } from "@/helper/common"
+import SpinLoading from "@/components/SpinLoading"
+import NestableCategory from "@/components/admin/NestableCategory"
+import { getAll, update as updateCategory, updateOrder, getById } from '@/api/admin/category'
+const { TextArea } = Input;
+import { useParams } from "next/navigation"
+import Link from 'next/link'
+import { ADMIN_ROUTES } from "@/constants/routes"
 
 const Page = () => {
-  const router = useRouter()
-  const params = useParams()
+  const {
+    token: { colorPrimary },
+  } = theme.useToken();
   const [errors, setErrors] = useState<Record<string, any>>({})
-  const [form] = Form.useForm();
-  const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false)
-  const [roles, setRoles] = useState<RoleType[]>([]);
-
-  const onFinish = async (values: any) => {
-    try {
-      setLoadingSubmit(true)
-      const id = Number(params.id)
-      await updateUser(id, values)
-      toast.success('Cập nhật thành công!')
-      router.push(ROUTES.DASHBOARD_USER_LIST)
-    } catch (error: any) {
-      setErrors(error?.data?.errors as Record<string, string>);
-    } finally {
-      setLoadingSubmit(false)
-    }
+  const [form] = Form.useForm()
+  const [loadingCreate, setLoadingCreate] = useState<boolean>(false)
+  const [categories, setCategories] = useState([])
+  const params = useParams()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  
+  const layout = {
+    labelCol: { span: 4 },
+    wrapperCol: { span: 20 },
   };
-
   const onReset = () => {
     form.resetFields();
     setErrors({})
   };
+  const tailLayout = {
+    wrapperCol: { offset: 4, span: 20 },
+  };
+  const rules: any = {
+    name: [
+      { required: true },
+      { max: 50 },
+    ],
+    status: [
+      { required: true },
+    ],
+    parent_id: [
+      { required: false },
+    ],
+    description: [
+      { required: false },
+      { max: 255 },
+    ],
+  }
+
+  
+
+
+  
+
+  const onFinish = async (values: any) => {
+      try {
+        setIsLoading(true)
+        const response = await updateCategory(params.id, values)
+        const { data } = response;
+        setCategories(buildCategoryTree(data));
+        setErrors({})
+        toast.success('Tạo thành công!')
+      } catch (error: any) {
+        setErrors(error?.data?.errors as Record<string, string>);
+      } finally {
+        setIsLoading(false)
+      }
+    };
+
+    useEffect(() => {
+      const getCategories = async () => {
+        try {
+          const response = await getAll();
+          const { data } = response;
+          setCategories(buildCategoryTree(data));
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      };
+    
+      const getCategory = async (id: any) => {
+        try {
+          const response = await getById(id);
+          if (form) {
+            form.setFieldsValue(response.data);
+          }
+        } catch (error) {
+          console.error("Fetch category error:", error);
+        }
+      };
+    
+      getCategories();
+      getCategory(params.id);
+    }, [params, form]); // ⚠️ Đảm bảo form không bị thay đổi liên tục
+    
+
+  const updateCategoryOrder = async (data: Array<object>) => {
+    try {
+      console.log(data)
+      const response = await updateOrder({categories: data})
+      toast.success('Cập nhật thành công!')
+    } catch (error: any) {
+    } finally {
+    }
+  }
+
   const actions = (
-    <Link href={ROUTES.DASHBOARD_ROLE_LIST}>
+    <Link href={ADMIN_ROUTES.CATEGORY_PRODUCT_LIST}>
       <Button
         size="large"
         type="primary"
       >
-        <UnorderedListOutlined />Danh sách
+        <PlusCircleOutlined />Tạo mới
       </Button>
     </Link>
   );
 
-  const layout = {
-    labelCol: { span: 5 },
-    wrapperCol: { span: 12 },
-  };
-
-  const tailLayout = {
-    wrapperCol: { offset: 5, span: 12 },
-  };
-
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const { data } = await getAll()
-        setRoles(data.map((item: any) => {
-          return {
-            value: item.id,
-            label: item.name,
-          }
-        }))
-      } catch (error) {
-        console.error("Error fetching", error);
-      }
-    };
-
-    const fetchUser = async (id: any) => {
-      try {
-        const { data } = await getUser(id)
-        form.setFieldsValue({
-          name: data.name,
-          email: data.email,
-          role_id: Number(data.role_id),
-        });
-      } catch (error) {
-        console.error("Error fetching", error);
-      }
-    };
-
-    const initData = async () => {
-      const id = params?.id
-      if (id) {
-        await fetchUser(id)
-        // Promise.all([fetchRoles(), fetchUser()])
-        await fetchRoles()
-      }
-    }
-    initData()
-  }, [params.id, form]);
-
-
-  const rules: any = {
-    name: [
-      { required: true },
-      { max: 255 },
-    ],
-    email: [
-      { required: true },
-      { type: 'email' },
-      { max: 255 },
-    ],
-    password: [
-      { min: 6 },
-    ],
-    password_confirmation: [
-      { min: 6 },
-      ({ getFieldValue }: {getFieldValue: any}) => ({
-        validator(_: any, value: any) {
-          if (getFieldValue('password')) {
-            if (!value) {
-              return Promise.reject(new Error('Vui lòng nhập.'))
-            }
-
-            if (getFieldValue('password') !== value) {
-              return Promise.reject(new Error('Mật khẩu không khớp.'));
-            }
-          }
-          return Promise.resolve()
-        },
-      }),
-    ],
-    role_id: [
-      { required: true },
-    ],
-  }
+  const categoryOptions = useMemo(() => {
+    const id = params.id ? Number(params.id) : null;
+    return getCategoryOptions(categories, id);
+  }, [categories, params.id]);
 
 
   return (
     <div>
-      <Breadcrumb items={[{title: 'Người dùng'}]} />
-      <Card title="Tạo mới quyền" bordered={false} extra={actions}>
-        <Form
-          validateMessages={validateMessages}
-          {...layout}
-          form={form}
-          onFinish={onFinish}
-          style={{ width: '100%' }}
-        >
-          <Form.Item
-            name="name"
-            label="Tên"
-            rules={rules.name}
-            validateStatus={ errors?.name ? 'error' : undefined}
-            help={errors?.name ? errors?.name : undefined}
-          >
-            <Input size="large" />
-          </Form.Item>
+      <Breadcrumb items={[{title: 'Danh mục sản phẩm'}]} />
+      <Row gutter={[16, 16]}>
+        <Col span={9}>
+          <Card title="Danh sách" bordered={false} extra={actions}>
+            <NestableCategory categories={categories} onChange={updateCategoryOrder} />
+          </Card>
+        </Col>
+        <Col span={15}>
+          <Card title="Chỉnh sửa" bordered={false}>
+              <Form
+                validateMessages={validateMessages}
+                {...layout}
+                form={form}
+                initialValues={{ status: 1, parent_id: null, name: null, description: null }}
+                onFinish={onFinish}
+                style={{ width: '100%' }}
+              >
+                <Form.Item
+                  name="name"
+                  label="Tên"
+                  rules={rules.name}
+                  validateStatus={ errors?.name ? 'error' : undefined}
+                  help={errors?.name ? errors?.name : undefined}
+                >
+                  <Input size="large" />
+                </Form.Item>
 
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={rules.email}
-            validateStatus={ errors?.email ? 'error' : undefined}
-            help={errors?.email ? errors?.email : undefined}
-          >
-            <Input size="large" />
-          </Form.Item>
+                <Form.Item
+                  name="status"
+                  label="Trạng thái"
+                  rules={rules.status}
+                >
+                  <Radio.Group
+                    options={[
+                      {
+                        value: 1,
+                        label: "Active"
+                      },
+                      {
+                        value: 2,
+                        label: "Inactive"
+                      },
+                    ]}
+                  />
+                </Form.Item>
 
-          <Form.Item
-            name="password"
-            label="Mật khẩu"
-            rules={rules.password}
-          >
-            <Input.Password size="large" />
-          </Form.Item>
+                <Form.Item
+                  name="parent_id"
+                  label="Danh mục cha"
+                  rules={rules.parent_id}
+                >
+                  <Select
+                    size="large"
+                    showSearch
+                    placeholder="---Chọn---"
+                    filterOption={(input, option) => {
+                      const label = String(option?.label ?? ""); // Ép kiểu về string
+                      return label.toLowerCase().includes(input.toLowerCase());
+                    }}
+                    options={categoryOptions}
+                  />
+                </Form.Item>
 
-          <Form.Item
-            name="password_confirmation"
-            label="Xác nhận mật khẩu"
-            rules={rules.password_confirmation}
-          >
-            <Input.Password size="large" />
-          </Form.Item>
+                <Form.Item
+                  name="description"
+                  label="Mô tả"
+                  rules={rules.description}
+                  validateStatus={ errors?.description ? 'error' : undefined}
+                  help={errors?.description ? errors?.description : undefined}
+                >
+                  <TextArea allowClear style={{ height: 100, resize: 'none' }} />
+                </Form.Item>
 
-          <Form.Item
-            name="role_id"
-            label="Quyền"
-            rules={rules.role_id}>
-            <Select
-              size="large"
-              showSearch
-              options={roles}
-            >
-            </Select>
-          </Form.Item>
-
-          <Form.Item {...tailLayout}>
-            <Space>
-              <Button size="large" disabled={loadingSubmit} type="primary" htmlType="submit">
-                { loadingSubmit ? <SpinLoading /> : <PlusCircleOutlined /> }Cập nhật
-              </Button>
-              <Button size="large" htmlType="button" onClick={onReset}>
-                <ClearOutlined />
-                Xoá
-              </Button>
-            </Space>
-          </Form.Item>
-        </Form>
-      </Card>
+                <Form.Item {...tailLayout}>
+                  <Space>
+                    <Button size="large" disabled={loadingCreate} type="primary" htmlType="submit">
+                      { loadingCreate ? <SpinLoading /> : <PlusCircleOutlined /> }
+                      Cập nhật
+                    </Button>
+                    <Button size="large" htmlType="button" onClick={onReset}>
+                      <ClearOutlined />
+                      Xoá
+                    </Button>
+                  </Space>
+                </Form.Item>
+            </Form>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }

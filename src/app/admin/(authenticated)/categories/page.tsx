@@ -2,7 +2,7 @@
 import {Card, Select, Radio, Button, Table, Tooltip, theme, Row, Col, Form, Space, Input } from "antd"
 import { PlusCircleOutlined, ClearOutlined, DeleteOutlined } from "@ant-design/icons"
 import React, { useEffect, useState } from "react"
-import { getCategoryOptions } from "@/helper/common"
+import { buildCategoryTree, getCategoryOptions } from "@/helper/common"
 import { toast } from 'react-toastify'
 import withAuth from "@/hooks/withAuth";
 import Breadcrumb from "@/components/Breadcrumb"
@@ -53,7 +53,7 @@ const Page = () => {
     try {
       const response = await getAll();
       const { data } = response;
-      setCategories(data);
+      setCategories(buildCategoryTree(data));
     } catch (error) {
       console.error('Fetch error:', error);
     } finally {
@@ -64,7 +64,8 @@ const Page = () => {
       try {
         setLoadingCreate(true)
         const response = await createCategory(values)
-        setCategories(response.data)
+        const { data } = response;
+        setCategories(buildCategoryTree(data));
         form.resetFields()
         toast.success('Tạo thành công!')
       } catch (error: any) {
@@ -78,10 +79,11 @@ const Page = () => {
     getCategories()
   }, [])
 
-  const updateCategoryOrder = async (data: Array<object>) => {
+  const updateCategoryOrder = async (items: Array<object>) => {
     try {
-      console.log(data)
-      const response = await updateOrder({categories: data})
+      const response = await updateOrder({categories: items})
+      const { data } = response;
+      setCategories(buildCategoryTree(data));
       toast.success('Cập nhật thành công!')
     } catch (error: any) {
     } finally {
@@ -145,9 +147,10 @@ const Page = () => {
                     size="large"
                     showSearch
                     placeholder="---Chọn---"
-                    filterOption={(input, option) =>
-                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
+                    filterOption={(input, option) => {
+                      const label = String(option?.label ?? ""); // Ép kiểu về string
+                      return label.toLowerCase().includes(input.toLowerCase());
+                    }}
                     options={getCategoryOptions(categories)}
                   />
                 </Form.Item>

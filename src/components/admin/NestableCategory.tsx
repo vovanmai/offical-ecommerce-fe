@@ -38,12 +38,12 @@ const NestableCategory = (props: any) => {
     const { item, index, collapseIcon, handler } = props;
 
     return (
-      <div style={{ ...styles, fontWeight: item.children.length ? "400" : "400" }}>
+      <div style={{ ...styles, fontWeight: item.children.length ? "400" : "400" } as React.CSSProperties}>
         {handler}
         {collapseIcon}
         <div style={{ padding: ".5rem", flex: 1 }}>
           
-          <Link href="/admin/categories">
+          <Link href={`/admin/categories/${item.id}/edit`}>
             <Tooltip title={`ID: ${item.id}`}>
               <span>{item.text}</span>
             </Tooltip>

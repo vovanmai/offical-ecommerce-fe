@@ -14,6 +14,10 @@ export const getActiveAdminMenuByRoute = (pathname: string) => {
       regex: /^\/admin\/categories$/,
       path: ADMIN_ROUTES.CATEGORY_PRODUCT_LIST
     },
+    {
+      regex: /^\/admin\/categories\/\d+\/edit$/,
+      path: ADMIN_ROUTES.CATEGORY_PRODUCT_LIST
+    },
   ]
 
   const route = matchRoutes.find((route) => {
@@ -42,11 +46,24 @@ export const validateMessages = {
   }
 };
 
-export const getCategoryOptions = (categories: any) => {
-  return categories.filter((item: any) => item.parent_id === null).map((item) => {
+export const getCategoryOptions = (categories: any, ignoreId: any = null) => {
+  console.log(ignoreId)
+  return categories.filter((item: any) => (item.parent_id === null && item.id !== ignoreId)).map((item: any) => {
     return {
       value: item.id,
       label: item.name,
     }
   })
 }
+
+
+export const buildCategoryTree = (items: any, parentId: number | null = null) => {
+  return items
+    .filter((item: any) => item.parent_id === parentId)
+    .map((item: any) => ({
+      ...item,
+      text: item.name,
+      children: buildCategoryTree(items, item.id),
+    }));
+};
+
