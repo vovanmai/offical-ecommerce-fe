@@ -8,4 +8,6 @@ export const ROUTES = {
 
 export const ADMIN_ROUTES = {
   CATEGORY_PRODUCT_LIST: '/admin/categories',
+  PRODUCT_LIST: '/admin/products',
+  PRODUCT_CREATE: '/admin/products/create',
 };

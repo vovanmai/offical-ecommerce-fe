@@ -34,8 +34,9 @@ import { getPrimaryColor } from "@/store/admin/appSlice"
 
 const NestableCategory = (props: any) => {
   const primaryColor = useAppSelector(getPrimaryColor);
-  const { categories, onChange } = props
+  const { categories, onChange, id } = props
   const [loading, setLoading] = useState<boolean>(false)
+  const activeStyle = { color: 'black', fontWeight: 'bold'}
 
   const renderItem = (props: any) => {
     const { item, index, collapseIcon, handler } = props;
@@ -46,14 +47,14 @@ const NestableCategory = (props: any) => {
         {collapseIcon}
         <div style={{ padding: ".5rem", flex: 1 }}>
           
-          <Link href={`/admin/categories/${item.id}/edit`} style={{color: primaryColor}}>
+          <Link href={`/admin/categories/${item.id}/edit`} style={ id == item.id ? activeStyle : {color: primaryColor}}>
             <Tooltip title={`ID: ${item.id}`}>
               <span>{item.text}</span>
             </Tooltip>
           </Link>
         </div>
         <div style={{padding: 10}}>
-          <span>Sản phẩm: 180</span>
+          {/* <span>Sản phẩm: 180</span> */}
         </div>
       </div>
     );

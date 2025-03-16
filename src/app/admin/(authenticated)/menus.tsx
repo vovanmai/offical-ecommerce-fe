@@ -10,6 +10,11 @@ const menus = [
     label: 'Danh mục sản phẩm',
     icon: <FaCircle />
   },
+  {
+    key: ADMIN_ROUTES.PRODUCT_LIST,
+    label: 'Sản phẩm',
+    icon: <FaCircle />
+  },
 ]
 
 export default menus

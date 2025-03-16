@@ -135,7 +135,7 @@ const Page = () => {
       <Row gutter={[16, 16]}>
         <Col span={9}>
           <Card title="Danh sách" bordered={false} extra={actions}>
-            <NestableCategory categories={categories} onChange={updateCategoryOrder} />
+            <NestableCategory id={params.id} categories={categories} onChange={updateCategoryOrder} />
           </Card>
         </Col>
         <Col span={15}>
