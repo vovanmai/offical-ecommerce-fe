@@ -1,11 +1,10 @@
 'use client'
-import {Card, Button, Form, Space, Input } from "antd"
+import {Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber } from "antd"
 import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import Link from 'next/link'
-import React, {useEffect, useState} from "react"
+import React, { useState } from "react"
 import withAuth from "@/hooks/withAuth"
 import { ADMIN_ROUTES } from "@/constants/routes"
-import PermissionGroup from './PermissionGroup'
 import { getAll } from "@/api/user/permission"
 import { createRole } from '@/api/user/role'
 import {useRouter} from "next/navigation"
@@ -13,6 +12,9 @@ import { groupBy } from "lodash"
 import SpinLoading from "@/components/SpinLoading"
 import Breadcrumb from "@/components/Breadcrumb"
 import { toast } from 'react-toastify'
+import type { UploadFile, UploadProps } from 'antd';
+import { validateMessages } from "@/helper/common"
+import UploadImage from "@/components/admin/UploadImage"
 
 type ActionType = 'list' | 'edit' | 'create' | 'delete' | 'detail'
 interface PermissionItem {
@@ -55,7 +57,7 @@ const ListRoles = () => {
     setPermissionGroups(permissionGroups.map(item => ({...item, checkedValues: []})))
   };
   const actions = (
-    <Link href={ADMIN_ROUTES.PRODUCT_CREATE}>
+    <Link href={ADMIN_ROUTES.PRODUCT_LIST}>
       <Button
         size="large"
         type="primary"
@@ -66,104 +68,124 @@ const ListRoles = () => {
   );
 
   const layout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 17 },
+    labelCol: { span: 5 },
+    wrapperCol: { span: 20 },
   };
 
   const tailLayout = {
-    wrapperCol: { offset: 4, span: 16 },
+    wrapperCol: { offset: 11, span: 16 },
   };
 
-  useEffect(() => {
-    const getPermissions = async () => {
-      try {
-        setLoading(true)
-        const response = await getAll();
-        let groups: any = groupBy(response.data, 'group');
-        groups = Object.keys(groups).map((group) => {
-          const permissions = groups[group].map((item: any) => {
-            return {
-              id: item.id,
-              action: item.action,
-            } as any
-          })
-          return {
-            group: group,
-            permissions: permissions,
-            checkedValues: [],
-          } as any
-        })
-        setPermissionGroups(groups)
-      } catch (error) {
-        console.error("Error fetching permissions", error);
-      } finally {
-        setLoading(false)
-      }
-    };
-    getPermissions();
-  }, []);
+  const onChangeUploadPreviewImage = (ids: any) => {
+    form.setFieldsValue({ preview_image_id: ids[0] ?? null });
+    form.setFieldsValue({ preview_image_id: ids.at(0) ?? null });
 
-  const updatePermissionGroup = (index: number, updatedData: any) => {
-    setPermissionGroups(prevPermissionGroups => {
-      const updatedPermissionGroups = [...prevPermissionGroups]
-
-      updatedPermissionGroups[index] = {
-        ...updatedPermissionGroups[index],
-        ...updatedData
-      };
-
-      return updatedPermissionGroups
-    });
   };
+
+  const rules: any = {
+    name: [
+      { required: true },
+      { max: 50 },
+    ],
+    status: [
+      { required: true },
+    ],
+    price: [
+      { required: true },
+    ],
+    preview_image_id: [
+      { required: true, message: 'Vui lòng chọn ảnh.' },
+    ],
+    description: [
+      { required: true },
+    ],
+  }
+
+  const initialValues={ 
+    status: 1,
+    price: null, 
+    name: null, 
+    description: null,
+    preview_image_id: null,
+  }
 
   return (
     <div>
-      <Breadcrumb items={[{title: 'Quyền'}]} />
-      <Card title="Tạo mới quyền" bordered={false} extra={actions}>
+      <Breadcrumb items={[{title: 'Sản phẩm'}]} />
+      <Card title="Tạo mới" bordered={false} extra={actions}>
         <Form
           {...layout}
           form={form}
           onFinish={onFinish}
           style={{ width: '100%' }}
+          validateMessages={validateMessages}
+          initialValues={initialValues}
         >
-          <Form.Item
-            name="name"
-            label="Tên"
-            rules={[{ required: true, message: 'Vui lòng nhập.' }]}
-            validateStatus={ errors?.name ? 'error' : undefined}
-            help={errors?.name ? errors?.name : undefined}
-          >
-            <Input size="large" />
-          </Form.Item>
-
-          <Form.Item label="Quyền">
-            <div style={{ border: "1px solid #d9d9d9", padding: 15, borderRadius: 8}}>
-              { loading && (
-                <div>Đang tải...</div>
-              )}
-              {!loading && permissionGroups.map((item, index) => {
-                return <PermissionGroup
-                  key={index}
-                  permissionGroup={item}
-                  groupIndex={index}
-                  updatePermissionGroup={updatePermissionGroup}
-                />
-              })}
-            </div>
-          </Form.Item>
-
-          <Form.Item {...tailLayout}>
-            <Space>
-              <Button size="large" disabled={loadingSubmit} type="primary" htmlType="submit">
-                { loadingSubmit ? <SpinLoading /> : <PlusCircleOutlined /> }
-                Tạo
-              </Button>
-              <Button size="large" htmlType="button" onClick={onReset}>
-                <ClearOutlined />
-                Xoá
-              </Button>
-            </Space>
-          </Form.Item>
+          <Row gutter={[24, 24]}>
+            <Col sm={24} md={12}>
+              <Form.Item
+                name="name"
+                label="Tên"
+                rules={rules.name}
+                validateStatus={ errors?.name ? 'error' : undefined}
+                help={errors?.name ? errors?.name : undefined}
+              >
+                <Input size="large" />
+              </Form.Item>
+              <Form.Item
+                  name="status"
+                  label="Trạng thái"
+                  rules={rules.status}
+                >
+                  <Radio.Group
+                    options={[
+                      {
+                        value: 1,
+                        label: "Active"
+                      },
+                      {
+                        value: 2,
+                        label: "Inactive"
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              <Form.Item
+                name="price"
+                label="Giá"
+                rules={rules.price}
+                validateStatus={ errors?.name ? 'error' : undefined}
+                help={errors?.name ? errors?.name : undefined}
+              >
+                <InputNumber size="large" min={1000} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col sm={24} md={12}>
+              <Form.Item
+                  name="preview_image"
+                  label="Ảnh đại diện"
+                  rules={rules.preview_image_id}
+                >
+                  <UploadImage
+                    onChange={onChangeUploadPreviewImage}
+                  />
+                </Form.Item>
+            </Col>
+            <Col span={24}>
+              <div style={{ display: 'flex', justifyContent: 'center'}}>
+                <Space>
+                    <Button size="large" disabled={loadingSubmit} type="primary" htmlType="submit">
+                      { loadingSubmit ? <SpinLoading /> : <PlusCircleOutlined /> }
+                      Tạo
+                    </Button>
+                    <Button size="large" htmlType="button" onClick={onReset}>
+                      <ClearOutlined />
+                      Xoá
+                    </Button>
+                  </Space>
+              </div>
+            </Col>
+          </Row>
         </Form>
       </Card>
     </div>
