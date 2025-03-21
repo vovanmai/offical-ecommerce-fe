@@ -55,7 +55,6 @@ export const validateMessages = {
 };
 
 export const getCategoryOptions = (categories: any, ignoreId: any = null) => {
-  console.log(ignoreId)
   return categories.filter((item: any) => (item.parent_id === null && item.id !== ignoreId)).map((item: any) => {
     return {
       value: item.id,
@@ -71,7 +70,12 @@ export const buildCategoryTree = (items: any, parentId: number | null = null) =>
     .map((item: any) => ({
       ...item,
       text: item.name,
+      value: item.id,
+      title: item.name,
       children: buildCategoryTree(items, item.id),
     }));
 };
+
+
+
 

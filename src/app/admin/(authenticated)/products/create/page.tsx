@@ -1,20 +1,20 @@
 'use client'
-import {Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber } from "antd"
+
+import {Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
 import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import Link from 'next/link'
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import withAuth from "@/hooks/withAuth"
 import { ADMIN_ROUTES } from "@/constants/routes"
-import { getAll } from "@/api/user/permission"
-import { createRole } from '@/api/user/role'
 import {useRouter} from "next/navigation"
-import { groupBy } from "lodash"
 import SpinLoading from "@/components/SpinLoading"
 import Breadcrumb from "@/components/Breadcrumb"
 import { toast } from 'react-toastify'
-import type { UploadFile, UploadProps } from 'antd';
 import { validateMessages } from "@/helper/common"
 import UploadImage from "@/components/admin/UploadImage"
+import { getAll as getAllCategories } from "@/api/admin/category"
+import { buildCategoryTree } from "@/helper/common"
+import type { TreeSelectProps } from 'antd';
 
 type ActionType = 'list' | 'edit' | 'create' | 'delete' | 'detail'
 interface PermissionItem {
@@ -32,29 +32,33 @@ const ListRoles = () => {
   const router = useRouter()
   const [errors, setErrors] = useState<Record<string, any>>({})
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState<boolean>(false)
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false)
-  const [permissionGroups, setPermissionGroups] = useState<PermissionGroupInterface[]>([]);
+  const [categories, setCategories] = useState([])
 
   const onFinish = async (values: any) => {
-    const permissionIds = permissionGroups.flatMap(group => group.checkedValues);
-
-    try {
-      setLoadingSubmit(true)
-      await createRole({...values, permission_ids: permissionIds})
-      toast.success('Tạo thành công!')
-      router.push(ROUTES.DASHBOARD_ROLE_LIST)
-    } catch (error: any) {
-      setErrors(error?.data?.errors as Record<string, string>);
-    } finally {
-      setLoadingSubmit(false)
-    }
+    
   };
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response = await getAllCategories();
+        const { data } = response;
+        console.log(buildCategoryTree(data))
+        setCategories(data)
+      } catch (error) {
+        console.error('Fetch error:', error);
+      } finally {
+      }
+    };
+    getCategories()
+  }, [])
+
+  
 
   const onReset = () => {
     form.resetFields();
     setErrors({})
-    setPermissionGroups(permissionGroups.map(item => ({...item, checkedValues: []})))
   };
   const actions = (
     <Link href={ADMIN_ROUTES.PRODUCT_LIST}>
@@ -67,17 +71,7 @@ const ListRoles = () => {
     </Link>
   );
 
-  const layout = {
-    labelCol: { span: 5 },
-    wrapperCol: { span: 20 },
-  };
-
-  const tailLayout = {
-    wrapperCol: { offset: 11, span: 16 },
-  };
-
   const onChangeUploadPreviewImage = (ids: any) => {
-    form.setFieldsValue({ preview_image_id: ids[0] ?? null });
     form.setFieldsValue({ preview_image_id: ids.at(0) ?? null });
 
   };
@@ -96,17 +90,25 @@ const ListRoles = () => {
     preview_image_id: [
       { required: true, message: 'Vui lòng chọn ảnh.' },
     ],
+    detail_file_ids: [
+      { required: true, message: 'Vui lòng chọn ảnh.' },
+    ],
     description: [
       { required: true },
     ],
+    category_id: [
+      { required: true, message: 'Vui lòng chọn.' },
+    ],
   }
 
-  const initialValues={ 
+  const initialValues={
     status: 1,
     price: null, 
     name: null, 
     description: null,
     preview_image_id: null,
+    detail_file_ids: [],
+    category_id: null
   }
 
   return (
@@ -114,14 +116,14 @@ const ListRoles = () => {
       <Breadcrumb items={[{title: 'Sản phẩm'}]} />
       <Card title="Tạo mới" bordered={false} extra={actions}>
         <Form
-          {...layout}
+          layout="vertical"
           form={form}
           onFinish={onFinish}
           style={{ width: '100%' }}
           validateMessages={validateMessages}
           initialValues={initialValues}
         >
-          <Row gutter={[24, 24]}>
+          <Row gutter={[100, 0]}>
             <Col sm={24} md={12}>
               <Form.Item
                 name="name"
@@ -170,6 +172,31 @@ const ListRoles = () => {
                     onChange={onChangeUploadPreviewImage}
                   />
                 </Form.Item>
+                <Form.Item
+                  name="category_id"
+                  label="Danh mục"
+                  rules={rules.category_id}
+                >
+                  <TreeSelect
+                    size="large"
+                    placeholder="Vui lòng chọn."
+                    allowClear
+                    treeDefaultExpandAll
+                    treeData={buildCategoryTree(categories)}
+                  />
+                </Form.Item>
+            </Col>
+            <Col sm={24} md={24}>
+              <Form.Item
+                name="detail_file_ids"
+                label="Ảnh đại diện"
+                rules={rules.preview_image_id}
+              >
+                <UploadImage
+                  multiple={true}
+                  onChange={onChangeUploadPreviewImage}
+                />
+              </Form.Item>
             </Col>
             <Col span={24}>
               <div style={{ display: 'flex', justifyContent: 'center'}}>
