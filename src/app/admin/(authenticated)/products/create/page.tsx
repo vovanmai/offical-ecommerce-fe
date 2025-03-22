@@ -14,7 +14,12 @@ import { validateMessages } from "@/helper/common"
 import UploadImage from "@/components/admin/UploadImage"
 import { getAll as getAllCategories } from "@/api/admin/category"
 import { buildCategoryTree } from "@/helper/common"
-import type { TreeSelectProps } from 'antd';
+import dynamic from 'next/dynamic';
+
+const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
+  ssr: false,
+});
+
 
 type ActionType = 'list' | 'edit' | 'create' | 'delete' | 'detail'
 interface PermissionItem {
@@ -44,7 +49,6 @@ const ListRoles = () => {
       try {
         const response = await getAllCategories();
         const { data } = response;
-        console.log(buildCategoryTree(data))
         setCategories(data)
       } catch (error) {
         console.error('Fetch error:', error);
@@ -100,6 +104,7 @@ const ListRoles = () => {
       { required: true, message: 'Vui lòng chọn.' },
     ],
   }
+  const [content, setContent] = useState("");
 
   const initialValues={
     status: 1,
@@ -111,10 +116,15 @@ const ListRoles = () => {
     category_id: null
   }
 
+  const handleEditorChange = (data: string) => {
+    console.log(data)
+    form.setFieldsValue({ description: data });
+  };
+
   return (
     <div>
       <Breadcrumb items={[{title: 'Sản phẩm'}]} />
-      <Card title="Tạo mới" bordered={false} extra={actions}>
+      <Card title="Tạo mới" variant="outlined" extra={actions}>
         <Form
           layout="vertical"
           form={form}
@@ -196,6 +206,15 @@ const ListRoles = () => {
                   multiple={true}
                   onChange={onChangeUploadPreviewImage}
                 />
+              </Form.Item>
+            </Col>
+            <Col sm={24} md={24}>
+              <Form.Item
+                name="description"
+                label="Chi tiết"
+                rules={rules.description}
+              >
+                <MyCKEditor onChange={handleEditorChange} />
               </Form.Item>
             </Col>
             <Col span={24}>
