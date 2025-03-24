@@ -16,11 +16,6 @@ function CustomUploadAdapterPlugin(editor: any): void {
   };
 }
 
-// Định nghĩa interface cho kết quả upload
-interface UploadResponse {
-  default: string;
-}
-
 // Lớp CustomUploadAdapter với TypeScript
 class CustomUploadAdapter {
   private loader: FileLoader;
@@ -265,7 +260,7 @@ export default function MyCKEditor({ onChange, value }: { onChange: (data: strin
 	  TableToolbar,
 	  TextPartLanguage,
 	  TextTransformation,
-	  Title,
+	//   Title,
 	  TodoList,
 	  Underline,
 	  WordCount,
@@ -375,18 +370,6 @@ export default function MyCKEditor({ onChange, value }: { onChange: (data: strin
 	initialData: value,
 	language: "vi",
 	licenseKey: LICENSE_KEY,
-	// simpleUpload: {
-	// 	// The URL that the images are uploaded to.
-	// 	uploadUrl: `${process.env.API_BASE_URL}/api/admin/common/uploads`,
-
-	// 	// Enable the XMLHttpRequest.withCredentials property.
-	// 	withCredentials: true,
-
-	// 	// Headers sent along with the XMLHttpRequest to the upload server.
-	// 	headers: {
-	// 		Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
-	// 	}
-	// },
 	link: {
 	  addTargetToExternalLinks: true,
 	  defaultProtocol: "https://",
@@ -481,6 +464,7 @@ export default function MyCKEditor({ onChange, value }: { onChange: (data: strin
 	},
 	translations: [translations],
   }
+
   return (
     <>
 	  <CKEditor

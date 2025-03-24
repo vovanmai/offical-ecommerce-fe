@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Image, Button, Upload } from "antd";
-import { LoadingOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
-import type { UploadProps } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { toast } from 'react-toastify'
 import { createUpload } from "@/api/admin/common";
+import type { GetProp, UploadFile, UploadProps } from 'antd';
+
 
 interface UploadImageProps {
   onChange: (fileIds: number[]) => void;
@@ -15,6 +16,13 @@ interface UploadImageProps {
 const UploadImage: React.FC<UploadImageProps> = ({ onChange, defaultList = [], multiple = false, maxCount = null }) => {
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState<any[]>(defaultList);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+
+  const handlePreview = async (file: UploadFile) => {
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
 
   const handleRemove = (file: any) => {
     const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
@@ -91,7 +99,19 @@ const UploadImage: React.FC<UploadImageProps> = ({ onChange, defaultList = [], m
           listType="picture-card"
           fileList={fileList}
           onRemove={handleRemove}
+          onPreview={handlePreview}
         />
+        {previewImage && (
+          <Image
+            wrapperStyle={{ display: 'none' }}
+            preview={{
+              visible: previewOpen,
+              onVisibleChange: (visible) => setPreviewOpen(visible),
+              afterOpenChange: (visible) => !visible && setPreviewImage(''),
+            }}
+            src={previewImage}
+          />
+      )}
       </div>
     </div>
     

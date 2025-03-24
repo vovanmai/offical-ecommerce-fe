@@ -9,7 +9,6 @@ import { ADMIN_ROUTES } from "@/constants/routes"
 import {useRouter} from "next/navigation"
 import SpinLoading from "@/components/SpinLoading"
 import Breadcrumb from "@/components/Breadcrumb"
-import { toast } from 'react-toastify'
 import { validateMessages } from "@/helper/common"
 import UploadImage from "@/components/admin/UploadImage"
 import { getAll as getAllCategories } from "@/api/admin/category"
@@ -21,8 +20,6 @@ const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
   ssr: false,
 });
 
-type ActionType = 'list' | 'edit' | 'create' | 'delete' | 'detail'
-
 const CreateProduct = () => {
   const router = useRouter()
   const [errors, setErrors] = useState<Record<string, any>>({})
@@ -33,8 +30,11 @@ const CreateProduct = () => {
   const onFinish = async (values: any) => {
     try {
       await createProduct(values)
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      const statusCode = error.status
+      if(statusCode == 422) {
+        setErrors(error?.data?.errors as Record<string, string>);
+      }
     }
   };
 
@@ -110,6 +110,7 @@ const CreateProduct = () => {
   }
 
   const handleEditorChange = (data: string) => {
+    data = data.replace(/<p>&nbsp;<\/p>|<p><\/p>/g, '');
     form.setFieldsValue({ description: data });
   };
 
@@ -158,8 +159,8 @@ const CreateProduct = () => {
                 name="price"
                 label="Giá"
                 rules={rules.price}
-                validateStatus={ errors?.name ? 'error' : undefined}
-                help={errors?.name ? errors?.name : undefined}
+                validateStatus={ errors?.price ? 'error' : undefined}
+                help={errors?.price ? errors?.price : undefined}
               >
                 <InputNumber size="large" min={1000} style={{ width: "100%" }} />
               </Form.Item>
@@ -191,7 +192,7 @@ const CreateProduct = () => {
             <Col sm={24} md={24}>
               <Form.Item
                 name="detail_file_ids"
-                label="Ảnh đại diện"
+                label="Ảnh chi tiết"
                 rules={rules.preview_image_id}
               >
                 <UploadImage
