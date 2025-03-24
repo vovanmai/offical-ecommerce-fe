@@ -1,6 +1,6 @@
 'use client'
 
-import {Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
+import { Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
 import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import Link from 'next/link'
 import React, { useEffect, useState } from "react"
@@ -15,25 +15,15 @@ import UploadImage from "@/components/admin/UploadImage"
 import { getAll as getAllCategories } from "@/api/admin/category"
 import { buildCategoryTree } from "@/helper/common"
 import dynamic from 'next/dynamic';
+import { create as createProduct } from '@/api/admin/product'
 
 const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
   ssr: false,
 });
 
-
 type ActionType = 'list' | 'edit' | 'create' | 'delete' | 'detail'
-interface PermissionItem {
-  id: number;
-  action: ActionType;
-}
 
-interface PermissionGroupInterface {
-  group: 'user' | 'role';
-  permissions: PermissionItem[];
-  checkedValues: number[],
-}
-
-const ListRoles = () => {
+const CreateProduct = () => {
   const router = useRouter()
   const [errors, setErrors] = useState<Record<string, any>>({})
   const [form] = Form.useForm();
@@ -41,7 +31,11 @@ const ListRoles = () => {
   const [categories, setCategories] = useState([])
 
   const onFinish = async (values: any) => {
-    
+    try {
+      await createProduct(values)
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   useEffect(() => {
@@ -58,8 +52,6 @@ const ListRoles = () => {
     getCategories()
   }, [])
 
-  
-
   const onReset = () => {
     form.resetFields();
     setErrors({})
@@ -75,9 +67,12 @@ const ListRoles = () => {
     </Link>
   );
 
-  const onChangeUploadPreviewImage = (ids: any) => {
-    form.setFieldsValue({ preview_image_id: ids.at(0) ?? null });
+  const onChangePreviewImage = (ids: any) => {
+    form.setFieldsValue({ preview_image_id: ids[0] ?? null });
+  };
 
+  const onChangeDetailFile = (ids: any) => {
+    form.setFieldsValue({ detail_file_ids: ids });
   };
 
   const rules: any = {
@@ -104,8 +99,6 @@ const ListRoles = () => {
       { required: true, message: 'Vui lòng chọn.' },
     ],
   }
-  const [content, setContent] = useState("");
-
   const initialValues={
     status: 1,
     price: null, 
@@ -117,7 +110,6 @@ const ListRoles = () => {
   }
 
   const handleEditorChange = (data: string) => {
-    console.log(data)
     form.setFieldsValue({ description: data });
   };
 
@@ -174,12 +166,12 @@ const ListRoles = () => {
             </Col>
             <Col sm={24} md={12}>
               <Form.Item
-                  name="preview_image"
+                  name="preview_image_id"
                   label="Ảnh đại diện"
                   rules={rules.preview_image_id}
                 >
                   <UploadImage
-                    onChange={onChangeUploadPreviewImage}
+                    onChange={onChangePreviewImage}
                   />
                 </Form.Item>
                 <Form.Item
@@ -204,7 +196,8 @@ const ListRoles = () => {
               >
                 <UploadImage
                   multiple={true}
-                  onChange={onChangeUploadPreviewImage}
+                  onChange={onChangeDetailFile}
+                  maxCount={10}
                 />
               </Form.Item>
             </Col>
@@ -214,7 +207,7 @@ const ListRoles = () => {
                 label="Chi tiết"
                 rules={rules.description}
               >
-                <MyCKEditor onChange={handleEditorChange} />
+                <MyCKEditor value={initialValues.description} onChange={handleEditorChange} />
               </Form.Item>
             </Col>
             <Col span={24}>
@@ -238,4 +231,4 @@ const ListRoles = () => {
   );
 }
 
-export default withAuth(ListRoles)
+export default withAuth(CreateProduct)
