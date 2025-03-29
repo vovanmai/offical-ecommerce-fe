@@ -1,8 +1,8 @@
 import api from '@/api/axiosClient';
 
 
-export function getAll() {
-  return api.get('api/admin/categories');
+export function list(params: object) {
+  return api.get('api/admin/products', {params});
 }
 
 export function getById(id: number) {
@@ -21,6 +21,6 @@ export function updateOrder(data: object) {
   return api.post('api/admin/categories/update-order', data);
 }
 
-export function deleteRole(id: number) {
-  return api.delete(`api/roles/${id}`);
+export function deleteProduct(id: number) {
+  return api.delete(`api/products/${id}`);
 }

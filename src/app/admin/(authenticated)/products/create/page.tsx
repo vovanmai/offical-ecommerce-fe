@@ -29,12 +29,17 @@ const CreateProduct = () => {
 
   const onFinish = async (values: any) => {
     try {
+      setLoadingSubmit(true)
       await createProduct(values)
+      setLoadingSubmit(false)
+      router.push('/admin/products')
     } catch (error: any) {
       const statusCode = error.status
       if(statusCode == 422) {
         setErrors(error?.data?.errors as Record<string, string>);
       }
+    } finally {
+      setLoadingSubmit(false)
     }
   };
 
@@ -86,6 +91,9 @@ const CreateProduct = () => {
     price: [
       { required: true },
     ],
+    inventory_quantity: [
+      { required: true },
+    ],
     preview_image_id: [
       { required: true, message: 'Vui lòng chọn ảnh.' },
     ],
@@ -106,7 +114,8 @@ const CreateProduct = () => {
     description: null,
     preview_image_id: null,
     detail_file_ids: [],
-    category_id: null
+    category_id: null,
+    inventory_quantity: null
   }
 
   const handleEditorChange = (data: string) => {
@@ -188,6 +197,15 @@ const CreateProduct = () => {
                     treeData={buildCategoryTree(categories)}
                   />
                 </Form.Item>
+                <Form.Item
+                  name="inventory_quantity"
+                  label="Số lượng tồn kho"
+                  rules={rules.inventory_quantity}
+                  validateStatus={ errors?.inventory_quantity ? 'error' : undefined}
+                  help={errors?.inventory_quantity ? errors?.inventory_quantity : undefined}
+              >
+                <InputNumber size="large" min={1} style={{ width: "100%" }} />
+              </Form.Item>
             </Col>
             <Col sm={24} md={24}>
               <Form.Item

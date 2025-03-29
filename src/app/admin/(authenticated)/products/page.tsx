@@ -1,9 +1,9 @@
 'use client'
-import {Card, Button, Table, Tooltip, Space, theme, Tag } from "antd"
+import { Card, Button, Table, Tooltip, Space, theme, Image, Badge } from "antd"
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useRouter, useSearchParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
-import { getRoles, deleteRole } from '@/api/user/role'
+import { list as listProducts, deleteProduct } from '@/api/admin/product'
 import dayjs from 'dayjs'
 import Search from "./Search"
 import { removeEmptyFields } from "@/helper/common"
@@ -13,21 +13,14 @@ import Link from 'next/link'
 import { ADMIN_ROUTES } from "@/constants/routes"
 import { toast } from 'react-toastify'
 import ConfirmModal from "@/components/ConfirmModal"
-import { ROLE } from "@/constants/common"
 import Breadcrumb from "@/components/Breadcrumb"
+import numeral from 'numeral'
 
 import type { GetProp, TableProps } from 'antd';
 type ColumnsType<T extends object = object> = TableProps<T>['columns'];
 type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>;
 
-interface DataType {
-  id: number
-  name: string;
-  created_at: string;
-  updated_at: string;
-}
-
-const ListRoles = () => {
+const ProductList = () => {
   const {
     token: { colorPrimary },
   } = theme.useToken();
@@ -79,21 +72,21 @@ const ListRoles = () => {
     sort: searchParams.get('sort') || '',
     order: searchParams.get('order') || '',
     page: 1,
-    per_page: 10,
+    per_page: 15,
   })
 
-  const [data, setData] = useState<DataType[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
 
   const fetchData = async (params = {}) => {
     setLoading(true);
     try {
-      const response = await getRoles(removeEmptyFields(params));
+      const response = await listProducts(removeEmptyFields(params));
       const { data: responseData } = response;
       setData(responseData.data);
       setPagination({
@@ -112,7 +105,7 @@ const ListRoles = () => {
     fetchData(queryParams)
   }, [queryParams]);
 
-  const handleTableChange: TableProps<DataType>['onChange'] = async (pagination, filters, sorter) => {
+  const handleTableChange: TableProps<any>['onChange'] = async (pagination, filters, sorter) => {
     setPagination(pagination)
     const isSorterArray = Array.isArray(sorter);
     const sortField = isSorterArray ? sorter[0]?.field : sorter?.field;
@@ -131,7 +124,7 @@ const ListRoles = () => {
     }
     setQueryParams(params)
     const queryString = qs.stringify(removeEmptyFields(params));
-    router.push(`/dashboard/roles?${queryString}`)
+    router.push(`/admin/products?${queryString}`)
   }
 
   const onSearch = async (data: any) => {
@@ -144,10 +137,10 @@ const ListRoles = () => {
     }
     setQueryParams(params)
     const queryString = qs.stringify(removeEmptyFields(params));
-    router.push(`/dashboard/roles?${queryString}`)
+    router.push(`/admin/products?${queryString}`)
   }
 
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<any> = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -158,17 +151,7 @@ const ListRoles = () => {
       sorter: true,
       render: (text, record) => {
         return (
-          <Link style={{ color: colorPrimary }} href={`/dashboard/roles/${record.id}/edit`}>{text}</Link>
-        )
-      }
-    },
-    {
-      title: 'Danh mục',
-      dataIndex: 'category_id',
-      sorter: true,
-      render: (text, record) => {
-        return (
-          <Link style={{ color: colorPrimary }} href={`/dashboard/roles/${record.id}/edit`}>{text}</Link>
+          <Link style={{ color: colorPrimary }} href={`/admin/products/${record.id}/edit`}>{text}</Link>
         )
       }
     },
@@ -176,9 +159,35 @@ const ListRoles = () => {
       title: 'Ảnh đại diện',
       dataIndex: 'preview_image',
       sorter: true,
-      render: (text, record) => {
+      render: (record) => {
+        const url = record ? `${record.path}/${record.filename}` : ''
         return (
-          <Link style={{ color: colorPrimary }} href={`/dashboard/roles/${record.id}/edit`}>{text}</Link>
+          url && <Image
+            width={80}
+            height={80}
+            src={url}
+            style={{objectFit: 'cover'}}
+          />
+        )
+      }
+    },
+    {
+      title: 'Trang thái',
+      dataIndex: 'status',
+      render: (status) => {
+        return (
+          <Badge
+            status={status == 1 ? "success" : "default"} 
+          />
+        )
+      }
+    },
+    {
+      title: 'Danh mục',
+      sorter: true,
+      render: (record) => {
+        return (
+          <Link style={{ color: colorPrimary }} href={`/admin/categories/${record.category_id}/edit`}>{ record.category_name }</Link>
         )
       }
     },
@@ -186,17 +195,11 @@ const ListRoles = () => {
       title: 'Giá',
       dataIndex: 'price',
       sorter: true,
-      render: (text, record) => {
+      render: (text) => {
         return (
-          <Link style={{ color: colorPrimary }} href={`/dashboard/roles/${record.id}/edit`}>{text}</Link>
+          <span>{numeral(text).format('0,0')} đ</span>
         )
       }
-    },
-    {
-      title: 'Ngày tạo',
-      dataIndex: 'created_at',
-      sorter: true,
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: 'Ngày cập nhật',
@@ -225,7 +228,7 @@ const ListRoles = () => {
   const deleteRecord = async () => {
     try {
       setLoadingDelete(true)
-      await deleteRole(deletedId)
+      await deleteProduct(deletedId)
       setData(data.filter((item) => item.id !== deletedId))
       setShowConfirmDelete(false)
       toast.success('Xoá thành công!')
@@ -250,7 +253,7 @@ const ListRoles = () => {
         onCancel={() => setShowConfirmDelete(false)}
         confirmLoading={loadingDelete}
       />
-      <Card title="Danh sách sản phẩm" bordered={false} extra={actions}>
+      <Card title="Danh sách sản phẩm" variant="outlined" extra={actions}>
         <Search
           onSearch={onSearch}
           resetForm={() => { setQueryParams({}) }}
@@ -272,4 +275,4 @@ const ListRoles = () => {
   );
 }
 
-export default withAuth(ListRoles)
+export default withAuth(ProductList)
