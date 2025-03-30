@@ -22,5 +22,5 @@ export function updateOrder(data: object) {
 }
 
 export function deleteProduct(id: number) {
-  return api.delete(`api/products/${id}`);
+  return api.delete(`api/admin/products/${id}`);
 }

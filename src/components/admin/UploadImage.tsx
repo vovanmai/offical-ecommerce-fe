@@ -51,10 +51,14 @@ const UploadImage: React.FC<UploadImageProps> = ({ onChange, defaultList = [], m
       });
 
       const responses = await Promise.all(uploadPromises);
-      const newImages = responses.map((response) => ({
-        uid: response.data.id,
-        url: `${response.data.path}/${response.data.filename}`,
-      }));
+      const newImages = responses.map((response) => {
+        const { data } = response
+
+        return {
+          uid: data.id,
+          url: `${data.data.endpoint_url}/${data.path}/${data.filename}`,
+        }
+      });
 
       const updatedFileList = multiple ? [...fileList,...newImages] : newImages
       const ids = updatedFileList.map(item => item.uid)
