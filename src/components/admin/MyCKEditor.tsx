@@ -33,9 +33,11 @@ class CustomUploadAdapter {
 		}
 		const formData = new FormData();
     	formData.append('file', file);
+    	formData.append('save', '0');
 		const { data } = await createUpload(formData)
+		console.log(data)
 		return {
-			default: `${data.path}/${data.filename}`
+			default: data.url
 		}
 	} catch(e) {
 		console.log(e)
@@ -466,18 +468,16 @@ export default function MyCKEditor({ onChange, value }: { onChange: (data: strin
   }
 
   return (
-    <>
-	  <CKEditor
-		  editor={ClassicEditor}
-		  config={editorConfigs}
-		  onChange={(event, editor) => {
+    <CKEditor
+		editor={ClassicEditor}
+		config={editorConfigs}
+		onChange={(event, editor) => {
 			const data = editor.getData(); // Lấy nội dung từ editor
 			onChange(data);
-		  }}
-		  onReady={(editor) => {
+		}}
+		onReady={(editor) => {
 			editor.setData(""); // Xóa nội dung khi CKEditor load xong
-		  }}
-		/>
-	</>
+		}}
+	/>
   );
 }

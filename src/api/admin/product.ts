@@ -6,7 +6,7 @@ export function list(params: object) {
 }
 
 export function getById(id: number) {
-  return api.get(`api/admin/categories/${id}`);
+  return api.get(`api/admin/products/${id}`);
 }
 
 export function create(data: object) {
@@ -14,11 +14,7 @@ export function create(data: object) {
 }
 
 export function update(id: any, data: object) {
-  return api.put(`api/admin/categories/${id}`, data);
-}
-
-export function updateOrder(data: object) {
-  return api.post('api/admin/categories/update-order', data);
+  return api.put(`api/admin/products/${id}`, data);
 }
 
 export function deleteProduct(id: number) {

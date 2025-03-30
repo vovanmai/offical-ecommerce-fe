@@ -1,67 +1,82 @@
 'use client'
-import {Card, Button, Form, Space, Input } from "antd"
-import {UnorderedListOutlined, ClearOutlined, EditOutlined, PlusCircleOutlined} from "@ant-design/icons"
+
+import { Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
+import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import Link from 'next/link'
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useState } from "react"
 import withAuth from "@/hooks/withAuth"
-import { ROUTES } from "@/constants/routes"
-import PermissionGroup from './PermissionGroup'
-import { getAll } from "@/api/user/permission"
-import { updateRole, getRole } from '@/api/user/role'
-import {useRouter, useParams } from "next/navigation"
-import { groupBy } from "lodash"
-import { toast } from 'react-toastify'
-import {ROLE} from "@/constants/common"
+import { ADMIN_ROUTES } from "@/constants/routes"
+import {useRouter} from "next/navigation"
+import SpinLoading from "@/components/SpinLoading"
 import Breadcrumb from "@/components/Breadcrumb"
-import SpinLoading from "@/components/SpinLoading";
+import { validateMessages } from "@/helper/common"
+import UploadImage from "@/components/admin/UploadImage"
+import { getAll as getAllCategories } from "@/api/admin/category"
+import { buildCategoryTree } from "@/helper/common"
+import dynamic from 'next/dynamic';
+import { update as updateProduct, getById } from '@/api/admin/product'
+import { useParams } from "next/navigation"
 
-type ActionType = 'list' | 'edit' | 'create' | 'delete' | 'detail'
-interface PermissionItem {
-  id: number;
-  action: ActionType;
-}
+const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
+  ssr: false,
+});
 
-interface PermissionGroupInterface {
-  group: 'user' | 'role';
-  permissions: PermissionItem[];
-  checkedValues: number[],
-}
-
-const ListRoles = () => {
-  const params = useParams()
+const EditProduct = () => {
   const router = useRouter()
-  const [errors, setErrors] = useState<Record<string, any>>({
-    name: undefined,
-  })
+  const [errors, setErrors] = useState<Record<string, any>>({})
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState<boolean>(false)
-  const [permissionGroups, setPermissionGroups] = useState<PermissionGroupInterface[]>([]);
-  const [disabledForm, setDisabledForm] = useState(false)
-  const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false)
+  const [categories, setCategories] = useState([])
+  const params = useParams()
+  const [product, setProduct] = useState(null)
 
   const onFinish = async (values: any) => {
-    const permissionIds = permissionGroups.flatMap(group => group.checkedValues);
-
     try {
       setLoadingSubmit(true)
-      const id = Number(params.id);
-      await updateRole(id, {...values, permission_ids: permissionIds})
-      toast.success('Cập nhật thành công!')
-      router.push(ROUTES.DASHBOARD_ROLE_LIST)
+      await updateProduct(params.id, values)
+      setLoadingSubmit(false)
+      router.push('/admin/products')
     } catch (error: any) {
-      setErrors(error?.data?.errors as Record<string, string>);
+      const statusCode = error.status
+      if(statusCode == 422) {
+        setErrors(error?.data?.errors as Record<string, string>);
+      }
     } finally {
       setLoadingSubmit(false)
     }
   };
 
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response = await getAllCategories();
+        const { data } = response;
+        setCategories(data)
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+
+    const getProduct = async (id: any) => {
+      try {
+        const response = await getById(id);
+        const { data } = response;
+        setProduct(data)
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+    getCategories()
+    getProduct(params.id)
+
+  }, [params])
+
   const onReset = () => {
     form.resetFields();
     setErrors({})
-    setPermissionGroups(permissionGroups.map(item => ({...item, checkedValues: []})))
   };
   const actions = (
-    <Link href={ROUTES.DASHBOARD_ROLE_LIST}>
+    <Link href={ADMIN_ROUTES.PRODUCT_LIST}>
       <Button
         size="large"
         type="primary"
@@ -69,126 +84,184 @@ const ListRoles = () => {
         <UnorderedListOutlined />Danh sách
       </Button>
     </Link>
-  )
+  );
 
-  const layout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 17 },
+  const onChangePreviewImage = (ids: any) => {
+    form.setFieldsValue({ preview_image_id: ids[0] ?? null });
   };
 
-  const tailLayout = {
-    wrapperCol: { offset: 4, span: 16 },
+  const onChangeDetailFile = (ids: any) => {
+    form.setFieldsValue({ detail_file_ids: ids });
   };
 
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      const { data } = await getAll();
-      return data
-    };
+  const rules: any = {
+    name: [
+      { required: true },
+      { max: 50 },
+    ],
+    status: [
+      { required: true },
+    ],
+    price: [
+      { required: true },
+    ],
+    inventory_quantity: [
+      { required: true },
+    ],
+    preview_image_id: [
+      { required: true, message: 'Vui lòng chọn ảnh.' },
+    ],
+    detail_file_ids: [
+      { required: true, message: 'Vui lòng chọn ảnh.' },
+    ],
+    description: [
+      { required: true },
+    ],
+    category_id: [
+      { required: true, message: 'Vui lòng chọn.' },
+    ],
+  }
+  const initialValues={
+    status: 1,
+    price: null, 
+    name: null, 
+    description: null,
+    preview_image_id: null,
+    detail_file_ids: [],
+    category_id: null,
+    inventory_quantity: null
+  }
 
-    const fetchRoleDetail = async () => {
-      const id = Number(params.id);
-      if (!id) return;
-      const { data } = await getRole(id);
-      return data
-    };
-
-    const groupPermissions = (permissions: any[], checkedPermissions: any) => {
-      checkedPermissions = groupBy(checkedPermissions, 'group')
-      const groups = groupBy(permissions, 'group');
-      return Object.keys(groups).map((group) => ({
-        group,
-        permissions: groups[group].map((item: any) => ({
-          id: item.id,
-          action: item.action,
-        })),
-        checkedValues: checkedPermissions[group] ? checkedPermissions[group].map((item: any) => item.id) : [],
-      }));
-    };
-
-    const initializeData = async () => {
-      try {
-        setLoading(true)
-        const role = await fetchRoleDetail();
-        setDisabledForm(role?.type === ROLE.TYPE.DEFAULT)
-        form.setFieldsValue({ name: role.name });
-        const permissions = await fetchPermissions();
-        const groupedPermissions = groupPermissions(permissions, role.permissions);
-        setPermissionGroups(groupedPermissions as PermissionGroupInterface[]);
-      } catch (error) {
-        console.log(error)
-      } finally {
-        setLoading(false)
-      }
-    };
-
-    initializeData();
-  }, [params.id, form]);
-
-  const updatePermissionGroup = (index: number, updatedData: any) => {
-    setPermissionGroups(prevPermissionGroups => {
-      const updatedPermissionGroups = [...prevPermissionGroups]
-
-      updatedPermissionGroups[index] = {
-        ...updatedPermissionGroups[index],
-        ...updatedData
-      };
-
-      return updatedPermissionGroups
-    });
+  const handleEditorChange = (data: string) => {
+    data = data.replace(/<p>&nbsp;<\/p>|<p><\/p>/g, '');
+    form.setFieldsValue({ description: data });
   };
 
   return (
     <div>
-      <Breadcrumb items={[{title: 'Quyền'}]} />
-      <Card title="Tạo mới quyền" bordered={false} extra={actions}>
+      <Breadcrumb items={[{title: 'Sản phẩm'}, {title: 'Chỉnh sửa'}]} />
+      <Card title="Tạo mới" variant="outlined" extra={actions}>
         <Form
-          disabled={disabledForm}
-          {...layout}
+          layout="vertical"
           form={form}
           onFinish={onFinish}
           style={{ width: '100%' }}
+          validateMessages={validateMessages}
+          initialValues={initialValues}
         >
-          <Form.Item
-            name="name"
-            label="Tên"
-            rules={[{ required: true, message: 'Vui lòng nhập.' }]}
-            validateStatus={ errors.name ? 'error' : undefined}
-            help={errors.name ? errors.name : undefined}
-          >
-            <Input size="large" />
-          </Form.Item>
-
-          <Form.Item label="Quyền">
-            <div style={{ border: "1px solid #d9d9d9", padding: 15, borderRadius: 8}}>
-              { loading && (
-                <div>Đang tải...</div>
-              )}
-              {!loading && permissionGroups.map((item, index) => {
-                return <PermissionGroup
-                  key={index}
-                  permissionGroup={item}
-                  groupIndex={index}
-                  updatePermissionGroup={updatePermissionGroup}
+          <Row gutter={[100, 0]}>
+            <Col sm={24} md={12}>
+              <Form.Item
+                name="name"
+                label="Tên"
+                rules={rules.name}
+                validateStatus={ errors?.name ? 'error' : undefined}
+                help={errors?.name ? errors?.name : undefined}
+              >
+                <Input size="large" />
+              </Form.Item>
+              <Form.Item
+                  name="status"
+                  label="Trạng thái"
+                  rules={rules.status}
+                >
+                  <Radio.Group
+                    options={[
+                      {
+                        value: 1,
+                        label: "Active"
+                      },
+                      {
+                        value: 2,
+                        label: "Inactive"
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              <Form.Item
+                name="price"
+                label="Giá"
+                rules={rules.price}
+                validateStatus={ errors?.price ? 'error' : undefined}
+                help={errors?.price ? errors?.price : undefined}
+              >
+                <InputNumber size="large" min={1000} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col sm={24} md={12}>
+              <Form.Item
+                  name="preview_image_id"
+                  label="Ảnh đại diện"
+                  rules={rules.preview_image_id}
+                >
+                  <UploadImage
+                    onChange={onChangePreviewImage}
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="category_id"
+                  label="Danh mục"
+                  rules={rules.category_id}
+                >
+                  <TreeSelect
+                    size="large"
+                    placeholder="Vui lòng chọn."
+                    allowClear
+                    treeDefaultExpandAll
+                    treeData={buildCategoryTree(categories)}
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="inventory_quantity"
+                  label="Số lượng tồn kho"
+                  rules={rules.inventory_quantity}
+                  validateStatus={ errors?.inventory_quantity ? 'error' : undefined}
+                  help={errors?.inventory_quantity ? errors?.inventory_quantity : undefined}
+              >
+                <InputNumber size="large" min={1} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col sm={24} md={24}>
+              <Form.Item
+                name="detail_file_ids"
+                label="Ảnh chi tiết"
+                rules={rules.preview_image_id}
+              >
+                <UploadImage
+                  multiple={true}
+                  onChange={onChangeDetailFile}
+                  maxCount={10}
                 />
-              })}
-            </div>
-          </Form.Item>
-
-          <Form.Item {...tailLayout}>
-            <Space>
-              <Button size="large" disabled={disabledForm ? disabledForm : loadingSubmit} type="primary" htmlType="submit">
-                { loadingSubmit ? <SpinLoading /> : <EditOutlined /> }
-                Cập nhật
-              </Button>
-              <Button size="large" htmlType="button" onClick={onReset}>
-                <ClearOutlined />Xoá</Button>
-            </Space>
-          </Form.Item>
+              </Form.Item>
+            </Col>
+            <Col sm={24} md={24}>
+              <Form.Item
+                name="description"
+                label="Chi tiết"
+                rules={rules.description}
+              >
+                <MyCKEditor value={initialValues.description} onChange={handleEditorChange} />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <div style={{ display: 'flex', justifyContent: 'center'}}>
+                <Space>
+                    <Button size="large" disabled={loadingSubmit} type="primary" htmlType="submit">
+                      { loadingSubmit ? <SpinLoading /> : <PlusCircleOutlined /> }
+                      Cập nhật
+                    </Button>
+                    <Button size="large" htmlType="button" onClick={onReset}>
+                      <ClearOutlined />
+                      Xoá
+                    </Button>
+                  </Space>
+              </div>
+            </Col>
+          </Row>
         </Form>
       </Card>
     </div>
   );
 }
 
-export default withAuth(ListRoles)
+export default withAuth(EditProduct)

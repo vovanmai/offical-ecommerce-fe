@@ -160,7 +160,7 @@ const ProductList = () => {
       dataIndex: 'preview_image',
       sorter: true,
       render: (record) => {
-        const url = record ? `${record.path}/${record.filename}` : ''
+        const url = record && record.data ? `${record.data.endpoint_url}/${record.path}/${record.filename}` : ''
         return (
           url && <Image
             width={80}
@@ -216,7 +216,8 @@ const ProductList = () => {
               <Link href={`/admin/products/${record.id}/edit`}>
                 <Button shape="circle" icon={<EditOutlined />} />
               </Link>
-            </Tooltip><Tooltip title="">
+            </Tooltip>
+            <Tooltip title="Xoá">
               <Button onClick={() => {showDeleteConfirm(record.id)}} danger shape="circle" icon={<DeleteOutlined />} />
             </Tooltip>
           </Space>
@@ -233,7 +234,8 @@ const ProductList = () => {
       setShowConfirmDelete(false)
       toast.success('Xoá thành công!')
     } catch (error: any) {
-      toast.error(error.data.message)
+      console.log(error)
+      toast.error(error.message)
     } finally {
       setLoadingDelete(false)
     }

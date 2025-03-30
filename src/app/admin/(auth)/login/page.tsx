@@ -9,7 +9,7 @@ export const metadata = {
 export default function Login() {
   const title = <h2 style={{ textAlign: "center" }}>Đăng nhập</h2>
   return (
-    <Card title={title} bordered={false} className="auth-page" style={{ margin: 'auto', marginTop: 100 }}>
+    <Card title={title} variant="outlined" className="auth-page" style={{ margin: 'auto', marginTop: 100 }}>
       <ComponentLogin/>
     </Card>
   );

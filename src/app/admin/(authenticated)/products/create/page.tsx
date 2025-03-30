@@ -125,7 +125,7 @@ const CreateProduct = () => {
 
   return (
     <div>
-      <Breadcrumb items={[{title: 'Sản phẩm'}]} />
+      <Breadcrumb items={[{title: 'Sản phẩm'}, {title: 'Tạo mới'}]} />
       <Card title="Tạo mới" variant="outlined" extra={actions}>
         <Form
           layout="vertical"
