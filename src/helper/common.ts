@@ -26,6 +26,14 @@ export const getActiveAdminMenuByRoute = (pathname: string) => {
       regex: /^\/admin\/products\/create$/,
       path: ADMIN_ROUTES.PRODUCT_LIST
     },
+    {
+      regex: /^\/admin\/pages$/,
+      path: ADMIN_ROUTES.PAGE_LIST
+    },
+    {
+      regex: /^\/admin\/pages\/create$/,
+      path: ADMIN_ROUTES.PAGE_LIST
+    },
   ]
 
   const route = matchRoutes.find((route) => {

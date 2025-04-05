@@ -31,6 +31,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ onChange, defaultList = [], m
   const handleRemove = (file: any) => {
     const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
     setFileList(updatedFileList);
+    onChange(updatedFileList.map(item => item.uid));
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);

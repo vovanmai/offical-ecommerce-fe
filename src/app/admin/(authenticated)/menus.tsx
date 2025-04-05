@@ -15,6 +15,11 @@ const menus = [
     label: 'Sản phẩm',
     icon: <FaCircle />
   },
+  {
+    key: ADMIN_ROUTES.PAGE_LIST,
+    label: 'Trang',
+    icon: <FaCircle />
+  },
 ]
 
 export default menus

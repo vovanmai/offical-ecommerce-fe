@@ -10,4 +10,6 @@ export const ADMIN_ROUTES = {
   CATEGORY_PRODUCT_LIST: '/admin/categories',
   PRODUCT_LIST: '/admin/products',
   PRODUCT_CREATE: '/admin/products/create',
+  PAGE_LIST: '/admin/pages',
+  PAGE_CREATE: '/admin/pages/create',
 };
