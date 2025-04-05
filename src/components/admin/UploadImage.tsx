@@ -3,7 +3,7 @@ import { Image, Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { toast } from 'react-toastify'
 import { createUpload } from "@/api/admin/common";
-import type { GetProp, UploadFile, UploadProps } from 'antd';
+import type { UploadFile } from 'antd';
 
 
 interface UploadImageProps {
@@ -18,6 +18,10 @@ const UploadImage: React.FC<UploadImageProps> = ({ onChange, defaultList = [], m
   const [fileList, setFileList] = useState<any[]>(defaultList);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
+
+  useEffect(() => {
+    setFileList(defaultList);
+  }, [defaultList.length]);
 
   const handlePreview = async (file: UploadFile) => {
     setPreviewImage(file.url || (file.preview as string));

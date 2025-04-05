@@ -132,6 +132,7 @@ import {
   Underline,
   WordCount,
 } from "ckeditor5";
+import { useState } from 'react';
 
 /**
  * Create a free account with a trial: https://portal.ckeditor.com/checkout?plan=free
@@ -471,12 +472,12 @@ export default function MyCKEditor({ onChange, value }: { onChange: (data: strin
     <CKEditor
 		editor={ClassicEditor}
 		config={editorConfigs}
+		data={value}
 		onChange={(event, editor) => {
 			const data = editor.getData(); // Lấy nội dung từ editor
 			onChange(data);
 		}}
 		onReady={(editor) => {
-			editor.setData(""); // Xóa nội dung khi CKEditor load xong
 		}}
 	/>
   );

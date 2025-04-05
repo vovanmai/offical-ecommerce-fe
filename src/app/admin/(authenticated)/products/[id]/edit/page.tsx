@@ -28,7 +28,9 @@ const EditProduct = () => {
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false)
   const [categories, setCategories] = useState([])
   const params = useParams()
-  const [product, setProduct] = useState(null)
+  const [description, setDescription] = useState<string>('')
+  const [prevewImage, setPreviewImage] = useState<any[]>([])
+  const [detailFiles, setDetailFiles] = useState<any[]>([])
 
   const onFinish = async (values: any) => {
     try {
@@ -61,7 +63,29 @@ const EditProduct = () => {
       try {
         const response = await getById(id);
         const { data } = response;
-        setProduct(data)
+        form.setFieldsValue({
+          name: data.name,
+          status: data.status,
+          price: data.price,
+          category_id: data.category_id,
+          inventory_quantity: data.inventory_quantity,
+          description: data.description
+        })
+        setDescription(data.description)
+
+        const { preview_image } = data
+        setPreviewImage([{
+          uid: preview_image.id,
+          url: `${preview_image.data.endpoint_url}/${preview_image.path}/${preview_image.filename}`,
+        }])
+        form.setFieldsValue({ preview_image_id: preview_image.id })
+        const { detail_medias } = data
+        const detailFiles = detail_medias.map((item: any) => ({
+          uid: item.id,
+          url: `${item.data.endpoint_url}/${item.path}/${item.filename}`,
+        }))
+        setDetailFiles(detailFiles)
+        form.setFieldsValue({ detail_file_ids: detailFiles.map((item: any) => item.uid) })
       } catch (error) {
         console.error('Fetch error:', error);
       }
@@ -121,16 +145,6 @@ const EditProduct = () => {
       { required: true, message: 'Vui lòng chọn.' },
     ],
   }
-  const initialValues={
-    status: 1,
-    price: null, 
-    name: null, 
-    description: null,
-    preview_image_id: null,
-    detail_file_ids: [],
-    category_id: null,
-    inventory_quantity: null
-  }
 
   const handleEditorChange = (data: string) => {
     data = data.replace(/<p>&nbsp;<\/p>|<p><\/p>/g, '');
@@ -147,7 +161,6 @@ const EditProduct = () => {
           onFinish={onFinish}
           style={{ width: '100%' }}
           validateMessages={validateMessages}
-          initialValues={initialValues}
         >
           <Row gutter={[100, 0]}>
             <Col sm={24} md={12}>
@@ -187,6 +200,15 @@ const EditProduct = () => {
               >
                 <InputNumber size="large" min={1000} style={{ width: "100%" }} />
               </Form.Item>
+              <Form.Item
+                  name="inventory_quantity"
+                  label="Số lượng tồn kho"
+                  rules={rules.inventory_quantity}
+                  validateStatus={ errors?.inventory_quantity ? 'error' : undefined}
+                  help={errors?.inventory_quantity ? errors?.inventory_quantity : undefined}
+                >
+                  <InputNumber size="large" min={1} style={{ width: "100%" }} />
+                </Form.Item>
             </Col>
             <Col sm={24} md={12}>
               <Form.Item
@@ -195,6 +217,7 @@ const EditProduct = () => {
                   rules={rules.preview_image_id}
                 >
                   <UploadImage
+                    defaultList={prevewImage}
                     onChange={onChangePreviewImage}
                   />
                 </Form.Item>
@@ -211,15 +234,6 @@ const EditProduct = () => {
                     treeData={buildCategoryTree(categories)}
                   />
                 </Form.Item>
-                <Form.Item
-                  name="inventory_quantity"
-                  label="Số lượng tồn kho"
-                  rules={rules.inventory_quantity}
-                  validateStatus={ errors?.inventory_quantity ? 'error' : undefined}
-                  help={errors?.inventory_quantity ? errors?.inventory_quantity : undefined}
-              >
-                <InputNumber size="large" min={1} style={{ width: "100%" }} />
-              </Form.Item>
             </Col>
             <Col sm={24} md={24}>
               <Form.Item
@@ -228,6 +242,7 @@ const EditProduct = () => {
                 rules={rules.preview_image_id}
               >
                 <UploadImage
+                  defaultList={detailFiles}
                   multiple={true}
                   onChange={onChangeDetailFile}
                   maxCount={10}
@@ -236,12 +251,12 @@ const EditProduct = () => {
             </Col>
             <Col sm={24} md={24}>
               <Form.Item
-                name="description"
-                label="Chi tiết"
-                rules={rules.description}
-              >
-                <MyCKEditor value={initialValues.description} onChange={handleEditorChange} />
-              </Form.Item>
+                  name="description"
+                  label="Chi tiết"
+                  rules={rules.description}
+                >
+                  <MyCKEditor value={description} onChange={handleEditorChange} />
+                </Form.Item>
             </Col>
             <Col span={24}>
               <div style={{ display: 'flex', justifyContent: 'center'}}>
