@@ -3,16 +3,13 @@
 import { Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
 import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import Link from 'next/link'
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import withAuth from "@/hooks/withAuth"
 import { ADMIN_ROUTES } from "@/constants/routes"
 import {useRouter} from "next/navigation"
 import SpinLoading from "@/components/SpinLoading"
 import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
-import UploadImage from "@/components/admin/UploadImage"
-import { getAll as getAllCategories } from "@/api/admin/category"
-import { buildCategoryTree } from "@/helper/common"
 import dynamic from 'next/dynamic';
 import { create as createPage } from '@/api/admin/page'
 
@@ -25,14 +22,13 @@ const CreatePage = () => {
   const [errors, setErrors] = useState<Record<string, any>>({})
   const [form] = Form.useForm();
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false)
-  const [categories, setCategories] = useState([])
 
   const onFinish = async (values: any) => {
     try {
       setLoadingSubmit(true)
       await createPage(values)
       setLoadingSubmit(false)
-      router.push('/admin/products')
+      router.push('/admin/pages')
     } catch (error: any) {
       const statusCode = error.status
       if(statusCode == 422) {

@@ -4,12 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import RangeDatePicker from '@/components/RangeDatePicker';
-import {ROUTES} from "@/constants/routes";
 
 type PropsType = {
   formData: {
     name?: string,
-    email?: string,
     created_at_from?: string,
     created_at_to?: string,
     updated_at_from?: string,
@@ -30,7 +28,6 @@ const Search = ({ formData, onSearch, resetForm }: PropsType) => {
     if (formData) {
       form.setFieldsValue({
         name: formData.name,
-        email: formData.email,
         created_at_from: formData.created_at_from ? dayjs(formData.created_at_from) : null,
         created_at_to: formData.created_at_to ? dayjs(formData.created_at_to) : null,
         updated_at_from: formData.updated_at_from ? dayjs(formData.updated_at_from) : null,
@@ -54,29 +51,24 @@ const Search = ({ formData, onSearch, resetForm }: PropsType) => {
 
   const clearForm = () => {
     form.resetFields();
-    router.push(ROUTES.DASHBOARD_USER_LIST);
+    router.push('/admin/products');
     resetForm();
   };
 
   return (
     <Form form={form} layout="vertical" onFinish={onSubmit} style={{ padding: '0px 0px 24px 0px' }}>
       <Row gutter={30}>
-        <Col xs={24} sm={12} md={8}>
+        <Col xs={24} sm={12} md={6}>
           <Form.Item name="name" label="Tên">
             <Input size="large" />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={12} md={8}>
-          <Form.Item name="email" label="Email">
-            <Input size="large" />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={12} md={8}>
+        <Col xs={24} sm={12} md={9}>
           <Form.Item label="Ngày tạo">
             <RangeDatePicker fromName="created_at_from" toName="created_at_to" />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={12} md={8}>
+        <Col xs={24} sm={12} md={9}>
           <Form.Item label="Ngày cập nhật">
             <RangeDatePicker fromName="updated_at_from" toName="updated_at_to" />
           </Form.Item>

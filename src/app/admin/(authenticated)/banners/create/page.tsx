@@ -1,37 +1,30 @@
 'use client'
 
-import { Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
+import { Card, Button, Form, Space, Input, Row, Col, Radio } from "antd"
 import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import Link from 'next/link'
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import withAuth from "@/hooks/withAuth"
 import { ADMIN_ROUTES } from "@/constants/routes"
 import {useRouter} from "next/navigation"
 import SpinLoading from "@/components/SpinLoading"
 import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
-import dynamic from 'next/dynamic';
-import { update as updatePage, getById } from '@/api/admin/page'
-import { useParams } from "next/navigation"
+import UploadImage from "@/components/admin/UploadImage"
+import { create as createRequest } from '@/api/admin/banner'
 
-const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
-  ssr: false,
-});
-
-const Edit = () => {
+const Create = () => {
   const router = useRouter()
   const [errors, setErrors] = useState<Record<string, any>>({})
   const [form] = Form.useForm();
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false)
-  const params = useParams()
-  const [description, setDescription] = useState<string>('')
 
   const onFinish = async (values: any) => {
     try {
       setLoadingSubmit(true)
-      await updatePage(params.id, values)
+      await createRequest(values)
       setLoadingSubmit(false)
-      router.push('/admin/pages')
+      router.push('/admin/banners')
     } catch (error: any) {
       const statusCode = error.status
       if(statusCode == 422) {
@@ -42,31 +35,12 @@ const Edit = () => {
     }
   };
 
-  useEffect(() => {
-    const getDetail = async (id: any) => {
-      try {
-        const response = await getById(id);
-        const { data } = response;
-        form.setFieldsValue({
-          name: data.name,
-          status: data.status,
-          description: data.description
-        })
-        setDescription(data.description)
-      } catch (error) {
-        console.error('Fetch error:', error);
-      }
-    };
-    getDetail(params.id)
-
-  }, [params])
-
   const onReset = () => {
     form.resetFields();
     setErrors({})
   };
   const actions = (
-    <Link href={ADMIN_ROUTES.PAGE_LIST}>
+    <Link href={ADMIN_ROUTES.BANNER_LIST}>
       <Button
         size="large"
         type="primary"
@@ -76,27 +50,35 @@ const Edit = () => {
     </Link>
   );
 
+  const onChangeImage = (ids: any) => {
+    form.setFieldsValue({ image_id: ids[0] ?? null });
+  };
+
   const rules: any = {
     name: [
-      { required: true },
+      { required: false },
       { max: 50 },
     ],
     status: [
       { required: true },
     ],
-    description: [
-      { required: true },
+    image_id: [
+      { required: true, message: 'Vui lòng chọn ảnh.' },
+    ],
+    url: [
+      { required: false },
     ],
   }
-
-  const handleEditorChange = (data: string) => {
-    data = data.replace(/<p>&nbsp;<\/p>|<p><\/p>/g, '');
-    form.setFieldsValue({ description: data });
-  };
+  const initialValues={
+    status: 1,
+    url: null, 
+    name: null, 
+    image_id: null,
+  }
 
   return (
     <div>
-      <Breadcrumb items={[{title: 'Trang'}, {title: 'Chỉnh sửa'}]} />
+      <Breadcrumb items={[{title: 'Banner'}, {title: 'Tạo mới'}]} />
       <Card title="Tạo mới" variant="outlined" extra={actions}>
         <Form
           layout="vertical"
@@ -104,6 +86,7 @@ const Edit = () => {
           onFinish={onFinish}
           style={{ width: '100%' }}
           validateMessages={validateMessages}
+          initialValues={initialValues}
         >
           <Row gutter={[100, 0]}>
             <Col sm={24} md={12}>
@@ -135,15 +118,28 @@ const Edit = () => {
                     },
                   ]}
                 />
+              </Form.Item>
+            </Col>
+            <Col sm={24} md={12}>
+                <Form.Item
+                  name="url"
+                  label="Đường dẫn"
+                  rules={rules.url}
+                  validateStatus={ errors?.url ? 'error' : undefined}
+                  help={errors?.url ? errors?.url : undefined}
+                >
+                  <Input size="large" />
                 </Form.Item>
             </Col>
-            <Col sm={24} md={24}>
+            <Col sm={24} md={12}>
               <Form.Item
-                  name="description"
-                  label="Chi tiết"
-                  rules={rules.description}
+                  name="image_id"
+                  label="Ảnh"
+                  rules={rules.image_id}
                 >
-                  <MyCKEditor value={description} onChange={handleEditorChange} />
+                  <UploadImage
+                    onChange={onChangeImage}
+                  />
                 </Form.Item>
             </Col>
             <Col span={24}>
@@ -151,7 +147,7 @@ const Edit = () => {
                 <Space>
                     <Button size="large" disabled={loadingSubmit} type="primary" htmlType="submit">
                       { loadingSubmit ? <SpinLoading /> : <PlusCircleOutlined /> }
-                      Cập nhật
+                      Tạo
                     </Button>
                     <Button size="large" htmlType="button" onClick={onReset}>
                       <ClearOutlined />
@@ -167,4 +163,4 @@ const Edit = () => {
   );
 }
 
-export default withAuth(Edit)
+export default withAuth(Create)

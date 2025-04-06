@@ -20,6 +20,11 @@ const menus = [
     label: 'Trang',
     icon: <FaCircle />
   },
+  {
+    key: ADMIN_ROUTES.BANNER_LIST,
+    label: 'Banners',
+    icon: <FaCircle />
+  },
 ]
 
 export default menus

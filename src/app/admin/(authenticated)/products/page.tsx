@@ -158,7 +158,6 @@ const ProductList = () => {
     {
       title: 'Ảnh đại diện',
       dataIndex: 'preview_image',
-      sorter: true,
       render: (record) => {
         const url = record && record.data ? `${record.data.endpoint_url}/${record.path}/${record.filename}` : ''
         return (

@@ -17,6 +17,6 @@ export function update(id: any, data: object) {
   return api.post(`api/admin/pages/${id}`, data);
 }
 
-export function deleteProduct(id: number) {
+export function deletePage(id: number) {
   return api.delete(`api/admin/pages/${id}`);
 }

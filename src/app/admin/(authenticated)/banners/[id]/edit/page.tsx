@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
+import { Card, Button, Form, Space, Input, Row, Col, Radio } from "antd"
 import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import Link from 'next/link'
 import React, { useEffect, useState } from "react"
@@ -10,28 +10,27 @@ import {useRouter} from "next/navigation"
 import SpinLoading from "@/components/SpinLoading"
 import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
-import dynamic from 'next/dynamic';
-import { update as updatePage, getById } from '@/api/admin/page'
+import UploadImage from "@/components/admin/UploadImage"
+import { update as updateRequest, getById } from '@/api/admin/banner'
 import { useParams } from "next/navigation"
-
-const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
-  ssr: false,
-});
 
 const Edit = () => {
   const router = useRouter()
   const [errors, setErrors] = useState<Record<string, any>>({})
   const [form] = Form.useForm();
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false)
+  const [categories, setCategories] = useState([])
   const params = useParams()
   const [description, setDescription] = useState<string>('')
+  const [image, setImage] = useState<any[]>([])
+  const [detailFiles, setDetailFiles] = useState<any[]>([])
 
   const onFinish = async (values: any) => {
     try {
       setLoadingSubmit(true)
-      await updatePage(params.id, values)
+      await updateRequest(params.id, values)
       setLoadingSubmit(false)
-      router.push('/admin/pages')
+      router.push('/admin/banners')
     } catch (error: any) {
       const statusCode = error.status
       if(statusCode == 422) {
@@ -43,21 +42,27 @@ const Edit = () => {
   };
 
   useEffect(() => {
-    const getDetail = async (id: any) => {
+    const getBanner = async (id: any) => {
       try {
         const response = await getById(id);
         const { data } = response;
         form.setFieldsValue({
           name: data.name,
           status: data.status,
-          description: data.description
+          url: data.url,
         })
-        setDescription(data.description)
+
+        const { image } = data
+        setImage([{
+          uid: image.id,
+          url: `${image.data.endpoint_url}/${image.path}/${image.filename}`,
+        }])
+        form.setFieldsValue({ image_id: image.id })
       } catch (error) {
         console.error('Fetch error:', error);
       }
     };
-    getDetail(params.id)
+    getBanner(params.id)
 
   }, [params])
 
@@ -66,7 +71,7 @@ const Edit = () => {
     setErrors({})
   };
   const actions = (
-    <Link href={ADMIN_ROUTES.PAGE_LIST}>
+    <Link href={ADMIN_ROUTES.PRODUCT_LIST}>
       <Button
         size="large"
         type="primary"
@@ -76,27 +81,29 @@ const Edit = () => {
     </Link>
   );
 
+  const onChangeImage = (ids: any) => {
+    form.setFieldsValue({ image_id: ids[0] ?? null });
+  };
+
   const rules: any = {
     name: [
-      { required: true },
+      { required: false },
       { max: 50 },
     ],
     status: [
       { required: true },
     ],
-    description: [
-      { required: true },
+    url: [
+      { required: false },
+    ],
+    image_id: [
+      { required: true, message: 'Vui lòng chọn ảnh.' },
     ],
   }
 
-  const handleEditorChange = (data: string) => {
-    data = data.replace(/<p>&nbsp;<\/p>|<p><\/p>/g, '');
-    form.setFieldsValue({ description: data });
-  };
-
   return (
     <div>
-      <Breadcrumb items={[{title: 'Trang'}, {title: 'Chỉnh sửa'}]} />
+      <Breadcrumb items={[{title: 'Sản phẩm'}, {title: 'Chỉnh sửa'}]} />
       <Card title="Tạo mới" variant="outlined" extra={actions}>
         <Form
           layout="vertical"
@@ -106,7 +113,7 @@ const Edit = () => {
           validateMessages={validateMessages}
         >
           <Row gutter={[100, 0]}>
-            <Col sm={24} md={12}>
+          <Col sm={24} md={12}>
               <Form.Item
                 name="name"
                 label="Tên"
@@ -135,17 +142,32 @@ const Edit = () => {
                     },
                   ]}
                 />
-                </Form.Item>
+              </Form.Item>
             </Col>
-            <Col sm={24} md={24}>
-              <Form.Item
-                  name="description"
-                  label="Chi tiết"
-                  rules={rules.description}
+            <Col sm={24} md={12}>
+                <Form.Item
+                  name="url"
+                  label="Đường dẫn"
+                  rules={rules.url}
+                  validateStatus={ errors?.url ? 'error' : undefined}
+                  help={errors?.url ? errors?.url : undefined}
                 >
-                  <MyCKEditor value={description} onChange={handleEditorChange} />
+                  <Input size="large" />
                 </Form.Item>
             </Col>
+            <Col sm={24} md={12}>
+              <Form.Item
+                  name="image_id"
+                  label="Ảnh"
+                  rules={rules.image_id}
+                >
+                  <UploadImage
+                    defaultList={image}
+                    onChange={onChangeImage}
+                  />
+                </Form.Item>
+            </Col>
+            
             <Col span={24}>
               <div style={{ display: 'flex', justifyContent: 'center'}}>
                 <Space>

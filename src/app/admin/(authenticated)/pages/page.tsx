@@ -3,7 +3,7 @@ import { Card, Button, Table, Tooltip, Space, theme, Image, Badge } from "antd"
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useRouter, useSearchParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
-import { list as listProducts, deleteProduct } from '@/api/admin/product'
+import { list as listRequest, deletePage as deleteRequest } from '@/api/admin/page'
 import dayjs from 'dayjs'
 import Search from "./Search"
 import { removeEmptyFields } from "@/helper/common"
@@ -14,13 +14,12 @@ import { ADMIN_ROUTES } from "@/constants/routes"
 import { toast } from 'react-toastify'
 import ConfirmModal from "@/components/ConfirmModal"
 import Breadcrumb from "@/components/Breadcrumb"
-import numeral from 'numeral'
 
 import type { GetProp, TableProps } from 'antd';
 type ColumnsType<T extends object = object> = TableProps<T>['columns'];
 type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>;
 
-const ProductList = () => {
+const List = () => {
   const {
     token: { colorPrimary },
   } = theme.useToken();
@@ -30,10 +29,9 @@ const ProductList = () => {
   const [deletedId, setDeletedId] = useState<any>(null)
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
   const actions = (
-    <Link href={ ADMIN_ROUTES.PRODUCT_CREATE }>
+    <Link href={ ADMIN_ROUTES.PAGE_CREATE }>
       <Button
         size="large"
-        onClick={() => { router.push('/admin/products/create') }}
         type="primary"
       >
         <PlusCircleOutlined />Tạo mới
@@ -86,7 +84,7 @@ const ProductList = () => {
   const fetchData = async (params = {}) => {
     setLoading(true);
     try {
-      const response = await listProducts(removeEmptyFields(params));
+      const response = await listRequest(removeEmptyFields(params));
       const { data: responseData } = response;
       setData(responseData.data);
       setPagination({
@@ -124,7 +122,7 @@ const ProductList = () => {
     }
     setQueryParams(params)
     const queryString = qs.stringify(removeEmptyFields(params));
-    router.push(`/admin/products?${queryString}`)
+    router.push(`/admin/pages?${queryString}`)
   }
 
   const onSearch = async (data: any) => {
@@ -137,7 +135,7 @@ const ProductList = () => {
     }
     setQueryParams(params)
     const queryString = qs.stringify(removeEmptyFields(params));
-    router.push(`/admin/products?${queryString}`)
+    router.push(`/admin/pages?${queryString}`)
   }
 
   const columns: ColumnsType<any> = [
@@ -151,23 +149,7 @@ const ProductList = () => {
       sorter: true,
       render: (text, record) => {
         return (
-          <Link style={{ color: colorPrimary }} href={`/admin/products/${record.id}/edit`}>{text}</Link>
-        )
-      }
-    },
-    {
-      title: 'Ảnh đại diện',
-      dataIndex: 'preview_image',
-      sorter: true,
-      render: (record) => {
-        const url = record && record.data ? `${record.data.endpoint_url}/${record.path}/${record.filename}` : ''
-        return (
-          url && <Image
-            width={80}
-            height={80}
-            src={url}
-            style={{objectFit: 'cover'}}
-          />
+          <Link style={{ color: colorPrimary }} href={`/admin/pages/${record.id}/edit`}>{text}</Link>
         )
       }
     },
@@ -183,25 +165,6 @@ const ProductList = () => {
       }
     },
     {
-      title: 'Danh mục',
-      sorter: true,
-      render: (record) => {
-        return (
-          <Link style={{ color: colorPrimary }} href={`/admin/categories/${record.category_id}/edit`}>{ record.category_name }</Link>
-        )
-      }
-    },
-    {
-      title: 'Giá',
-      dataIndex: 'price',
-      sorter: true,
-      render: (text) => {
-        return (
-          <span>{numeral(text).format('0,0')} đ</span>
-        )
-      }
-    },
-    {
       title: 'Ngày cập nhật',
       dataIndex: 'updated_at',
       sorter: true,
@@ -213,7 +176,7 @@ const ProductList = () => {
         return (
           <Space>
             <Tooltip title="Chỉnh sửa">
-              <Link href={`/admin/products/${record.id}/edit`}>
+              <Link href={`/admin/pages/${record.id}/edit`}>
                 <Button shape="circle" icon={<EditOutlined />} />
               </Link>
             </Tooltip>
@@ -229,7 +192,7 @@ const ProductList = () => {
   const deleteRecord = async () => {
     try {
       setLoadingDelete(true)
-      await deleteProduct(deletedId)
+      await deleteRequest(deletedId)
       setData(data.filter((item) => item.id !== deletedId))
       setShowConfirmDelete(false)
       toast.success('Xoá thành công!')
@@ -248,14 +211,14 @@ const ProductList = () => {
 
   return (
     <div>
-      <Breadcrumb items={[{title: 'Sản phẩm'}]} />
+      <Breadcrumb items={[{title: 'Trang'}]} />
       <ConfirmModal
         visible={showConfirmDelete}
         onOk={deleteRecord}
         onCancel={() => setShowConfirmDelete(false)}
         confirmLoading={loadingDelete}
       />
-      <Card title="Danh sách sản phẩm" variant="outlined" extra={actions}>
+      <Card title="Danh sách trang" variant="outlined" extra={actions}>
         <Search
           onSearch={onSearch}
           resetForm={() => { setQueryParams({}) }}
@@ -277,4 +240,4 @@ const ProductList = () => {
   );
 }
 
-export default withAuth(ProductList)
+export default withAuth(List)

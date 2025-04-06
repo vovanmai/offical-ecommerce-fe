@@ -1,36 +1,25 @@
 'use client'
-import {Card, Button, Table, Tooltip, Space, theme, Tag } from "antd"
+import { Card, Button, Table, Tooltip, Space, theme, Image, Badge } from "antd"
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useRouter, useSearchParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
-import { getUsers, deleteUser } from '@/api/user/user'
+import { list as listRequest, deleteBanner as deleteRequest } from '@/api/admin/banner'
 import dayjs from 'dayjs'
 import Search from "./Search"
 import { removeEmptyFields } from "@/helper/common"
 import qs from 'qs'
 import withAuth from "@/hooks/withAuth";
 import Link from 'next/link'
-import { ROUTES } from "@/constants/routes"
+import { ADMIN_ROUTES } from "@/constants/routes"
 import { toast } from 'react-toastify'
 import ConfirmModal from "@/components/ConfirmModal"
 import Breadcrumb from "@/components/Breadcrumb"
-import { useAppSelector} from "../../../../store/hooks"
-import { selectCurrentUser } from "@/store/user/auth/authSlice";
 
 import type { GetProp, TableProps } from 'antd';
-import { USER } from "@/constants/common";
 type ColumnsType<T extends object = object> = TableProps<T>['columns'];
 type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>;
 
-interface DataType {
-  id: number
-  name: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-}
-
-const Page = () => {
+const List = () => {
   const {
     token: { colorPrimary },
   } = theme.useToken();
@@ -40,10 +29,9 @@ const Page = () => {
   const [deletedId, setDeletedId] = useState<any>(null)
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
   const actions = (
-    <Link href={ROUTES.DASHBOARD_USER_CREATE}>
+    <Link href={ ADMIN_ROUTES.BANNER_CREATE }>
       <Button
         size="large"
-        onClick={() => { router.push(ROUTES.DASHBOARD_USER_CREATE) }}
         type="primary"
       >
         <PlusCircleOutlined />Tạo mới
@@ -53,7 +41,6 @@ const Page = () => {
 
   type SearchDataType = {
     name?: string,
-    email?: string,
     created_at_from?: string,
     created_at_to?: string,
     updated_at_from?: string,
@@ -72,7 +59,6 @@ const Page = () => {
 
   const [searchData] = useState<SearchDataType>({
     name: searchParams.get('name') || '',
-    email: searchParams.get('email') || '',
     created_at_from: searchParams.get('created_at_from') || '',
     created_at_to: searchParams.get('created_at_to') || '',
     updated_at_from: searchParams.get('updated_at_from') || '',
@@ -84,21 +70,21 @@ const Page = () => {
     sort: searchParams.get('sort') || '',
     order: searchParams.get('order') || '',
     page: 1,
-    per_page: 10,
+    per_page: 15,
   })
 
-  const [data, setData] = useState<DataType[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
   })
 
   const fetchData = async (params = {}) => {
     setLoading(true);
     try {
-      const response = await getUsers(removeEmptyFields(params));
+      const response = await listRequest(removeEmptyFields(params));
       const { data: responseData } = response;
       setData(responseData.data);
       setPagination({
@@ -117,7 +103,7 @@ const Page = () => {
     fetchData(queryParams)
   }, [queryParams]);
 
-  const handleTableChange: TableProps<DataType>['onChange'] = async (pagination, filters, sorter) => {
+  const handleTableChange: TableProps<any>['onChange'] = async (pagination, filters, sorter) => {
     setPagination(pagination)
     const isSorterArray = Array.isArray(sorter);
     const sortField = isSorterArray ? sorter[0]?.field : sorter?.field;
@@ -136,13 +122,12 @@ const Page = () => {
     }
     setQueryParams(params)
     const queryString = qs.stringify(removeEmptyFields(params));
-    router.push(`${ROUTES.DASHBOARD_USER_LIST}?${queryString}`)
+    router.push(`/admin/banners?${queryString}`)
   }
 
   const onSearch = async (data: any) => {
     const params = {
       name: data.name,
-      email: data.email,
       created_at_from: data.created_at_from,
       created_at_to: data.created_at_to,
       updated_at_from: data.updated_at_from,
@@ -150,27 +135,10 @@ const Page = () => {
     }
     setQueryParams(params)
     const queryString = qs.stringify(removeEmptyFields(params));
-    router.push(`${ROUTES.DASHBOARD_USER_LIST}?${queryString}`)
+    router.push(`/admin/banners?${queryString}`)
   }
 
-  const getStatusLabel = (status: string) => {
-    let color = ''
-    let label = ''
-    switch (status) {
-      case USER.STATUS.ACTIVE:
-        color = 'green'
-        label = 'Đang hoạt động'
-        break;
-      case USER.STATUS.INACTIVE:
-        color = 'magenta'
-        label = 'Vô hiệu hoá'
-    }
-
-    return <Tag color={color}>{label}</Tag>
-  }
-
-  const currentUser = useAppSelector(selectCurrentUser)
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<any> = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -181,33 +149,44 @@ const Page = () => {
       sorter: true,
       render: (text, record) => {
         return (
-          <Link style={{ color: colorPrimary }} href={`/dashboard/users/${record.id}/edit`}>{text}</Link>
+          <Link style={{ color: colorPrimary }} href={`/admin/banners/${record.id}/edit`}>{text}</Link>
         )
       }
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      sorter: true,
+      title: 'Ảnh',
+      dataIndex: 'image',
+      render: (record) => {
+        const url = record && record.data ? `${record.data.endpoint_url}/${record.path}/${record.filename}` : ''
+        return (
+          url && <Image
+            width={80}
+            height={80}
+            src={url}
+            style={{objectFit: 'cover'}}
+          />
+        )
+      }
     },
     {
-      title: 'Trạng thái',
+      title: 'Trang thái',
       dataIndex: 'status',
-      sorter: true,
-      render: (text: string) => getStatusLabel(text),
+      render: (status) => {
+        return (
+          <Badge
+            status={status == 1 ? "success" : "default"} 
+          />
+        )
+      }
     },
     {
-      title: 'Quyền',
-      dataIndex: 'role',
-      render: (data: any) => {
-        return <Tag color="volcano">{data?.name}</Tag>
-      },
-    },
-    {
-      title: 'Ngày tạo',
-      dataIndex: 'created_at',
-      sorter: true,
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
+      title: 'Đường dẫn',
+      dataIndex: 'url',
+      render: (url, record) => {
+        return url ? (
+          <Link style={{ color: colorPrimary }} href={url}>{url}</Link>
+        ) : ''
+      }
     },
     {
       title: 'Ngày cập nhật',
@@ -218,15 +197,14 @@ const Page = () => {
     {
       title: 'Hành động',
       render: (record) => {
-        if (currentUser?.id === record.id) return
-
         return (
           <Space>
             <Tooltip title="Chỉnh sửa">
-              <Link href={`/dashboard/users/${record.id}/edit`}>
+              <Link href={`/admin/banners/${record.id}/edit`}>
                 <Button shape="circle" icon={<EditOutlined />} />
               </Link>
-            </Tooltip><Tooltip title="">
+            </Tooltip>
+            <Tooltip title="Xoá">
               <Button onClick={() => {showDeleteConfirm(record.id)}} danger shape="circle" icon={<DeleteOutlined />} />
             </Tooltip>
           </Space>
@@ -238,12 +216,13 @@ const Page = () => {
   const deleteRecord = async () => {
     try {
       setLoadingDelete(true)
-      await deleteUser(deletedId)
+      await deleteRequest(deletedId)
       setData(data.filter((item) => item.id !== deletedId))
       setShowConfirmDelete(false)
       toast.success('Xoá thành công!')
     } catch (error: any) {
-      toast.error(error.data.message)
+      console.log(error)
+      toast.error(error.message)
     } finally {
       setLoadingDelete(false)
     }
@@ -256,14 +235,14 @@ const Page = () => {
 
   return (
     <div>
-      <Breadcrumb items={[{title: 'Người dùng'}]} />
+      <Breadcrumb items={[{title: 'Banners'}]} />
       <ConfirmModal
         visible={showConfirmDelete}
         onOk={deleteRecord}
         onCancel={() => setShowConfirmDelete(false)}
         confirmLoading={loadingDelete}
       />
-      <Card title="Danh sách người dùng" bordered={false} extra={actions}>
+      <Card title="Danh sách banner" variant="outlined" extra={actions}>
         <Search
           onSearch={onSearch}
           resetForm={() => { setQueryParams({}) }}
@@ -285,4 +264,4 @@ const Page = () => {
   );
 }
 
-export default withAuth(Page)
+export default withAuth(List)

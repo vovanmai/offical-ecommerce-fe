@@ -27,12 +27,32 @@ export const getActiveAdminMenuByRoute = (pathname: string) => {
       path: ADMIN_ROUTES.PRODUCT_LIST
     },
     {
+      regex: /^\/admin\/products\/\d+\/edit$/,
+      path: ADMIN_ROUTES.PRODUCT_LIST
+    },
+    {
       regex: /^\/admin\/pages$/,
       path: ADMIN_ROUTES.PAGE_LIST
     },
     {
       regex: /^\/admin\/pages\/create$/,
       path: ADMIN_ROUTES.PAGE_LIST
+    },
+    {
+      regex: /^\/admin\/pages\/\d+\/edit$/,
+      path: ADMIN_ROUTES.PAGE_LIST
+    },
+    {
+      regex: /^\/admin\/banners$/,
+      path: ADMIN_ROUTES.BANNER_LIST
+    },
+    {
+      regex: /^\/admin\/banners\/create$/,
+      path: ADMIN_ROUTES.BANNER_LIST
+    },
+    {
+      regex: /^\/admin\/banners\/\d+\/edit$/,
+      path: ADMIN_ROUTES.BANNER_LIST
     },
   ]
 

@@ -12,4 +12,6 @@ export const ADMIN_ROUTES = {
   PRODUCT_CREATE: '/admin/products/create',
   PAGE_LIST: '/admin/pages',
   PAGE_CREATE: '/admin/pages/create',
+  BANNER_LIST: '/admin/banners',
+  BANNER_CREATE: '/admin/banners/create',
 };
