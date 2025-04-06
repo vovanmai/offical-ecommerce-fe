@@ -54,6 +54,10 @@ export const getActiveAdminMenuByRoute = (pathname: string) => {
       regex: /^\/admin\/banners\/\d+\/edit$/,
       path: ADMIN_ROUTES.BANNER_LIST
     },
+    {
+      regex: /^\/admin\/settings$/,
+      path: ADMIN_ROUTES.SETTING
+    },
   ]
 
   const route = matchRoutes.find((route) => {

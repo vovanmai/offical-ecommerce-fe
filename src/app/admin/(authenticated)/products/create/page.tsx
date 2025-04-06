@@ -136,7 +136,7 @@ const CreateProduct = () => {
           initialValues={initialValues}
         >
           <Row gutter={[100, 0]}>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="name"
                 label="Tên"
@@ -174,7 +174,7 @@ const CreateProduct = () => {
                 <InputNumber size="large" min={1000} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                   name="preview_image_id"
                   label="Ảnh đại diện"
@@ -207,7 +207,7 @@ const CreateProduct = () => {
                 <InputNumber size="large" min={1} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            <Col sm={24} md={24}>
+            <Col xs={24} sm={24} md={24}>
               <Form.Item
                 name="detail_file_ids"
                 label="Ảnh chi tiết"
@@ -220,7 +220,7 @@ const CreateProduct = () => {
                 />
               </Form.Item>
             </Col>
-            <Col sm={24} md={24}>
+            <Col xs={24} sm={24} md={24}>
               <Form.Item
                 name="description"
                 label="Chi tiết"

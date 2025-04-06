@@ -165,6 +165,7 @@ const ProductList = () => {
             width={80}
             height={80}
             src={url}
+            alt="Ảnh đại diện"
             style={{objectFit: 'cover'}}
           />
         )

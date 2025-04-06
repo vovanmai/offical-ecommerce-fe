@@ -1,7 +1,7 @@
 'use client'
 
-import { Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
-import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
+import { Card, Button, Form, Space, Input, Row, Col, Radio } from "antd"
+import { UnorderedListOutlined, ClearOutlined, SaveOutlined } from "@ant-design/icons"
 import Link from 'next/link'
 import React, { useEffect, useState } from "react"
 import withAuth from "@/hooks/withAuth"
@@ -59,7 +59,7 @@ const Edit = () => {
     };
     getDetail(params.id)
 
-  }, [params])
+  }, [params, form])
 
   const onReset = () => {
     form.resetFields();
@@ -106,7 +106,7 @@ const Edit = () => {
           validateMessages={validateMessages}
         >
           <Row gutter={[100, 0]}>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="name"
                 label="Tên"
@@ -117,7 +117,7 @@ const Edit = () => {
                 <Input size="large" />
               </Form.Item>
             </Col>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="status"
                 label="Trạng thái"
@@ -137,7 +137,7 @@ const Edit = () => {
                 />
                 </Form.Item>
             </Col>
-            <Col sm={24} md={24}>
+            <Col xs={24} sm={24} md={24}>
               <Form.Item
                   name="description"
                   label="Chi tiết"
@@ -150,7 +150,7 @@ const Edit = () => {
               <div style={{ display: 'flex', justifyContent: 'center'}}>
                 <Space>
                     <Button size="large" disabled={loadingSubmit} type="primary" htmlType="submit">
-                      { loadingSubmit ? <SpinLoading /> : <PlusCircleOutlined /> }
+                      { loadingSubmit ? <SpinLoading /> : <SaveOutlined /> }
                       Cập nhật
                     </Button>
                     <Button size="large" htmlType="button" onClick={onReset}>

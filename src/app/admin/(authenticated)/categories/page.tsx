@@ -94,13 +94,13 @@ const Page = () => {
     <div>
       <Breadcrumb items={[{title: 'Danh mục sản phẩm'}]} />
       <Row gutter={[16, 16]}>
-        <Col span={9}>
-          <Card title="Danh sách" bordered={false}>
+        <Col xs={24} md={9} span={9}>
+          <Card title="Danh sách" variant="outlined">
             <NestableCategory categories={categories} onChange={updateCategoryOrder} />
           </Card>
         </Col>
-        <Col span={15}>
-          <Card title="Tạo mới" bordered={false}>
+        <Col xs={24} md={15} span={15}>
+          <Card title="Tạo mới" variant="outlined">
               <Form
                 validateMessages={validateMessages}
                 {...layout}

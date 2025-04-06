@@ -25,6 +25,11 @@ const menus = [
     label: 'Banners',
     icon: <FaCircle />
   },
+  {
+    key: ADMIN_ROUTES.SETTING,
+    label: 'Cài đặt',
+    icon: <FaCircle />
+  },
 ]
 
 export default menus

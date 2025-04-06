@@ -20,8 +20,10 @@ const UploadImage: React.FC<UploadImageProps> = ({ onChange, defaultList = [], m
   const [previewImage, setPreviewImage] = useState('');
 
   useEffect(() => {
-    setFileList(defaultList);
-  }, [defaultList.length]);
+    if (defaultList.length > 0) {
+      setFileList(defaultList);
+    }
+  }, [defaultList]);
 
   const handlePreview = async (file: UploadFile) => {
     setPreviewImage(file.url || (file.preview as string));
@@ -113,6 +115,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ onChange, defaultList = [], m
         {previewImage && (
           <Image
             wrapperStyle={{ display: 'none' }}
+            alt=""
             preview={{
               visible: previewOpen,
               onVisibleChange: (visible) => setPreviewOpen(visible),

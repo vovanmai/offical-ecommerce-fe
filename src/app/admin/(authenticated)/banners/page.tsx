@@ -163,6 +163,7 @@ const List = () => {
             width={80}
             height={80}
             src={url}
+            alt=""
             style={{objectFit: 'cover'}}
           />
         )

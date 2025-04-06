@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
-import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
+import { UnorderedListOutlined, ClearOutlined, SaveOutlined } from "@ant-design/icons"
 import Link from 'next/link'
 import React, { useEffect, useState } from "react"
 import withAuth from "@/hooks/withAuth"
@@ -93,7 +93,7 @@ const EditProduct = () => {
     getCategories()
     getProduct(params.id)
 
-  }, [params])
+  }, [params, form])
 
   const onReset = () => {
     form.resetFields();
@@ -163,7 +163,7 @@ const EditProduct = () => {
           validateMessages={validateMessages}
         >
           <Row gutter={[100, 0]}>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="name"
                 label="Tên"
@@ -210,7 +210,7 @@ const EditProduct = () => {
                   <InputNumber size="large" min={1} style={{ width: "100%" }} />
                 </Form.Item>
             </Col>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                   name="preview_image_id"
                   label="Ảnh đại diện"
@@ -235,7 +235,7 @@ const EditProduct = () => {
                   />
                 </Form.Item>
             </Col>
-            <Col sm={24} md={24}>
+            <Col xs={24} sm={24} md={24}>
               <Form.Item
                 name="detail_file_ids"
                 label="Ảnh chi tiết"
@@ -262,7 +262,7 @@ const EditProduct = () => {
               <div style={{ display: 'flex', justifyContent: 'center'}}>
                 <Space>
                     <Button size="large" disabled={loadingSubmit} type="primary" htmlType="submit">
-                      { loadingSubmit ? <SpinLoading /> : <PlusCircleOutlined /> }
+                      { loadingSubmit ? <SpinLoading /> : <SaveOutlined /> }
                       Cập nhật
                     </Button>
                     <Button size="large" htmlType="button" onClick={onReset}>

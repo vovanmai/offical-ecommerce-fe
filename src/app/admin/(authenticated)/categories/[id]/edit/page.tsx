@@ -1,7 +1,7 @@
 'use client'
 
-import {Card, Select, Radio, Button, Table, Tooltip, theme, Row, Col, Form, Space, Input } from "antd"
-import { PlusCircleOutlined, ClearOutlined, DeleteOutlined } from "@ant-design/icons"
+import {Card, Select, Radio, Button, theme, Row, Col, Form, Space, Input } from "antd"
+import { PlusCircleOutlined, ClearOutlined, SaveOutlined } from "@ant-design/icons"
 import React, { useEffect, useState, useMemo } from "react"
 import { buildCategoryTree, getCategoryOptions } from "@/helper/common"
 import { toast } from 'react-toastify'
@@ -134,12 +134,12 @@ const Page = () => {
       <Breadcrumb items={[{title: 'Danh mục sản phẩm'}]} />
       <Row gutter={[16, 16]}>
         <Col span={9}>
-          <Card title="Danh sách" bordered={false} extra={actions}>
+          <Card title="Danh sách" extra={actions} variant="outlined">
             <NestableCategory id={params.id} categories={categories} onChange={updateCategoryOrder} />
           </Card>
         </Col>
         <Col span={15}>
-          <Card title="Chỉnh sửa" bordered={false}>
+          <Card title="Chỉnh sửa" variant="outlined">
               <Form
                 validateMessages={validateMessages}
                 {...layout}
@@ -207,7 +207,7 @@ const Page = () => {
                 <Form.Item {...tailLayout}>
                   <Space>
                     <Button size="large" disabled={loadingCreate} type="primary" htmlType="submit">
-                      { loadingCreate ? <SpinLoading /> : <PlusCircleOutlined /> }
+                      { loadingCreate ? <SpinLoading /> : <SaveOutlined /> }
                       Cập nhật
                     </Button>
                     <Button size="large" htmlType="button" onClick={onReset}>

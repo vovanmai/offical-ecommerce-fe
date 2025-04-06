@@ -89,7 +89,7 @@ const Create = () => {
           initialValues={initialValues}
         >
           <Row gutter={[100, 0]}>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="name"
                 label="Tên"
@@ -100,7 +100,7 @@ const Create = () => {
                 <Input size="large" />
               </Form.Item>
             </Col>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="status"
                 label="Trạng thái"
@@ -120,7 +120,7 @@ const Create = () => {
                 />
               </Form.Item>
             </Col>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
                 <Form.Item
                   name="url"
                   label="Đường dẫn"
@@ -131,7 +131,7 @@ const Create = () => {
                   <Input size="large" />
                 </Form.Item>
             </Col>
-            <Col sm={24} md={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                   name="image_id"
                   label="Ảnh"

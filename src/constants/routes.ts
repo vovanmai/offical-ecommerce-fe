@@ -14,4 +14,5 @@ export const ADMIN_ROUTES = {
   PAGE_CREATE: '/admin/pages/create',
   BANNER_LIST: '/admin/banners',
   BANNER_CREATE: '/admin/banners/create',
+  SETTING: '/admin/settings',
 };
