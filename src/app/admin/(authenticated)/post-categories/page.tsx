@@ -1,6 +1,6 @@
 'use client'
-import {Card, Select, Radio, Button, theme, Row, Col, Form, Space, Input } from "antd"
-import { PlusCircleOutlined, ClearOutlined } from "@ant-design/icons"
+import {Card, Select, Radio, Button, Table, Tooltip, theme, Row, Col, Form, Space, Input } from "antd"
+import { PlusCircleOutlined, ClearOutlined, DeleteOutlined } from "@ant-design/icons"
 import React, { useEffect, useState } from "react"
 import { buildCategoryTree, getCategoryOptions } from "@/helper/common"
 import { toast } from 'react-toastify'
@@ -9,7 +9,7 @@ import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
 import SpinLoading from "@/components/SpinLoading"
 import NestableCategory from "@/components/admin/NestableCategory"
-import { getAll, create as createCategory, updateOrder } from '@/api/admin/category'
+import { getAll, create as createCategory, updateOrder } from '@/api/admin/post-category'
 const { TextArea } = Input;
 
 const Page = () => {
@@ -18,8 +18,8 @@ const Page = () => {
   } = theme.useToken();
   const [errors, setErrors] = useState<Record<string, any>>({})
   const [form] = Form.useForm()
-  const [loadingCreate, setLoadingCreate] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [loadingCreate, setLoadingCreate] = useState<boolean>(false)
   const [categories, setCategories] = useState([])
   
   const layout = {
@@ -96,11 +96,11 @@ const Page = () => {
 
   return (
     <div>
-      <Breadcrumb items={[{title: 'Danh mục sản phẩm'}]} />
+      <Breadcrumb items={[{title: 'Danh mục bài viết'}]} />
       <Row gutter={[16, 16]}>
         <Col xs={24} md={9} span={9}>
           <Card title="Danh sách" variant="outlined">
-            {loading ? 'Đang tải...' : <NestableCategory categories={categories} onChange={updateCategoryOrder} />}
+            { loading ? 'Đang tải...' :<NestableCategory type='post' categories={categories} onChange={updateCategoryOrder} />}
           </Card>
         </Col>
         <Col xs={24} md={15} span={15}>

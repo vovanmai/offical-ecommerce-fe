@@ -1,7 +1,8 @@
 'use client'
+
 import {Card, Select, Radio, Button, theme, Row, Col, Form, Space, Input } from "antd"
-import { PlusCircleOutlined, ClearOutlined } from "@ant-design/icons"
-import React, { useEffect, useState } from "react"
+import { PlusCircleOutlined, ClearOutlined, SaveOutlined } from "@ant-design/icons"
+import React, { useEffect, useState, useMemo } from "react"
 import { buildCategoryTree, getCategoryOptions } from "@/helper/common"
 import { toast } from 'react-toastify'
 import withAuth from "@/hooks/withAuth";
@@ -9,8 +10,11 @@ import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
 import SpinLoading from "@/components/SpinLoading"
 import NestableCategory from "@/components/admin/NestableCategory"
-import { getAll, create as createCategory, updateOrder } from '@/api/admin/category'
+import { getAll, update as updateCategory, updateOrder, getById } from '@/api/admin/post-category'
 const { TextArea } = Input;
+import { useParams } from "next/navigation"
+import Link from 'next/link'
+import { ADMIN_ROUTES } from "@/constants/routes"
 
 const Page = () => {
   const {
@@ -18,10 +22,11 @@ const Page = () => {
   } = theme.useToken();
   const [errors, setErrors] = useState<Record<string, any>>({})
   const [form] = Form.useForm()
-  const [loadingCreate, setLoadingCreate] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(false)
   const [categories, setCategories] = useState([])
-  
+  const params = useParams()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [listLoading, setListLoading] = useState<boolean>(false)
+
   const layout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 20 },
@@ -49,62 +54,92 @@ const Page = () => {
       { max: 255 },
     ],
   }
-
-  const getCategories = async () => {
-    try {
-      setLoading(true)
-      const response = await getAll();
-      const { data } = response;
-      setCategories(buildCategoryTree(data));
-    } catch (error) {
-      console.error('Fetch error:', error);
-    } finally {
-      setLoading(false)
-    }
-  };
-
+  
   const onFinish = async (values: any) => {
       try {
-        setLoadingCreate(true)
-        const response = await createCategory(values)
+        setLoading(true)
+        const response = await updateCategory(params.id, values)
         const { data } = response;
         setCategories(buildCategoryTree(data));
-        form.resetFields()
         setErrors({})
         toast.success('Tạo thành công!')
       } catch (error: any) {
         setErrors(error?.data?.errors as Record<string, string>);
       } finally {
-        setLoadingCreate(false)
+        setLoading(false)
       }
     };
 
-  useEffect(() => {
-    getCategories()
-  }, [])
+    useEffect(() => {
+      const getCategory = async (id: any) => {
+        try {
+          const response = await getById(id);
+          if (form) {
+            form.setFieldsValue(response.data);
+          }
+        } catch (error) {
+          console.error("Fetch category error:", error);
+        }
+      };
+    
+      getCategory(params.id);
+    }, [params.id, form]);
 
-  const updateCategoryOrder = async (items: Array<object>) => {
+    useEffect(() => {
+      const getCategories = async () => {
+        try {
+          setListLoading(true)
+          const response = await getAll();
+          const { data } = response;
+          setCategories(buildCategoryTree(data));
+        } catch (error) {
+          console.error("Fetch error:", error);
+        } finally {
+          setListLoading(false)
+        }
+      };
+      getCategories();
+    }, []);
+    
+
+  const updateCategoryOrder = async (data: Array<object>) => {
     try {
-      const response = await updateOrder({categories: items})
-      const { data } = response;
-      setCategories(buildCategoryTree(data));
+      console.log(data)
+      const response = await updateOrder({categories: data})
       toast.success('Cập nhật thành công!')
     } catch (error: any) {
     } finally {
     }
   }
 
+  const actions = (
+    <Link href={ADMIN_ROUTES.CATEGORY_POST_LIST}>
+      <Button
+        size="large"
+        type="primary"
+      >
+        <PlusCircleOutlined />Tạo mới
+      </Button>
+    </Link>
+  );
+
+  const categoryOptions = useMemo(() => {
+    const id = params.id ? Number(params.id) : null;
+    return getCategoryOptions(categories, id);
+  }, [categories, params.id]);
+
+
   return (
     <div>
       <Breadcrumb items={[{title: 'Danh mục sản phẩm'}]} />
       <Row gutter={[16, 16]}>
-        <Col xs={24} md={9} span={9}>
-          <Card title="Danh sách" variant="outlined">
-            {loading ? 'Đang tải...' : <NestableCategory categories={categories} onChange={updateCategoryOrder} />}
+        <Col span={9}>
+          <Card title="Danh sách" extra={actions} variant="outlined">
+            { listLoading ? 'Đang tải...' :<NestableCategory id={params.id} type='post' categories={categories} onChange={updateCategoryOrder} />}
           </Card>
         </Col>
-        <Col xs={24} md={15} span={15}>
-          <Card title="Tạo mới" variant="outlined">
+        <Col span={15}>
+          <Card title="Chỉnh sửa" variant="outlined">
               <Form
                 validateMessages={validateMessages}
                 {...layout}
@@ -155,7 +190,7 @@ const Page = () => {
                       const label = String(option?.label ?? ""); // Ép kiểu về string
                       return label.toLowerCase().includes(input.toLowerCase());
                     }}
-                    options={getCategoryOptions(categories)}
+                    options={categoryOptions}
                   />
                 </Form.Item>
 
@@ -171,9 +206,9 @@ const Page = () => {
 
                 <Form.Item {...tailLayout}>
                   <Space>
-                    <Button size="large" disabled={loadingCreate} type="primary" htmlType="submit">
-                      { loadingCreate ? <SpinLoading /> : <PlusCircleOutlined /> }
-                      Tạo
+                    <Button size="large" disabled={loading} type="primary" htmlType="submit">
+                      { loading ? <SpinLoading /> : <SaveOutlined /> }
+                      Cập nhật
                     </Button>
                     <Button size="large" htmlType="button" onClick={onReset}>
                       <ClearOutlined />

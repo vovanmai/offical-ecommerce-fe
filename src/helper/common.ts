@@ -55,6 +55,26 @@ export const getActiveAdminMenuByRoute = (pathname: string) => {
       path: ADMIN_ROUTES.BANNER_LIST
     },
     {
+      regex: /^\/admin\/post-categories$/,
+      path: ADMIN_ROUTES.CATEGORY_POST_LIST
+    },
+    {
+      regex: /^\/admin\/post-categories\/\d+\/edit$/,
+      path: ADMIN_ROUTES.CATEGORY_POST_LIST
+    },
+    {
+      regex: /^\/admin\/posts$/,
+      path: ADMIN_ROUTES.POST_LIST
+    },
+    {
+      regex: /^\/admin\/posts\/create$/,
+      path: ADMIN_ROUTES.POST_LIST
+    },
+    {
+      regex: /^\/admin\/posts\/\d+\/edit$/,
+      path: ADMIN_ROUTES.POST_LIST
+    },
+    {
       regex: /^\/admin\/settings$/,
       path: ADMIN_ROUTES.SETTING
     },

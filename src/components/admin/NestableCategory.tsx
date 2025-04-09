@@ -34,8 +34,7 @@ import { getPrimaryColor } from "@/store/admin/appSlice"
 
 const NestableCategory = (props: any) => {
   const primaryColor = useAppSelector(getPrimaryColor);
-  const { categories, onChange, id } = props
-  const [loading, setLoading] = useState<boolean>(false)
+  const { categories, onChange, id, type } = props
   const activeStyle = { color: 'black', fontWeight: 'bold'}
 
   const renderItem = (props: any) => {
@@ -46,8 +45,7 @@ const NestableCategory = (props: any) => {
         {handler}
         {collapseIcon}
         <div style={{ padding: ".5rem", flex: 1 }}>
-          
-          <Link href={`/admin/categories/${item.id}/edit`} style={ id == item.id ? activeStyle : {color: primaryColor}}>
+          <Link href={`/admin/${type ? 'post-categories' : 'categories'}/${item.id}/edit`} style={ id == item.id ? activeStyle : {color: primaryColor}}>
             <Tooltip title={`ID: ${item.id}`}>
               <span>{item.text}</span>
             </Tooltip>
@@ -81,19 +79,17 @@ const NestableCategory = (props: any) => {
   };
 
   return (
-    <>
-      {loading ? 'Đang tải...' : (<Nestable
-        items={categories}
-        renderItem={renderItem}
-        handler={<Handler />}
-        renderCollapseIcon={({ isCollapsed }) => (
-          <Collapser isCollapsed={isCollapsed} />
-        )}
-        collapsed={false}
-        maxDepth={2}
-        onChange={handleChange} 
-      />)}
-    </>
+    <Nestable
+      items={categories}
+      renderItem={renderItem}
+      handler={<Handler />}
+      renderCollapseIcon={({ isCollapsed }) => (
+        <Collapser isCollapsed={isCollapsed} />
+      )}
+      collapsed={false}
+      maxDepth={2}
+      onChange={handleChange} 
+    />
   );
 };
 

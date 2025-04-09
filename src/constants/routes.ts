@@ -1,3 +1,5 @@
+import { POST } from "@/app/api/route";
+
 export const ROUTES = {
   DASHBOARD: '/admin',
   DASHBOARD_ROLE_LIST: '/admin/roles',
@@ -15,4 +17,7 @@ export const ADMIN_ROUTES = {
   BANNER_LIST: '/admin/banners',
   BANNER_CREATE: '/admin/banners/create',
   SETTING: '/admin/settings',
+  CATEGORY_POST_LIST: '/admin/post-categories',
+  POST_LIST: '/admin/posts',
+  POST_CREATE: '/admin/posts/create',
 };
