@@ -13,6 +13,7 @@ import { validateMessages } from "@/helper/common"
 import UploadImage from "@/components/admin/UploadImage"
 import { update as updateRequest, getById } from '@/api/admin/banner'
 import { useParams } from "next/navigation"
+import { toast } from 'react-toastify'
 
 const Edit = () => {
   const router = useRouter()
@@ -32,6 +33,8 @@ const Edit = () => {
       const statusCode = error.status
       if(statusCode == 422) {
         setErrors(error?.data?.errors as Record<string, string>);
+      } else {
+        toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
       }
     } finally {
       setLoadingSubmit(false)

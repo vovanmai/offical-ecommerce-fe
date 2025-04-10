@@ -54,12 +54,6 @@ const Page = () => {
       { max: 255 },
     ],
   }
-
-  
-
-
-  
-
   const onFinish = async (values: any) => {
       try {
         setIsLoading(true)
@@ -69,7 +63,12 @@ const Page = () => {
         setErrors({})
         toast.success('Tạo thành công!')
       } catch (error: any) {
-        setErrors(error?.data?.errors as Record<string, string>);
+        const statusCode = error.status
+        if(statusCode == 422) {
+          setErrors(error?.data?.errors as Record<string, string>);
+        } else {
+          toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
+        }
       } finally {
         setIsLoading(false)
       }

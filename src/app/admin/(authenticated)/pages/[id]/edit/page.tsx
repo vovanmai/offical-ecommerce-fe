@@ -13,6 +13,7 @@ import { validateMessages } from "@/helper/common"
 import dynamic from 'next/dynamic';
 import { update as updatePage, getById } from '@/api/admin/page'
 import { useParams } from "next/navigation"
+import { toast } from 'react-toastify'
 
 const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
   ssr: false,
@@ -36,6 +37,8 @@ const Edit = () => {
       const statusCode = error.status
       if(statusCode == 422) {
         setErrors(error?.data?.errors as Record<string, string>);
+      } else {
+        toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
       }
     } finally {
       setLoadingSubmit(false)

@@ -12,6 +12,7 @@ import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
 import UploadImage from "@/components/admin/UploadImage"
 import { create as createRequest } from '@/api/admin/banner'
+import { toast } from 'react-toastify'
 
 const Create = () => {
   const router = useRouter()
@@ -29,6 +30,8 @@ const Create = () => {
       const statusCode = error.status
       if(statusCode == 422) {
         setErrors(error?.data?.errors as Record<string, string>);
+      } else {
+        toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
       }
     } finally {
       setLoadingSubmit(false)

@@ -34,6 +34,8 @@ const Setting = () => {
       const statusCode = error.status
       if(statusCode == 422) {
         setErrors(error?.data?.errors as Record<string, string>);
+      } else {
+        toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
       }
     } finally {
       setLoadingSubmit(false)

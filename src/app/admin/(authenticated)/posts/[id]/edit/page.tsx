@@ -16,6 +16,7 @@ import { buildCategoryTree } from "@/helper/common"
 import dynamic from 'next/dynamic';
 import { update as updateRequest, getById } from '@/api/admin/post'
 import { useParams } from "next/navigation"
+import { toast } from 'react-toastify'
 
 const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
   ssr: false,
@@ -41,6 +42,8 @@ const Page = () => {
       const statusCode = error.status
       if(statusCode == 422) {
         setErrors(error?.data?.errors as Record<string, string>);
+      } else {
+        toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
       }
     } finally {
       setLoadingSubmit(false)

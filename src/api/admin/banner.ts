@@ -14,7 +14,7 @@ export function create(data: object) {
 }
 
 export function update(id: any, data: object) {
-  return api.post(`api/admin/banners/${id}`, data);
+  return api.put(`api/admin/banners/${id}`, data);
 }
 
 export function deleteBanner(id: number) {

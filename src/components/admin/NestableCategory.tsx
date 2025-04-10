@@ -1,14 +1,15 @@
 'use client'
-import React, { useState } from "react"
+import React from "react"
+import { DeleteOutlined } from "@ant-design/icons"
 import {
   AiOutlineDrag,
   AiFillCaretRight,
-  AiFillCaretDown
+  AiFillCaretDown,
 } from "react-icons/ai";
 import dynamic from 'next/dynamic';
 const Nestable = dynamic(() => import('react-nestable'), { ssr: false });
 import Link from 'next/link'
-import { Tooltip } from 'antd';
+import { Tooltip, Button } from 'antd';
 
 // Định nghĩa cssCenter bên ngoài
 const cssCenter = {
@@ -41,18 +42,27 @@ const NestableCategory = (props: any) => {
     const { item, index, collapseIcon, handler } = props;
 
     return (
-      <div style={{ ...styles, fontWeight: item.children.length ? "400" : "400" } as React.CSSProperties}>
+      <div style={styles as React.CSSProperties}>
         {handler}
         {collapseIcon}
-        <div style={{ padding: ".5rem", flex: 1 }}>
-          <Link href={`/admin/${type ? 'post-categories' : 'categories'}/${item.id}/edit`} style={ id == item.id ? activeStyle : {color: primaryColor}}>
-            <Tooltip title={`ID: ${item.id}`}>
-              <span>{item.text}</span>
+        <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
+          <div style={{ flex: 1, padding: "10px" }}>
+            <Link href={`/admin/${type ? 'post-categories' : 'categories'}/${item.id}/edit`} style={ id == item.id ? activeStyle : {color: primaryColor}}>
+              <Tooltip title={`ID: ${item.id}`}>
+                <span>{item.text}</span>
+              </Tooltip>
+            </Link>
+          </div>
+          <div>
+            <Tooltip title={ type ? "Số lượng bài viết" : "Số lượng sản phẩm"}>
+              { type ? item.posts_count : item.products_count }
             </Tooltip>
-          </Link>
-        </div>
-        <div style={{padding: 10}}>
-          {/* <span>Sản phẩm: 180</span> */}
+          </div>
+          <div style={{ padding: "0px 10px" }}>
+            <Tooltip title="Xoá">
+              <Button size="small" onClick={() => {showDeleteConfirm(record.id)}} danger shape="circle" icon={<DeleteOutlined />} />
+            </Tooltip>
+          </div>
         </div>
       </div>
     );

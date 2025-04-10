@@ -12,6 +12,7 @@ import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
 import dynamic from 'next/dynamic';
 import { create as createPage } from '@/api/admin/page'
+import { toast } from 'react-toastify'
 
 const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
   ssr: false,
@@ -33,6 +34,8 @@ const CreatePage = () => {
       const statusCode = error.status
       if(statusCode == 422) {
         setErrors(error?.data?.errors as Record<string, string>);
+      } else {
+        toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
       }
     } finally {
       setLoadingSubmit(false)

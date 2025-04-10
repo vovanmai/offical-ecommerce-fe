@@ -14,7 +14,7 @@ export function create(data: object) {
 }
 
 export function update(id: any, data: object) {
-  return api.post(`api/admin/posts/${id}`, data);
+  return api.put(`api/admin/posts/${id}`, data);
 }
 
 export function deletePost(id: number) {
