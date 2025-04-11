@@ -24,6 +24,6 @@ export function updateOrder(data: object) {
   return api.post('api/admin/post-categories/update-order', data);
 }
 
-export function deleteItem(id: number) {
+export function deleteCategory(id: number) {
   return api.delete(`api/admin/post-categories/${id}`);
 }

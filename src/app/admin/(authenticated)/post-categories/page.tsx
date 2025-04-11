@@ -9,7 +9,8 @@ import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
 import SpinLoading from "@/components/SpinLoading"
 import NestableCategory from "@/components/admin/NestableCategory"
-import { getAll, create as createCategory, updateOrder } from '@/api/admin/post-category'
+import { getAll, create as createCategory, updateOrder, deleteCategory } from '@/api/admin/post-category'
+import ConfirmModal from "@/components/ConfirmModal"
 const { TextArea } = Input;
 
 const Page = () => {
@@ -21,6 +22,9 @@ const Page = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [loadingCreate, setLoadingCreate] = useState<boolean>(false)
   const [categories, setCategories] = useState([])
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+  const [deletedId, setDeletedId] = useState<any>(null)
   
   const layout = {
     labelCol: { span: 4 },
@@ -99,13 +103,41 @@ const Page = () => {
     }
   }
 
+  const deleteRecord = async () => {
+      try {
+        setDeleteLoading(true)
+        const response = await deleteCategory(deletedId)
+        setShowConfirmDelete(false)
+        const { data } = response;
+        setCategories(buildCategoryTree(data));
+        toast.success('Xoá thành công!')
+      } catch (error: any) {
+        console.log(error)
+        toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
+      } finally {
+        setDeleteLoading(false)
+      }
+    };
+  
+    const showDeleteConfirm = (id: number) => {
+      setShowConfirmDelete(true)
+      setDeletedId(id)
+    };
+
   return (
     <div>
+      <ConfirmModal
+        visible={showConfirmDelete}
+        onOk={deleteRecord}
+        onCancel={() => setShowConfirmDelete(false)}
+        confirmLoading={deleteLoading}
+        content={'Xoá danh mục sẽ xoá luôn bài viết. Bạn không thể khôi phục lại được.'}
+      />
       <Breadcrumb items={[{title: 'Danh mục bài viết'}]} />
       <Row gutter={[16, 16]}>
         <Col xs={24} md={9} span={9}>
           <Card title="Danh sách" variant="outlined">
-            { loading ? 'Đang tải...' :<NestableCategory type='post' categories={categories} onChange={updateCategoryOrder} />}
+            { loading ? 'Đang tải...' :<NestableCategory type='post' categories={categories} onDelete={showDeleteConfirm} onChange={updateCategoryOrder} />}
           </Card>
         </Col>
         <Col xs={24} md={15} span={15}>

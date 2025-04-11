@@ -1,5 +1,5 @@
 'use client'
-import React from "react"
+import React, { useState } from "react"
 import { DeleteOutlined } from "@ant-design/icons"
 import {
   AiOutlineDrag,
@@ -35,7 +35,7 @@ import { getPrimaryColor } from "@/store/admin/appSlice"
 
 const NestableCategory = (props: any) => {
   const primaryColor = useAppSelector(getPrimaryColor);
-  const { categories, onChange, id, type } = props
+  const { categories, onChange, id, type, onDelete } = props
   const activeStyle = { color: 'black', fontWeight: 'bold'}
 
   const renderItem = (props: any) => {
@@ -60,7 +60,7 @@ const NestableCategory = (props: any) => {
           </div>
           <div style={{ padding: "0px 10px" }}>
             <Tooltip title="Xoá">
-              <Button size="small" onClick={() => {showDeleteConfirm(record.id)}} danger shape="circle" icon={<DeleteOutlined />} />
+              <Button size="small" onClick={() => {onDelete(item.id)}} danger shape="circle" icon={<DeleteOutlined />} />
             </Tooltip>
           </div>
         </div>

@@ -10,11 +10,13 @@ import Breadcrumb from "@/components/Breadcrumb"
 import { validateMessages } from "@/helper/common"
 import SpinLoading from "@/components/SpinLoading"
 import NestableCategory from "@/components/admin/NestableCategory"
-import { getAll, update as updateCategory, updateOrder, getById } from '@/api/admin/category'
+import { getAll, update as updateCategory, updateOrder, getById, deleteCategory } from '@/api/admin/category'
 const { TextArea } = Input;
 import { useParams } from "next/navigation"
 import Link from 'next/link'
 import { ADMIN_ROUTES } from "@/constants/routes"
+import ConfirmModal from "@/components/ConfirmModal"
+import { useRouter } from "next/navigation"
 
 const Page = () => {
   const {
@@ -26,6 +28,10 @@ const Page = () => {
   const [categories, setCategories] = useState([])
   const params = useParams()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+  const [deletedId, setDeletedId] = useState<any>(null)
+  const router = useRouter()
   
   const layout = {
     labelCol: { span: 4 },
@@ -128,13 +134,42 @@ const Page = () => {
   }, [categories, params.id]);
 
 
+  const deleteRecord = async () => {
+    try {
+      setDeleteLoading(true)
+      const response = await deleteCategory(deletedId)
+      setShowConfirmDelete(false)
+      const { data } = response;
+      setCategories(buildCategoryTree(data));
+      toast.success('Xoá thành công!')
+      router.push(ADMIN_ROUTES.CATEGORY_PRODUCT_LIST)
+    } catch (error: any) {
+      console.log(error)
+      toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
+    } finally {
+      setDeleteLoading(false)
+    }
+  };
+
+  const showDeleteConfirm = (id: number) => {
+    setShowConfirmDelete(true)
+    setDeletedId(id)
+  };
+
   return (
     <div>
+      <ConfirmModal
+        visible={showConfirmDelete}
+        onOk={deleteRecord}
+        onCancel={() => setShowConfirmDelete(false)}
+        confirmLoading={deleteLoading}
+        content={'Xoá danh mục sẽ xoá luôn sản phẩm. Bạn không thể khôi phục lại được.'}
+      />
       <Breadcrumb items={[{title: 'Danh mục sản phẩm'}]} />
       <Row gutter={[16, 16]}>
         <Col span={9}>
           <Card title="Danh sách" extra={actions} variant="outlined">
-            <NestableCategory id={params.id} categories={categories} onChange={updateCategoryOrder} />
+            <NestableCategory id={params.id} categories={categories} onDelete={showDeleteConfirm} onChange={updateCategoryOrder} />
           </Card>
         </Col>
         <Col span={15}>
