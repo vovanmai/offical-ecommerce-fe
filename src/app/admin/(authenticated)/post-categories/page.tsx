@@ -94,9 +94,7 @@ const Page = () => {
 
   const updateCategoryOrder = async (items: Array<object>) => {
     try {
-      const response = await updateOrder({categories: items})
-      const { data } = response;
-      setCategories(buildCategoryTree(data));
+      await updateOrder({categories: items})
       toast.success('Cập nhật thành công!')
     } catch (error: any) {
     } finally {
@@ -104,25 +102,25 @@ const Page = () => {
   }
 
   const deleteRecord = async () => {
-      try {
-        setDeleteLoading(true)
-        const response = await deleteCategory(deletedId)
-        setShowConfirmDelete(false)
-        const { data } = response;
-        setCategories(buildCategoryTree(data));
-        toast.success('Xoá thành công!')
-      } catch (error: any) {
-        console.log(error)
-        toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
-      } finally {
-        setDeleteLoading(false)
-      }
-    };
+    try {
+      setDeleteLoading(true)
+      const response = await deleteCategory(deletedId)
+      setShowConfirmDelete(false)
+      const { data } = response;
+      setCategories(buildCategoryTree(data));
+      toast.success('Xoá thành công!')
+    } catch (error: any) {
+      console.log(error)
+      toast.error('Có lỗi xảy ra, vui lòng thử lại sau.')
+    } finally {
+      setDeleteLoading(false)
+    }
+  };
   
-    const showDeleteConfirm = (id: number) => {
-      setShowConfirmDelete(true)
-      setDeletedId(id)
-    };
+  const showDeleteConfirm = (id: number) => {
+    setShowConfirmDelete(true)
+    setDeletedId(id)
+  };
 
   return (
     <div>

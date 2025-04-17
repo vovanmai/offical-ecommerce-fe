@@ -12,7 +12,12 @@ const USER = {
   }
 }
 
+const USER_PRIMARY_COLOR = '#27964f'
+
 export {
   ROLE,
-  USER
+  USER,
+  USER_PRIMARY_COLOR,
 }
+
+

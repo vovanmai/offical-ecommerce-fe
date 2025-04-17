@@ -109,8 +109,7 @@ const Page = () => {
 
   const updateCategoryOrder = async (data: Array<object>) => {
     try {
-      console.log(data)
-      const response = await updateOrder({categories: data})
+      await updateOrder({categories: data})
       toast.success('Cập nhật thành công!')
     } catch (error: any) {
     } finally {

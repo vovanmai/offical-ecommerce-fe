@@ -95,12 +95,10 @@ const Page = () => {
 
   const updateCategoryOrder = async (items: Array<object>) => {
     try {
-      const response = await updateOrder({categories: items})
-      const { data } = response;
-      console.log(buildCategoryTree(data))
-      setCategories(buildCategoryTree(data));
+      await updateOrder({categories: items})
       toast.success('Cập nhật thành công!')
     } catch (error: any) {
+      console.log(error)
     } finally {
     }
   }
