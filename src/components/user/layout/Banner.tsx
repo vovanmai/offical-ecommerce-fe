@@ -31,7 +31,7 @@ const Banner = () => {
       <div className="container">
       <Swiper
         style={{
-          height: '600px',
+          height: '450px',
         }}
         autoplay={{
           delay: 2500,

@@ -42,7 +42,7 @@ const MiddleHeader = () => {
         <div className="d-flex align-items-center justify-content-between" style={{ gap: 70}}>
           <div className="logo">
             <Link href="/">
-              <Image src="/logo.jpg" alt="Logo" width={80} height={80} />
+              <Image src="/lam-farm.jpg" alt="Logo" width={80} height={80} />
             </Link>
           </div>
           <div className="flex-1 search-input" style={{ padding: '0px 0px' }}>

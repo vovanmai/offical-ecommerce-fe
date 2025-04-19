@@ -22,6 +22,7 @@ dayjs.extend(localizedFormat);
 
 import Header from "@/components/user/layout/Header";
 import PcMenu from "@/components/user/layout/PcMenu";
+import Footer from '@/components/user/layout/Footer';
 
 function ThemeWrapper({ children }: { children: React.ReactNode }) {
   const primaryColor = useAppSelector(getPrimaryColor);
@@ -29,6 +30,11 @@ function ThemeWrapper({ children }: { children: React.ReactNode }) {
   const customTheme = {
     token: {
       colorPrimary: primaryColor,
+    },
+    components: {
+      Card: {
+        bodyPadding: 12
+      },
     },
   };
 
@@ -55,6 +61,7 @@ export default function RootLayout({
             <Header/>
             <PcMenu/>
             {children}
+            <Footer />
           </ThemeWrapper>
         </AntdRegistry>
       </Provider>
