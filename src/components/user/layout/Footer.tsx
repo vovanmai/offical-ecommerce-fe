@@ -16,21 +16,27 @@ const LayoutFooter = () => {
           <Col xs={24} sm={12} md={6}>
             <p>Content for column 1</p>
           </Col>
-          <Col style={{display: "flex", flexDirection: "column", gap: 8}} xs={24} sm={12} md={6}>
-            <Title style={{color: "#00573e", margin: 0}} level={5}>DANH MỤC SẢN PHẨM</Title>
-            <Link style={{color: "inherit"}} href="a">Thực phẩm chức năng</Link>
+          <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={6}>
+            <div className="d-flex flex-direction-column" style={{gap: 8}}>
+              <Title style={{color: "#00573e", margin: 0}} level={5}>DANH MỤC SẢN PHẨM</Title>
+              <Link style={{color: "inherit"}} href="a">Thực phẩm chức năng</Link>
+            </div>
           </Col>
-          <Col style={{display: "flex", flexDirection: "column", gap: 8}} xs={24} sm={12} md={6}>
-            <Title style={{color: "#00573e", margin: 0}} level={5}>CHÍNH SÁCH</Title>
-            <Link style={{color: "inherit"}} href="a">Chính sách giao hàng</Link>
-            <Link style={{color: "inherit"}} href="a">Hướng dẫn mua hàng</Link>
-            <Link style={{color: "inherit"}} href="a">Chính sách bảo hành</Link>
-            <Link style={{color: "inherit"}} href="a">Xử lý khiếu nại</Link>
+          <Col style={{gap: 8}} xs={24} sm={12} md={6}>
+            <div className="d-flex flex-direction-column" style={{gap: 8}}>
+              <Title style={{color: "#00573e", margin: 0}} level={5}>CHÍNH SÁCH</Title>
+              <Link style={{color: "inherit"}} href="a">Chính sách giao hàng</Link>
+              <Link style={{color: "inherit"}} href="a">Hướng dẫn mua hàng</Link>
+              <Link style={{color: "inherit"}} href="a">Chính sách bảo hành</Link>
+              <Link style={{color: "inherit"}} href="a">Xử lý khiếu nại</Link>
+            </div>
           </Col>
-          <Col style={{display: "flex", flexDirection: "column", gap: 8}} xs={24} sm={12} md={6}>
-            <Title style={{color: "#00573e", margin: 0}} level={5}>VỀ CHÚNG TÔI</Title>
-            <Link style={{color: "inherit"}} href="a">Giới thiệu</Link>
-            <Link style={{color: "inherit"}} href="a">Tuyển dụng</Link>
+          <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={6}>
+            <div className="d-flex flex-direction-column" style={{gap: 8}}>
+              <Title style={{color: "#00573e", margin: 0}} level={5}>VỀ CHÚNG TÔI</Title>
+              <Link style={{color: "inherit"}} href="a">Giới thiệu</Link>
+              <Link style={{color: "inherit"}} href="a">Tuyển dụng</Link>
+            </div>
           </Col>
         </Row>
       </div>

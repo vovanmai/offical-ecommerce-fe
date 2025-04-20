@@ -62,7 +62,7 @@ const products = [
 export default function ProductList() {
   return (
     <div className="container" style={{ marginTop: 12 }}>
-      <Title style={{color: USER_PRIMARY_COLOR, marginTop: 20}} level={4}>Sản phẩm nội bật</Title>
+      <Title style={{marginTop: 20}} level={4}>Sản phẩm nội bật</Title>
       <Row gutter={[15, 15]}>
         {products.map((product, index) => (
           <ProductCard

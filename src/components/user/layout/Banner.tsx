@@ -31,7 +31,7 @@ const Banner = () => {
       <div className="container">
       <Swiper
         style={{
-          height: '450px',
+          height: '359px',
         }}
         autoplay={{
           delay: 2500,
@@ -48,6 +48,7 @@ const Banner = () => {
           <img
             src="/image.png"
             loading="lazy"
+            className="w-100"
           />
           <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
         </SwiperSlide>

@@ -60,7 +60,9 @@ export default function RootLayout({
           <ThemeWrapper>
             <Header/>
             <PcMenu/>
-            {children}
+            <main>
+              {children}
+            </main>
             <Footer />
           </ThemeWrapper>
         </AntdRegistry>

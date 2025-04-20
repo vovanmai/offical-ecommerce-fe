@@ -1,15 +1,15 @@
-'use client';
-import React from 'react';
-import Banner from '@/components/user/layout/Banner';
-import ProductList from '@/components/user/ProductList';
+"use client";
+import React from "react";
+import Banner from "@/components/user/layout/Banner";
+import ProductList from "@/components/user/ProductList";
 
-const Page: React.FC = () => {
-    return (
-        <div>
-            <Banner />
-            <ProductList />
-        </div>
-    );
+const Page = () => {
+  return (
+    <>
+      <Banner />
+      <ProductList />
+    </>
+  );
 };
 
 export default Page;

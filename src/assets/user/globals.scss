@@ -54,6 +54,10 @@ body {
   width: 100%;
 }
 
+.flex-direction-column {
+  flex-direction: column !important;
+}
+
 #pc-menu {
   .ant-menu-horizontal {
     line-height: 41px
