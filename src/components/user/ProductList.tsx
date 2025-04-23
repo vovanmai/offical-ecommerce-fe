@@ -62,17 +62,19 @@ const products = [
 export default function ProductList() {
   return (
     <div className="container" style={{ marginTop: 12 }}>
-      <Title style={{marginTop: 20}} level={4}>Sản phẩm nội bật</Title>
-      <Row gutter={[15, 15]}>
-        {products.map((product, index) => (
-          <ProductCard
-            key={index}
-            name={product.name}
-            price={product.price}
-            image={product.image}
-          />
-        ))}
-      </Row>
+      <div className="container__inner">
+        <Title style={{marginTop: 20}} level={4}>Sản phẩm nội bật</Title>
+        <Row gutter={[15, 15]}>
+          {products.map((product, index) => (
+            <ProductCard
+              key={index}
+              name={product.name}
+              price={product.price}
+              image={product.image}
+            />
+          ))}
+        </Row>
+      </div>
     </div>
   );
 }

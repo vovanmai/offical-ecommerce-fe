@@ -110,15 +110,17 @@ const PcMenu = () => {
   ];
   return (
     <div id="pc-menu" style={{ backgroundColor: USER_PRIMARY_COLOR }}>
-      <div className="container d-flex align-items-center" style={{ padding: '0px 0px'}}>
-        <Dropdown 
-          menu={{ items, selectable: true, defaultSelectedKeys: ['21'], }}
-        >
-          <Button style={{ boxShadow: "none", border: "1px solid white", marginRight: 20 }} type="primary" shape="round" icon={<MenuOutlined />} size="middle">
-              Danh mục
-          </Button>
-        </Dropdown>
-        <Menu className="w-100" onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items2} />
+      <div className="container" style={{ padding: '0px 0px'}}>
+        <div className="container__inner d-flex align-items-center">
+          <Dropdown 
+            menu={{ items, selectable: true, defaultSelectedKeys: ['21'], }}
+          >
+            <Button style={{ boxShadow: "none", border: "1px solid white", marginRight: 20 }} type="primary" shape="round" icon={<MenuOutlined />} size="middle">
+                Danh mục
+            </Button>
+          </Dropdown>
+          <Menu className="w-100" onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items2} />
+        </div>
       </div>
     </div>
   )
