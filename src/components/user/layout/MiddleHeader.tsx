@@ -41,8 +41,10 @@ const MiddleHeader = () => {
       <div className="container">
         <div className="container__inner">
           <div className="d-flex align-items-center justify-content-between">
-            <Button style={{boxShadow: "none"}} type="primary" icon={<MenuOutlined />} />
-            <Link href="/">
+            <div id="toggle-menu" >
+              <Button  style={{boxShadow: "none"}} type="primary" icon={<MenuOutlined />} />
+            </div>
+            <Link id="button-search-mobile" href="/">
               <Button style={{boxShadow: "none"}} type="primary" shape="circle" icon={<SearchOutlined />} />
               </Link>
             <div className="logo">
