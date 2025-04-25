@@ -1,11 +1,11 @@
 'use client';
 import { Card, Typography, Col } from 'antd';
-
 const { Paragraph, Text } = Typography;
 import Link from 'next/link'
 import Image from 'next/image';
-
-
+import numeral from 'numeral';
+import Test from '@/components/user/layout/Test';
+import { use } from 'react';
 
 interface ProductCardProps {
   product: any; // Thay thế bằng kiểu dữ liệu sản phẩm thực tế
@@ -29,7 +29,7 @@ export default function ProductCard(props: ProductCardProps) {
         ...colProps,
       }}
     >
-      <Link href={`/products/${name}`}>
+      <Link href={`/products/${product.id}`}>
         <Card
           className="product-card"
           cover={
@@ -64,8 +64,8 @@ export default function ProductCard(props: ProductCardProps) {
             >
               <Text>{product.name}</Text>
             </Paragraph>
-            
-            <Text strong type="danger">{product.price} vnđ</Text>
+            <Test />
+            {/* <Text strong type="danger">{numeral(product.price).format('0,0')} vnđ</Text> */}
           </div>
         </Card>
       </Link>
