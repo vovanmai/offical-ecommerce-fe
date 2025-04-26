@@ -6,6 +6,8 @@ import Image from 'next/image';
 import numeral from 'numeral';
 import Test from '@/components/user/layout/Test';
 import { use } from 'react';
+import type { CSSProperties } from 'react';
+
 
 interface ProductCardProps {
   product: any; // Thay thế bằng kiểu dữ liệu sản phẩm thực tế
@@ -17,6 +19,20 @@ export default function ProductCard(props: ProductCardProps) {
   const getImageUrl = (previewImage: any) => {
     return `${previewImage.data.endpoint_url}/${previewImage.path}/${previewImage.filename}`;
   }
+
+  const styleTitle: CSSProperties = {
+    marginBottom: '8px',
+    height: '4.5em',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 3,
+  };
+
+  const stylePrice: CSSProperties = {
+    color: 'red',
+  };
 
   return (
     <Col
@@ -54,18 +70,12 @@ export default function ProductCard(props: ProductCardProps) {
           style={{ borderRadius: 12 }}
         >
           <div>
-            <Paragraph 
-              ellipsis={{ rows: 3 }}
-              style={{
-                marginBottom: 8,
-                height: '4.5em',
-                overflow: 'hidden',
-              }}
-            >
-              <Text>{product.name}</Text>
-            </Paragraph>
-            <Test />
-            {/* <Text strong type="danger">{numeral(product.price).format('0,0')} vnđ</Text> */}
+            {/* <Text style={styleTitle} ellipsis /> */}
+            <div style={styleTitle}>{product.name}</div>
+            <span style={stylePrice}>
+              <strong>{numeral(product.price).format('0,0')} vnđ
+              </strong>
+            </span>
           </div>
         </Card>
       </Link>

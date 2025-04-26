@@ -124,7 +124,7 @@ const EditProduct = () => {
   const rules: any = {
     name: [
       { required: true },
-      { max: 50 },
+      { max: 150 },
     ],
     status: [
       { required: true },

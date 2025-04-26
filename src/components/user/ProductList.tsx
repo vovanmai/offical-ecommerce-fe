@@ -1,11 +1,9 @@
-import { Row, Typography } from 'antd';
-const { Title } = Typography;
-
+import { Row } from 'antd';
 import ProductCard from './ProductCard';
 
 
 export default async function ProductList() {
-  const data = await fetch('http://laravel.test/api/products', {
+  const data = await fetch(`${process.env.API_BASE_URL}/api/products`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -16,14 +14,21 @@ export default async function ProductList() {
 
   const products = response.data;
 
-
+  const style = {
+    marginBottom: '0.5em',
+    color: 'rgba(0, 0, 0, 0.88)',
+    fontWeight: 600,
+    fontSize: '20px',
+    lineHeight: 1.4,
+    marginTop: 20,
+  };
 
   return (
     <div className="container" style={{ marginTop: 12 }}>
       <div className="container__inner">
-        {/* <Title style={{marginTop: 20}} level={4}>Sản phẩm nội bật</Title> */}
+        <h4 style={style}>Sản phẩm nội bật</h4>
         <Row gutter={[25, 25]}>
-          {products.map((product: any, index: any) => (
+          {products && products.map((product: any, index: any) => (
             <ProductCard
               product={product}
               key={index}
@@ -32,5 +37,5 @@ export default async function ProductList() {
         </Row>
       </div>
     </div>
-  );
+  );  
 }
