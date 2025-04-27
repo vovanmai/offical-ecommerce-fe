@@ -12,7 +12,7 @@ const { Title } = Typography;
 const LayoutFooter = () => {
   return (
     <footer style={{ marginTop: 20 }}>
-      <div style={{ background: USER_PRIMARY_COLOR, height: "2rem" }}></div>
+      <div style={{ background: USER_PRIMARY_COLOR, height: "2rem", marginBottom: 20 }}></div>
       <div className="container">
         <div className="container__inner">
           <Row gutter={[16, 16]}>

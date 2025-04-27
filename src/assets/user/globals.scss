@@ -152,3 +152,11 @@ body {
     padding-right: 10px;
   }
 }
+
+.ant-menu-title-content a {
+  color: white;
+}
+
+.ant-menu-submenu-active .ant-menu-title-content a {
+  color: white;
+}

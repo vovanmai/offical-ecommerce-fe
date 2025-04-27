@@ -70,7 +70,6 @@ export default function ProductCard(props: ProductCardProps) {
           style={{ borderRadius: 12 }}
         >
           <div>
-            {/* <Text style={styleTitle} ellipsis /> */}
             <div style={styleTitle}>{product.name}</div>
             <span style={stylePrice}>
               <strong>{numeral(product.price).format('0,0')} vnđ

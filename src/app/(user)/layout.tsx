@@ -21,7 +21,7 @@ dayjs.locale('vi');
 dayjs.extend(localizedFormat);
 
 import Header from "@/components/user/layout/Header";
-import PcMenu from "@/components/user/layout/PcMenu";
+import NavBar from "@/components/user/layout/NavBar";
 import Footer from '@/components/user/layout/Footer';
 
 function ThemeWrapper({ children }: { children: React.ReactNode }) {
@@ -59,7 +59,7 @@ export default function RootLayout({
         <AntdRegistry>
           <ThemeWrapper>
             <Header/>
-            <PcMenu/>
+            <NavBar/>
             <main>
               {children}
             </main>

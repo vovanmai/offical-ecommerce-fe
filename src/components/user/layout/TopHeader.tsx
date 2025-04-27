@@ -11,11 +11,12 @@ const TopHeader = () => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  const [time, setTime] = useState(dayjs().format('dddd DD/MM/YYYY HH:mm'));
+  const [time, setTime] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(dayjs().format('dddd DD/MM/YYYY HH:mm'));
+      const now = dayjs().format('dddd DD/MM/YYYY HH:mm:ss');
+      setTime(now);
     }, 1000);
     return () => clearInterval(interval);
   }, []);

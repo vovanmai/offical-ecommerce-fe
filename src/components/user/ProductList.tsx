@@ -1,34 +1,35 @@
-import { Row } from 'antd';
+'use client';
+import { Row, Typography } from 'antd';
+const { Title } = Typography;
+
 import ProductCard from './ProductCard';
 
+import { list as listProducts } from '@/api/user/product';
+import { useEffect, useState } from 'react';
 
-export default async function ProductList() {
-  const data = await fetch(`${process.env.API_BASE_URL}/api/products`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  })
-  const response = await data.json()
-
-  const products = response.data;
-
-  const style = {
-    marginBottom: '0.5em',
-    color: 'rgba(0, 0, 0, 0.88)',
-    fontWeight: 600,
-    fontSize: '20px',
-    lineHeight: 1.4,
-    marginTop: 20,
-  };
-
+export default function ProductList() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await listProducts();
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+  
   return (
     <div className="container" style={{ marginTop: 12 }}>
       <div className="container__inner">
-        <h4 style={style}>Sản phẩm nội bật</h4>
+        <Title style={{marginTop: 20}} level={4}>Sản phẩm nội bật</Title>
         <Row gutter={[25, 25]}>
-          {products && products.map((product: any, index: any) => (
+          {products.map((product, index) => (
             <ProductCard
               product={product}
               key={index}
@@ -37,5 +38,5 @@ export default async function ProductList() {
         </Row>
       </div>
     </div>
-  );  
+  );
 }

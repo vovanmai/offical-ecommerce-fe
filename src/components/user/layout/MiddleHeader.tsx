@@ -46,11 +46,11 @@ const MiddleHeader = () => {
             </div>
             <Link id="button-search-mobile" href="/">
               <Button style={{boxShadow: "none"}} type="primary" shape="circle" icon={<SearchOutlined />} />
-              </Link>
+            </Link>
             <div className="logo">
-              <Link href="/">
+              <a href="/">
                 <Image src="/lam-farm.jpg" alt="Logo" width={80} height={80} />
-              </Link>
+              </a>
             </div>
             <div className="flex-1 search-input" style={{ padding: '0px 0px' }}>
               <Search
