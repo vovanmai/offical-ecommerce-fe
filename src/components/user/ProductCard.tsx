@@ -45,7 +45,7 @@ export default function ProductCard(props: ProductCardProps) {
         ...colProps,
       }}
     >
-      <Link href={`/products/${product.id}`}>
+      <Link href={`/san-pham/${product.slug}.html`}>
         <Card
           className="product-card"
           cover={
