@@ -71,15 +71,15 @@ const Page = ({ product }: Props) => {
               <Swiper
                 onSwiper={setThumbsSwiper}
                 spaceBetween={10}
-                slidesPerView={4}
+                slidesPerView={6}
                 freeMode
                 watchSlidesProgress
                 modules={[FreeMode, Navigation, Thumbs]}
-                className="mySwiper mt-4"
+                className="my-swiper mt-4"
               >
                 {detail_files.map((item: any, index: number) => (
                   <SwiperSlide key={index}>
-                    <div style={{ aspectRatio: '5/3', position: 'relative', width: '100%' }}>
+                    <div style={{ aspectRatio: '1/1', position: 'relative', width: '100%' }}>
                       <img
                         src={`${item.data.endpoint_url}/${item.path}/${item.filename}`}
                         loading="lazy"
@@ -94,7 +94,7 @@ const Page = ({ product }: Props) => {
 
             {/* Phần Nội dung */}
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-              <Text style={{fontSize: '1.25rem', color: '#00573E'}}>{product.name}</Text>
+              <Text style={{fontSize: '1.25rem'}}>{product.name}</Text>
               <p style={{ marginTop: 8 }}>{product.description}</p>
               {/* Bạn thêm các thông tin khác ở đây */}
             </Col>

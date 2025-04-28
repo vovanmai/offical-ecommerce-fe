@@ -42,7 +42,6 @@ const Banner = () => {
         }}
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper"
       >
         <SwiperSlide>
           <img
