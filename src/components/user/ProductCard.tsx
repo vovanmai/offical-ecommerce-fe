@@ -1,5 +1,5 @@
 'use client';
-import { Card, Typography, Col } from 'antd';
+import { Card, Typography, Col, Rate } from 'antd';
 const { Paragraph, Text } = Typography;
 import Link from 'next/link'
 import Image from 'next/image';
@@ -72,7 +72,7 @@ export default function ProductCard(props: ProductCardProps) {
           <div>
             <div style={styleTitle}>{product.name}</div>
             <span style={stylePrice}>
-              <strong>{numeral(product.price).format('0,0')} vnđ
+              <strong>{numeral(product.price).format('0,0')} đ
               </strong>
             </span>
           </div>

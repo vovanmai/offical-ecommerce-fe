@@ -182,3 +182,10 @@ body {
 .my-swiper .swiper-slide-thumb-active {
   opacity: 1;
 }
+
+.ckeditor-data {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
