@@ -68,6 +68,7 @@ const EditProduct = () => {
         const { data } = response;
         form.setFieldsValue({
           name: data.name,
+          unit: data.unit,
           status: data.status,
           price: data.price,
           category_id: data.category_id,
@@ -146,6 +147,10 @@ const EditProduct = () => {
     ],
     category_id: [
       { required: true, message: 'Vui lòng chọn.' },
+    ],
+    unit: [
+      { required: true },
+      { max: 150 },
     ],
   }
 
@@ -236,6 +241,15 @@ const EditProduct = () => {
                     treeDefaultExpandAll
                     treeData={buildCategoryTree(categories)}
                   />
+                </Form.Item>
+                <Form.Item
+                  name="unit"
+                  label="Đơn vị bán"
+                  rules={rules.unit}
+                  validateStatus={ errors?.unit ? 'error' : undefined}
+                  help={errors?.unit ? errors?.unit : undefined}
+                >
+                  <Input size="large" />
                 </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>

@@ -109,9 +109,14 @@ const CreateProduct = () => {
     category_id: [
       { required: true, message: 'Vui lòng chọn.' },
     ],
+    unit: [
+      { required: true },
+      { max: 50}
+    ],
   }
   const initialValues={
     status: 1,
+    unit: null,
     price: null, 
     name: null, 
     description: null,
@@ -175,6 +180,15 @@ const CreateProduct = () => {
                 help={errors?.price ? errors?.price : undefined}
               >
                 <InputNumber size="large" min={1000} style={{ width: "100%" }} />
+              </Form.Item>
+              <Form.Item
+                name="unit"
+                label="Đơn vị bán"
+                rules={rules.name}
+                validateStatus={ errors?.unit ? 'error' : undefined}
+                help={errors?.unit ? errors?.unit : undefined}
+              >
+                <Input size="large" />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12}>

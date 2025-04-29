@@ -126,7 +126,7 @@ const Page = ({ product }: Props) => {
                 </span>
               </div>
               <div style={{ marginBottom: 15 }}>
-                Đơn vị: <strong>Gói</strong>
+                Đơn vị: <strong>{product.unit}</strong>
               </div>
               <div style={{ marginBottom: 15 }}>
                 <Form
