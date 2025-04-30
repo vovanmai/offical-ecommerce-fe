@@ -18,6 +18,9 @@ import { useRouter } from 'next/navigation';
 
 const { Option } = Select;
 
+import { useMessageApi } from '@/components/user/MessageProvider';
+
+
 interface DataNodeType {
   value: string;
   label: string;
@@ -89,6 +92,7 @@ export const metadata = {
 }
 
 const Register = () => {
+  const [messageApi] = useMessageApi();
   const [form] = Form.useForm();
 
   const router = useRouter()
@@ -96,14 +100,18 @@ const Register = () => {
   const onFinish = async (values: any) => {
     try {
       await register(values)
+      messageApi.open({
+        type: 'success',
+        content: 'Đăng ký thành công !',
+      })
       router.push('/dang-nhap')
     } catch (error) {
-      console.error('Error:', error);
-      alert('Đã xảy ra lỗi trong quá trình đăng ký');
+      messageApi.open({
+        type: 'error',
+        content: 'Có lỗi xảy ra !',
+      })
     }
-    console.log('Received values of form: ', values);
   };
-
   
   return (
     <div>

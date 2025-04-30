@@ -15,7 +15,7 @@ const TopHeader = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const now = dayjs().format('dddd DD/MM/YYYY HH:mm:ss');
+      const now = dayjs().format('dddd DD/MM/YYYY HH:mm');
       setTime(now);
     }, 1000);
     return () => clearInterval(interval);

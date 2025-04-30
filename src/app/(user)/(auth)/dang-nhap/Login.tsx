@@ -11,9 +11,10 @@ import {
   Alert
 } from 'antd';
 
-import { register } from '@/api/user/auth';
-
+import { login } from '@/api/user/auth';
+import { useMessageApi } from '@/components/user/MessageProvider';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const { Option } = Select;
 
@@ -82,20 +83,34 @@ const tailFormItemLayout = {
   },
 };
 
+import { useAppDispatch } from '@/store/user/hooks';
+import { setCurrentUser } from "@/store/user/authSlice"
+
 const Login = () => {
   const [form] = Form.useForm();
+  const [messageApi] = useMessageApi();
+  const router = useRouter()
+  const dispatch = useAppDispatch()
 
   const onFinish = async (values: any) => {
     try {
-      const response = await register(values)
-      
+      const response = await login(values)
+      const { data } = response;
+      localStorage.setItem('user_token', data.access_token)
+      const user = data.user
+      dispatch(setCurrentUser(user));
+      messageApi.open({
+        type: 'success',
+        content: 'Đăng nhập thành công !',
+      })
+      router.push('/')
     } catch (error) {
-      console.error('Error:', error);
-      alert('Đã xảy ra lỗi trong quá trình đăng ký');
+      messageApi.open({
+        type: 'error',
+        content: 'Tài khoản đăng nhập không đúng !',
+      })
     }
-    console.log('Received values of form: ', values);
   };
-
   
   return (
     <div>

@@ -1,9 +1,5 @@
 'use client'
 import { Button, Input, Badge, Tooltip } from 'antd';
-import dayjs from 'dayjs';
-import { FaPhone } from "react-icons/fa6";
-import { IoTimeSharp } from "react-icons/io5";
-import { useEffect, useState } from 'react';
 const { Search } = Input;
 import Link from 'next/link'
 import Image from 'next/image'
@@ -16,26 +12,70 @@ import { Dropdown, Space } from 'antd';
 
 import type { MenuProps } from 'antd';
 
+import { useAppSelector } from '@/store/user/hooks';
+import { getProfile, logout } from '@/api/user/auth';
+import { use, useEffect, useState } from 'react';
+import { useAppDispatch } from '@/store/user/hooks';
+import { setCurrentUser } from "@/store/user/authSlice"
+
 
 const MiddleHeader = () => {
-  const items: MenuProps['items'] = [
-    {
-      key: 'dang-nhap',
-      label: (
-        <Link href="/dang-nhap">
-          Đăng nhập
-        </Link>
-      )
-    },
-    {
-      key: 'dang-ky',
-      label: (
-        <Link href="/dang-ky">
-          Đăng ký
-        </Link>
-      )
+  const dispatch = useAppDispatch()
+  const currentUser = useAppSelector((state) => state.auth.currentUser)
+  const [items, setItems] = useState<MenuProps['items']>([]);
+  useEffect(() => {
+    const token = localStorage.getItem('user_token');
+    const fetchUserProfile = async () => {
+      try {
+        const response = await getProfile();
+        const { data } = response;
+        dispatch(setCurrentUser(data));
+      } catch (error) {
+      }
+    };
+    if (token) {
+      fetchUserProfile();
     }
-  ];
+  }, []);
+
+  const isLoggedIn = !!currentUser;
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      localStorage.removeItem('user_token');
+      dispatch(setCurrentUser(null));
+    }
+    catch (error) {
+    }
+  };
+
+  useEffect(() => {
+    const newItems: MenuProps['items'] = isLoggedIn
+      ? [
+          {
+            key: 'profile',
+            label: <Link href="/thong-tin-ca-nhan">Thông tin cá nhân</Link>,
+          },
+          {
+            key: 'logout',
+            label: <span onClick={handleLogout}>Đăng xuất</span>,
+          },
+        ]
+      : [
+          {
+            key: 'dang-nhap',
+            label: <Link href="/dang-nhap">Đăng nhập</Link>,
+          },
+          {
+            key: 'dang-ky',
+            label: <Link href="/dang-ky">Đăng ký</Link>,
+          },
+        ];
+  
+    setItems(newItems);
+  }, [isLoggedIn]);
+
   return (
     <div id="middle-header">
       <div className="container">

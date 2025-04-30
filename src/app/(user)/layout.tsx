@@ -13,6 +13,7 @@ import { useAppSelector } from '@/store/user/hooks'
 import 'react-toastify/dist/ReactToastify.css';
 
 import { getPrimaryColor } from "@/store/user/appSlice"
+import { MessageProvider } from '@/components/user/MessageProvider';
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi'
@@ -58,12 +59,14 @@ export default function RootLayout({
       <Provider store={store}>
         <AntdRegistry>
           <ThemeWrapper>
-            <Header/>
-            <NavBar/>
-            <main>
-              {children}
-            </main>
-            <Footer />
+            <MessageProvider>
+              <Header/>
+              <NavBar/>
+              <main>
+                {children}
+              </main>
+              <Footer />
+            </MessageProvider>
           </ThemeWrapper>
         </AntdRegistry>
       </Provider>
