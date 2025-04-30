@@ -118,6 +118,9 @@ body {
     border-bottom: 1px solid #e5e5e5;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
+  .button-register {
+    width: 100%;
+  }
 }
 
 @media (min-width: 576px) {
@@ -188,4 +191,12 @@ body {
     max-width: 100%;
     height: auto;
   }
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.swiper-button-next::after, .swiper-button-prev::after {
+  font-size: 30px !important;
 }
