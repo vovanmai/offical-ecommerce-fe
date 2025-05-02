@@ -14,15 +14,16 @@ import type { MenuProps } from 'antd';
 
 import { useAppSelector } from '@/store/user/hooks';
 import { getProfile, logout } from '@/api/user/auth';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch } from '@/store/user/hooks';
 import { setCurrentUser } from "@/store/user/authSlice"
-
+import { useMessageApi } from '@/components/user/MessageProvider';
 
 const MiddleHeader = () => {
   const dispatch = useAppDispatch()
   const currentUser = useAppSelector((state) => state.auth.currentUser)
   const [items, setItems] = useState<MenuProps['items']>([]);
+  const [messageApi] = useMessageApi();
   useEffect(() => {
     const token = localStorage.getItem('user_token');
     const fetchUserProfile = async () => {
@@ -45,6 +46,10 @@ const MiddleHeader = () => {
       await logout();
       localStorage.removeItem('user_token');
       dispatch(setCurrentUser(null));
+      messageApi.open({
+        type: 'success',
+        content: 'Đăng xuất thành công !',
+      })
     }
     catch (error) {
     }

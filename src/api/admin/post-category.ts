@@ -1,4 +1,4 @@
-import api from '@/api/axiosClient';
+import api from '@/api/admin/axiosClient';
 
 export function getRoles(params: object) {
   return api.get('api/admin/post-categories', { params: params});

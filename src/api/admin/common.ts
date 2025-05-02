@@ -1,4 +1,4 @@
-import api from '@/api/axiosClient';
+import api from '@/api/admin/axiosClient';
 
 export function createUpload(data: FormData, headers = {}) {
   return api.post('api/admin/common/uploads', data, {

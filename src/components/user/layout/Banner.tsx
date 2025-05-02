@@ -1,31 +1,31 @@
 'use client'
-import { Col, Input, Button, Menu } from 'antd';
-import dayjs from 'dayjs';
-import { FaPhone } from "react-icons/fa6";
-import { IoTimeSharp } from "react-icons/io5";
-import { useEffect, useState } from 'react';
-const { Search } = Input;
-import Link from 'next/link'
-import Image from 'next/image'
-import { MenuOutlined, DownOutlined } from '@ant-design/icons';
-import { USER_PRIMARY_COLOR } from '@/constants/common';
-import { FaUserCircle, FaCartPlus } from "react-icons/fa";
-import { HomeOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
 
-import { Dropdown, Space } from 'antd';
-
-import type { MenuProps } from 'antd';
-type MenuItem = Required<MenuProps>['items'][number];
 import { Swiper, SwiperSlide } from 'swiper/react';
-
 import 'swiper/css';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
+import {list as listBanner} from '@/api/user/banner';
+import { useEffect, useState } from 'react';
+
 
 const Banner = () => {
-  
+
+  const [banners, setBanners] = useState<any[]>([]);
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const response = await listBanner();
+        setBanners(response.data);
+      } catch (error) {
+        console.error('Error fetching banners:', error);
+      } finally {
+      }
+    };
+    fetchBanners()
+  }, [])
+
   return (
     <div id="banner">
       <div className="container">
@@ -43,14 +43,24 @@ const Banner = () => {
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
       >
-        <SwiperSlide>
-          <img
-            src="/image.png"
-            loading="lazy"
-            className="w-100"
-          />
-          <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-        </SwiperSlide>
+        {banners.map((banner, index) => (
+          <SwiperSlide key={index}>
+            <div style={{ aspectRatio: '16 / 9', width: '100%', position: 'relative' }}>
+              <img
+                src={`${banner.image.data.endpoint_url}/${banner.image.path}/${banner.image.filename}`}
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                }}
+              />
+            </div>
+          </SwiperSlide>
+        ))}
       </Swiper>
       </div>
     </div>

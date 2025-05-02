@@ -15,7 +15,6 @@ export default async function ProductList() {
   const response = await data.json()
 
   const products = response.data;
-  console.log(products)
 
   const style = {
     marginBottom: '0.5em',

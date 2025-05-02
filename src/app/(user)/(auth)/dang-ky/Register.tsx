@@ -1,7 +1,7 @@
 
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { CascaderProps } from 'antd';
 import {
   Button,
@@ -92,10 +92,16 @@ export const metadata = {
 }
 
 const Register = () => {
+  const router = useRouter()
   const [messageApi] = useMessageApi();
   const [form] = Form.useForm();
 
-  const router = useRouter()
+  useEffect(() => {
+    const userToken = localStorage.getItem('user_token');
+    if (userToken) {
+      router.push('/');
+    }
+  }, [])
 
   const onFinish = async (values: any) => {
     try {

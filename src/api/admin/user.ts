@@ -1,4 +1,4 @@
-import api from '@/api/axiosClient';
+import api from '@/api/admin/axiosClient';
 
 export function getUsers(params: object) {
   return api.get('api/users', { params: params});
