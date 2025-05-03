@@ -1,4 +1,4 @@
-import api from '@/api/admin/axiosClient';
+import api from '@/api/user/axiosClient';
 
 export function login(data: object) {
   return api.post('api/login', data);

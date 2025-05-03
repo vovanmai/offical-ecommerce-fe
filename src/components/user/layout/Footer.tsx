@@ -19,12 +19,13 @@ const LayoutFooter = () => {
             <Col xs={24} sm={12} md={6}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
                 <Link href="/">
-                  <Image src="/lam-farm.jpg" alt="Logo" width={100} height={100} />
+                  <Image src="/lamsfarm_logo.jpeg" alt="Logo" width={120} height={100} />
                 </Link>
-                <Text italic>Bé xinh shop chuyên bán quần áo trẻ em online Đẹp - Rẻ - Uy Tín tại Tphcm, giao hàng tận nơi trên Toàn quốc. Cam kết: Hàng chất lượng, mẫu mã đa dạng, đổi trả hàng nếu không vừa ý.
-                </Text>
-                <Badge color="black" text="Phone: 0986.308.460" />
-                <Badge color="black" text="Địa chỉ: Thôn sơn viên, xã duy nghĩa, huyện duy xuyên, tỉnh quảng nam" />
+                <Text italic>Lam's Farm chuyên cung cấp các sản phẩm ngon, uy tín đến quý khách hàng.</Text>
+                <Badge color="black" text="Tên đơn vị: Hợp tác xã Lam Nguyễn" />
+                <Badge color="black" text="Địa chỉ: 526/13 Nguyễn Tri Phương, khối Thanh Nam, phường Cẩm Nam, tp Hội An, Quảng Nam" />
+                <Badge color="black" text="Email: nguyenlam.htx@gmail.com" />
+                <Badge color="black" text="Phone: 078.249.7116" />
               </div>
             </Col>
             <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={6}>
@@ -36,11 +37,11 @@ const LayoutFooter = () => {
             <Col style={{gap: 8}} xs={24} sm={12} md={6}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
                 <Title style={{color: "#00573e", margin: 0}} level={5}>CHÍNH SÁCH</Title>
-                <Link style={{color: "inherit"}} href="a">Chính sách bán hàng</Link>
-                <Link style={{color: "inherit"}} href="a">Hướng dẫn mua hàng</Link>
-                <Link style={{color: "inherit"}} href="a">Chính sách đổi trả</Link>
-                <Link style={{color: "inherit"}} href="a">Giới thiệu</Link>
-                <Link style={{color: "inherit"}} href="a">Tuyển dụng</Link>
+                <Link style={{color: "inherit"}} href="">Chính sách bán hàng</Link>
+                <Link style={{color: "inherit"}} href="">Hướng dẫn mua hàng</Link>
+                <Link style={{color: "inherit"}} href="">Chính sách đổi trả</Link>
+                <Link style={{color: "inherit"}} href="">Giới thiệu</Link>
+                <Link style={{color: "inherit"}} href="">Tuyển dụng</Link>
               </div>
             </Col>
             <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={6}>

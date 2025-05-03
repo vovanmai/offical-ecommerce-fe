@@ -52,6 +52,7 @@ const MiddleHeader = () => {
       })
     }
     catch (error) {
+      console.log(error)
     }
   };
 
@@ -92,9 +93,9 @@ const MiddleHeader = () => {
             <Link id="button-search-mobile" href="/">
               <Button style={{boxShadow: "none"}} type="primary" shape="circle" icon={<SearchOutlined />} />
             </Link>
-            <div className="logo">
+            <div className="logo" style={{ padding: '5px 0px' }}>
               <a href="/">
-                <Image src="/lam-farm.jpg" alt="Logo" width={80} height={80} />
+                <Image src="/lamsfarm_logo.jpeg" alt="Logo" width={100} height={80} />
               </a>
             </div>
             <div className="flex-1 search-input" style={{ padding: '0px 0px' }}>
