@@ -22,10 +22,6 @@ const ConfirmModal = (props: PropsType) => {
     onCancel,
   } = props
 
-  const handleCancel = () => {
-    console.log('Clicked cancel button');
-  };
-
   return (
     <>
       <Modal

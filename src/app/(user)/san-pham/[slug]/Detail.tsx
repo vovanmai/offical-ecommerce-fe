@@ -9,6 +9,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, FreeMode, Navigation, Thumbs } from 'swiper/modules';
 const { Text } = Typography;
 import type { FormProps } from 'antd';
+import { create as createCart } from '@/api/user/cart';
+import { useRouter } from 'next/navigation';
 
 
 import 'swiper/css';
@@ -16,15 +18,18 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/free-mode';
 import 'swiper/css/thumbs';
+import { useMessageApi } from "@/components/user/MessageProvider";
 
 type Props = {
   product: any;
 };
 
-const Page = ({ product }: Props) => {
-  console.log(product)
+const Detail = ({ product }: Props) => {
   const { detail_files = [] } = product;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+  const [quantity, setQuantity] = useState(1)
+  const router = useRouter()
+  const [messageApi] = useMessageApi();
 
 
   const buildBreadcrumbItems: any = (category: any): { title: JSX.Element }[] => {
@@ -41,14 +46,45 @@ const Page = ({ product }: Props) => {
     return items;
   };
 
-  const onFinish: FormProps['onFinish'] = (values) => {
-    console.log('Success:', values);
-  };
-
   const onChangeQuantity = (value: any) => {
-    console.log('changed', value);
+    setQuantity(value)
   };
 
+  const addToCart = async () => {
+    const userToken = localStorage.getItem('user_token')
+
+    if (!userToken) {
+      messageApi.open({
+        type: 'error',
+        content: 'Vui lòng đăng nhập.',
+      })
+      router.push('/dang-nhap')
+    }
+    try {
+      const params = {
+        quantity,
+        product_id: product.id
+      }
+      await createCart(params)
+    } catch (error: any) {
+      messageApi.open({
+        type: 'error',
+        content: error.data.message
+      })
+    }
+  }
+
+  const addToCartSubmit = async (values: any) => {
+    await addToCart()
+    messageApi.open({
+      type: 'success',
+      content: 'Thêm vào giỏ hàng thành công',
+    })
+  }
+
+  const buyNow = async () => {
+    await addToCart()
+  }
 
 
   return (
@@ -67,7 +103,6 @@ const Page = ({ product }: Props) => {
 
         <Card style={{ width: '100%' }}>
           <Row gutter={30}>
-            {/* Phần Ảnh */}
             <Col xs={24} sm={24} md={12} lg={12} xl={12}>
               <Swiper
                 pagination={{ clickable: true }}
@@ -131,12 +166,11 @@ const Page = ({ product }: Props) => {
               <div style={{ marginBottom: 15 }}>
                 <Form
                   layout="horizontal"
-                  initialValues={{  }}
-                  onFinish={onFinish}
+                  initialValues={{}}
                 >
                   <Form.Item
                     label="Số lượng"
-                    name="username"
+                    name="quantity"
                   >
                     <Space>
                       <InputNumber size="large" min={1} max={product.inventory_quantity} defaultValue={1} onChange={onChangeQuantity} />
@@ -146,10 +180,10 @@ const Page = ({ product }: Props) => {
 
                   <Form.Item>
                     <Space>
-                      <Button type="primary" size="large" ghost htmlType="submit">
+                      <Button type="primary" size="large" ghost onClick={addToCartSubmit}>
                         Thêm vào giỏ hàng
                       </Button>
-                      <Button type="primary" size="large" htmlType="submit">
+                      <Button type="primary" size="large" onClick={buyNow}>
                         Mua ngay
                       </Button>
                     </Space>
@@ -172,4 +206,4 @@ const Page = ({ product }: Props) => {
   );
 };
 
-export default Page;
+export default Detail;
