@@ -27,7 +27,6 @@ export default async function NavBar() {
     },
   })
 
-  console.log(data)
 
 
   // const items2: MenuItem[] = [

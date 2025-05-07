@@ -28,7 +28,6 @@ class CustomUploadAdapter {
 	try {
 		const file = await this.loader.file
 		if (!file) {
-			console.log('No file provided')
 			return
 		}
 		const formData = new FormData();

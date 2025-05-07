@@ -1,10 +1,9 @@
 'use client'
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Row, Col, Space, Button, Tooltip } from 'antd';
+import { Table, Row, Col, Space, Button, Tooltip, InputNumber } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import ConfirmModal from '@/components/ConfirmModal';
-import { list as listCart } from '@/api/user/cart';
+import { list as listCart, deleteCart, update as updateCart } from '@/api/user/cart';
 import numeral from 'numeral';
 
 interface CartItem {
@@ -16,49 +15,44 @@ interface CartItem {
   };
 }
 
-const Cart = () => {
-  const [carts, setCarts] = useState<CartItem[]>([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
-  const [deleteState, setDeleteState] = useState<{
-    visible: boolean;
-    id: number | null;
-    loading: boolean;
-  }>({
-    visible: false,
-    id: null,
-    loading: false,
-  });
+import { useAppDispatch, useAppSelector } from '@/store/user/hooks';
+import { setCarts } from "@/store/user/cartSlice"
 
+const Cart = () => {
+  const dispatch = useAppDispatch()
+  const carts = useAppSelector((state) => state.cart.carts)
   const fetchCart = useCallback(async () => {
     try {
       const response = await listCart();
-      setCarts(response.data);
+      dispatch(setCarts(response.data));
     } catch (error) {
       console.error('Error fetching cart:', error);
     }
   }, []);
 
+  const onChangeQuantity = async (cartId: Number, value: any) => {
+    if(!value) {
+      return
+    }
+    try {
+      await updateCart(cartId, { quantity: value })
+      await fetchCart();
+    } catch (error) {
+      
+    }
+
+  }
+
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
 
-  const showDeleteConfirm = (id: number) => {
-    setDeleteState({ visible: true, id, loading: false });
-  };
-
-  const deleteCartItem = async () => {
-    if (deleteState.id === null) return;
-
+  const onDelete = async (id: Number) => {
     try {
-      setDeleteState(prev => ({ ...prev, loading: true }));
-      // await deleteRequest(deleteState.id); // Bật lại nếu có API xoá
-      setCarts(prev => prev.filter(item => item.id !== deleteState.id));
-      setDeleteState({ visible: false, id: null, loading: false });
-      // toast.success("Xoá thành công!");
+      await deleteCart(id)
+      await fetchCart();
     } catch (error) {
       console.error(error);
-      // toast.error("Xoá thất bại!");
-      setDeleteState(prev => ({ ...prev, loading: false }));
     }
   };
 
@@ -80,15 +74,16 @@ const Cart = () => {
     },
     {
       title: 'Giá thành',
-      dataIndex: 'product',
-      key: 'price',
-      render: (product: CartItem['product']) =>
-        `${numeral(product.price).format('0,0')} đ`,
+      render: (record: any) =>
+        `${numeral(record.product.price * record.quantity).format('0,0')} đ`,
     },
     {
       title: 'Số lượng',
-      dataIndex: 'quantity',
-      key: 'quantity',
+      render: (record: any) => {
+        return (
+          <InputNumber size="large" min={1} max={record.product.inventory_quantity} defaultValue={record.quantity} onChange={(value: any) => onChangeQuantity(record.id, value)} />
+        )
+      }
     },
     {
       title: 'Hành động',
@@ -98,7 +93,7 @@ const Cart = () => {
           <Tooltip title="Xoá">
             <Button
               type="text"
-              onClick={() => showDeleteConfirm(record.id)}
+              onClick={() => onDelete(record.id)}
               icon={<DeleteOutlined style={{ color: 'red' }} />}
             />
           </Tooltip>
@@ -107,29 +102,12 @@ const Cart = () => {
     },
   ];
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (newKeys: React.Key[]) => {
-      setSelectedRowKeys(newKeys as number[]);
-    },
-  };
-
   return (
     <div className="container" style={{ marginTop: 24 }}>
       <div className="container__inner">
-        <ConfirmModal
-          visible={deleteState.visible}
-          onOk={deleteCartItem}
-          onCancel={() =>
-            setDeleteState(prev => ({ ...prev, visible: false }))
-          }
-          confirmLoading={deleteState.loading}
-        />
-
         <Row gutter={16}>
           <Col lg={16} xs={24}>
             <Table
-              // rowSelection={rowSelection}
               dataSource={carts}
               columns={columns}
               rowKey="id"

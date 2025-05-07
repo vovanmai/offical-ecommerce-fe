@@ -21,6 +21,7 @@ import { useMessageApi } from '@/components/user/MessageProvider';
 
 const MiddleHeader = () => {
   const dispatch = useAppDispatch()
+  const carts = useAppSelector((state) => state.cart.carts)
   const currentUser = useAppSelector((state) => state.auth.currentUser)
   const [items, setItems] = useState<MenuProps['items']>([]);
   const [messageApi] = useMessageApi();
