@@ -1,7 +1,7 @@
 
 'use client'
 
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import type { CascaderProps } from 'antd';
 import {
   Button,
@@ -42,12 +42,25 @@ const tailFormItemLayout = {
 
 import { useAppDispatch } from '@/store/user/hooks';
 import { setCurrentUser } from "@/store/user/authSlice"
+import { setCarts } from "@/store/user/cartSlice"
+import { list as listCart } from '@/api/user/cart';
 
 const Login = () => {
   const [form] = Form.useForm();
   const [messageApi] = useMessageApi();
   const router = useRouter()
   const dispatch = useAppDispatch()
+
+
+  const fetchCart = useCallback(async () => {
+    try {
+      const response = await listCart();
+      const { data } = response;
+      dispatch(setCarts(data));
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+  }, []);
 
   const onFinish = async (values: any) => {
     try {
@@ -56,6 +69,7 @@ const Login = () => {
       localStorage.setItem('user_token', data.access_token)
       const user = data.user
       dispatch(setCurrentUser(user));
+      fetchCart()
       messageApi.open({
         type: 'success',
         content: 'Đăng nhập thành công !',

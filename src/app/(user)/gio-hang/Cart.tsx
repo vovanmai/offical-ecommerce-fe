@@ -87,7 +87,7 @@ const Cart = () => {
     {
       title: '',
       key: 'action',
-      render: (_: any, record: CartItem) => (
+      render: (record: any) => (
         <Space>
           <Tooltip title="Xoá">
             <Button

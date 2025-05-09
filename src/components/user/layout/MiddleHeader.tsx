@@ -13,13 +13,12 @@ import { list as listCart } from '@/api/user/cart';
 import { Dropdown, Space } from 'antd';
 
 import type { MenuProps } from 'antd';
-import { setCarts } from "@/store/user/cartSlice"
-
 import { useAppSelector } from '@/store/user/hooks';
 import { getProfile, logout } from '@/api/user/auth';
 import { useEffect, useState, useCallback } from 'react';
 import { useAppDispatch } from '@/store/user/hooks';
 import { setCurrentUser } from "@/store/user/authSlice"
+import { setCarts } from "@/store/user/cartSlice"
 import { useMessageApi } from '@/components/user/MessageProvider';
 
 const MiddleHeader = () => {
@@ -57,6 +56,7 @@ const MiddleHeader = () => {
       await logout();
       localStorage.removeItem('user_token');
       dispatch(setCurrentUser(null));
+      dispatch(setCarts([]));
       messageApi.open({
         type: 'success',
         content: 'Đăng xuất thành công !',

@@ -7,6 +7,7 @@ const { Text } = Typography;
 import Link from 'next/link'
 import Image from 'next/image'
 const { Title } = Typography;
+import FacebookPagePlugin from "@/components/user/FacebookPagePlugin"
 
 
 const LayoutFooter = () => {
@@ -47,7 +48,9 @@ const LayoutFooter = () => {
             <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={6}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
                 <Title style={{color: "#00573e", margin: 0}} level={5}>FANPAGE</Title>
-                <div>11</div>
+                <div>
+                  <FacebookPagePlugin />
+                </div>
               </div>
             </Col>
           </Row>
