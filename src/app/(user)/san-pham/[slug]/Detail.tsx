@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Breadcrumb, Card, Row, Col, InputNumber, Typography, Rate, Button, Space, Form, Input } from 'antd';
 import { HomeOutlined } from "@ant-design/icons";
 import Link from "next/link";
@@ -24,13 +24,17 @@ type Props = {
   product: any;
 };
 
+import { list as listCart } from '@/api/user/cart';
+import { useAppDispatch, useAppSelector } from '@/store/user/hooks';
+import { setCarts } from "@/store/user/cartSlice"
+
 const Detail = ({ product }: Props) => {
   const { detail_files = [] } = product;
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [quantity, setQuantity] = useState(1)
   const router = useRouter()
   const [messageApi] = useMessageApi();
-
+  const dispatch = useAppDispatch()
 
   const buildBreadcrumbItems: any = (category: any): { title: JSX.Element }[] => {
     const items: { title: JSX.Element }[] = [];
@@ -75,7 +79,17 @@ const Detail = ({ product }: Props) => {
   }
 
   const addToCartSubmit = async (values: any) => {
+    const userToken = localStorage.getItem('user_token')
+    if (!userToken) {
+      messageApi.open({
+        type: 'error',
+        content: 'Vui lòng đăng nhập.',
+      })
+      router.push('/dang-nhap')
+      return
+    }
     await addToCart()
+    await fetchCart()
     messageApi.open({
       type: 'success',
       content: 'Thêm vào giỏ hàng thành công',
@@ -83,8 +97,26 @@ const Detail = ({ product }: Props) => {
   }
 
   const buyNow = async () => {
+    const userToken = localStorage.getItem('user_token')
+    if (!userToken) {
+      messageApi.open({
+        type: 'error',
+        content: 'Vui lòng đăng nhập.',
+      })
+      router.push('/dang-nhap')
+      return
+    }
     await addToCart()
   }
+
+  const fetchCart = useCallback(async () => {
+      try {
+        const response = await listCart();
+        dispatch(setCarts(response.data));
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+    }, []);
 
 
   return (

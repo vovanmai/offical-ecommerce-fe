@@ -7,14 +7,17 @@ import { SearchOutlined } from '@ant-design/icons';
 import { USER_PRIMARY_COLOR } from '@/constants/common';
 import { FaUserCircle, FaCartPlus } from "react-icons/fa";
 import { DownOutlined, MenuOutlined } from '@ant-design/icons';
+import { list as listCart } from '@/api/user/cart';
+
 
 import { Dropdown, Space } from 'antd';
 
 import type { MenuProps } from 'antd';
+import { setCarts } from "@/store/user/cartSlice"
 
 import { useAppSelector } from '@/store/user/hooks';
 import { getProfile, logout } from '@/api/user/auth';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAppDispatch } from '@/store/user/hooks';
 import { setCurrentUser } from "@/store/user/authSlice"
 import { useMessageApi } from '@/components/user/MessageProvider';
@@ -25,6 +28,7 @@ const MiddleHeader = () => {
   const currentUser = useAppSelector((state) => state.auth.currentUser)
   const [items, setItems] = useState<MenuProps['items']>([]);
   const [messageApi] = useMessageApi();
+  const [cartCount, setCartCount] = useState(0)
   useEffect(() => {
     const token = localStorage.getItem('user_token');
     const fetchUserProfile = async () => {
@@ -37,8 +41,14 @@ const MiddleHeader = () => {
     };
     if (token) {
       fetchUserProfile();
+      fetchCart();
     }
   }, []);
+
+  useEffect(() => {
+    const count = carts.reduce((acc: number, item: any) => acc + item.quantity, 0);
+    setCartCount(count);
+  }, [carts])
 
   const isLoggedIn = !!currentUser;
 
@@ -56,6 +66,18 @@ const MiddleHeader = () => {
       console.log(error)
     }
   };
+
+  const fetchCart = useCallback(async () => {
+      try {
+        const response = await listCart();
+        const { data } = response;
+        dispatch(setCarts(data));
+        const count = data.reduce((acc: number, item: any) => acc + item.quantity, 0);
+        setCartCount(count);
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+    }, []);
 
   useEffect(() => {
     const newItems: MenuProps['items'] = isLoggedIn
@@ -110,7 +132,7 @@ const MiddleHeader = () => {
             <div className="d-flex align-items-center">
               <Link href="/gio-hang">
                 <Tooltip title="Giỏ hàng">
-                  <Badge count={5}>
+                  <Badge showZero count={cartCount}>
                     <FaCartPlus style={{fontSize: 28, color: USER_PRIMARY_COLOR}} />
                   </Badge>
                 </Tooltip>

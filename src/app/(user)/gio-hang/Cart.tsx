@@ -1,10 +1,12 @@
 'use client'
 
-import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Row, Col, Space, Button, Tooltip, InputNumber } from 'antd';
+import React, { useEffect, useCallback } from 'react';
+import { Table, Row, Col, Card, Space, Button, Tooltip, InputNumber, Divider } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { list as listCart, deleteCart, update as updateCart } from '@/api/user/cart';
 import numeral from 'numeral';
+import Link from 'next/link';
+
 
 interface CartItem {
   id: number;
@@ -21,6 +23,7 @@ import { setCarts } from "@/store/user/cartSlice"
 const Cart = () => {
   const dispatch = useAppDispatch()
   const carts = useAppSelector((state) => state.cart.carts)
+  const totalPrice = carts.reduce((acc: number, item: any) => acc + item.product.price * item.quantity, 0);
   const fetchCart = useCallback(async () => {
     try {
       const response = await listCart();
@@ -42,10 +45,6 @@ const Cart = () => {
     }
 
   }
-
-  useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
 
   const onDelete = async (id: Number) => {
     try {
@@ -86,7 +85,7 @@ const Cart = () => {
       }
     },
     {
-      title: 'Hành động',
+      title: '',
       key: 'action',
       render: (_: any, record: CartItem) => (
         <Space>
@@ -105,7 +104,7 @@ const Cart = () => {
   return (
     <div className="container" style={{ marginTop: 24 }}>
       <div className="container__inner">
-        <Row gutter={16}>
+        <Row gutter={[20, 20]}>
           <Col lg={16} xs={24}>
             <Table
               dataSource={carts}
@@ -115,7 +114,22 @@ const Cart = () => {
             />
           </Col>
           <Col lg={8} xs={24}>
-            {/* Có thể bổ sung tổng tiền / nút thanh toán ở đây */}
+            <Card style={{ width: '100%' }}>
+              <div className="d-flex align-items-center justify-content-between">
+                <div>Tổng tiền sản phẩm: </div>
+                <div>
+                  <strong>{ numeral(totalPrice).format('0,0') } đ</strong>
+                </div>
+              </div>
+              <Divider />
+              <div>
+                <Link href="/mua-hang">
+                  <Button shape="round" type="primary" size="large" style={{ width: '100%' }}>
+                    Mua hàng
+                  </Button>
+                </Link>
+              </div>
+            </Card>
           </Col>
         </Row>
       </div>
