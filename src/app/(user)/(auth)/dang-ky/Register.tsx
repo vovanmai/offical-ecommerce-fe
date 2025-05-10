@@ -1,13 +1,12 @@
 
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import type { CascaderProps } from 'antd';
 import {
   Button,
   Form,
   Input,
-  Select,
   Alert
 } from 'antd';
 
@@ -15,8 +14,6 @@ import { register } from '@/api/user/auth';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
-const { Option } = Select;
 
 import { useMessageApi } from '@/components/user/MessageProvider';
 
@@ -26,41 +23,6 @@ interface DataNodeType {
   label: string;
   children?: DataNodeType[];
 }
-
-const residences: CascaderProps<DataNodeType>['options'] = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-          },
-        ],
-      },
-    ],
-  },
-];
 
 const formItemLayout = {
   labelCol: {
@@ -127,7 +89,7 @@ const Register = () => {
         form={form}
         name="register"
         onFinish={onFinish}
-        initialValues={{ residence: ['zhejiang', 'hangzhou', 'xihu'], prefix: '86' }}
+        initialValues={{}}
         style={{ maxWidth: 600 }}
         scrollToFirstError
       >

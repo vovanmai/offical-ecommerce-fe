@@ -70,11 +70,13 @@ const Detail = ({ product }: Props) => {
         product_id: product.id
       }
       await createCart(params)
+      return true
     } catch (error: any) {
       messageApi.open({
         type: 'error',
         content: error.data.message
       })
+      return false
     }
   }
 
@@ -88,12 +90,15 @@ const Detail = ({ product }: Props) => {
       router.push('/dang-nhap')
       return
     }
-    await addToCart()
-    await fetchCart()
-    messageApi.open({
-      type: 'success',
-      content: 'Thêm vào giỏ hàng thành công',
-    })
+    const addSuccess = await addToCart()
+
+    if (addSuccess) {
+      await fetchCart()
+      messageApi.open({
+        type: 'success',
+        content: 'Thêm vào giỏ hàng thành công',
+      })
+    }
   }
 
   const buyNow = async () => {
@@ -106,7 +111,12 @@ const Detail = ({ product }: Props) => {
       router.push('/dang-nhap')
       return
     }
-    await addToCart()
+    const addSuccess = await addToCart()
+
+    if (addSuccess) {
+      await fetchCart()
+      router.push('/mua-hang')
+    }
   }
 
   const fetchCart = useCallback(async () => {

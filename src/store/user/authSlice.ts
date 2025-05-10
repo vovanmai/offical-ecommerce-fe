@@ -1,18 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '@/store/admin/store'
 
-// Định nghĩa kiểu dữ liệu cho currentUser
-interface User {
-  id: number | null;
-  name: string | null;
-}
 
-interface AuthState {
-  currentUser: User | null;
-}
-
-// Khởi tạo state
-const initialState: AuthState = {
+const initialState = {
   currentUser: null,
 };
 
@@ -21,7 +11,7 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCurrentUser: (state, action: PayloadAction<User | null>) => {
+    setCurrentUser: (state, action: PayloadAction<any>) => {
       state.currentUser = action.payload;
     },
   },

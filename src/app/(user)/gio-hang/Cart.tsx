@@ -111,6 +111,7 @@ const Cart = () => {
               columns={columns}
               rowKey="id"
               pagination={false}
+              scroll={{ x: 'max-content' }}
             />
           </Col>
           <Col lg={8} xs={24}>
