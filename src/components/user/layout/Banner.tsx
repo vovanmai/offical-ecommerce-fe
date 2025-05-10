@@ -31,7 +31,7 @@ const Banner = () => {
       <div className="container">
       <Swiper
         style={{
-          height: '359px',
+          aspectRatio: '20 / 9', width: '100%'
         }}
         autoplay={{
           delay: 2500,
@@ -45,8 +45,12 @@ const Banner = () => {
       >
         {banners.map((banner, index) => (
           <SwiperSlide key={index}>
-            <div style={{ aspectRatio: '16 / 9', width: '100%', position: 'relative' }}>
-              <img
+            <div style={{ 
+              aspectRatio: '20 / 9',
+              width: '100%',
+            }}>
+              <a href={banner.url}>
+                <img
                 src={`${banner.image.data.endpoint_url}/${banner.image.path}/${banner.image.filename}`}
                 loading="lazy"
                 style={{
@@ -58,6 +62,7 @@ const Banner = () => {
                   left: 0,
                 }}
               />
+              </a>
             </div>
           </SwiperSlide>
         ))}
