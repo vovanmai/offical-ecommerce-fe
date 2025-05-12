@@ -31,7 +31,7 @@ const Banner = () => {
       <div className="container">
       <Swiper
         style={{
-          aspectRatio: '20 / 9', width: '100%'
+          aspectRatio: '16/7', width: '100%'
         }}
         autoplay={{
           delay: 2500,
@@ -46,7 +46,7 @@ const Banner = () => {
         {banners.map((banner, index) => (
           <SwiperSlide key={index}>
             <div style={{ 
-              aspectRatio: '20 / 9',
+              aspectRatio: '16/7',
               width: '100%',
             }}>
               <a href={banner.url}>

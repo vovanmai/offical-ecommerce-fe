@@ -2,6 +2,7 @@
 import React from "react";
 import Banner from "@/components/user/layout/Banner";
 import ProductList from "@/components/user/ProductList";
+import HomePostList from "@/components/user/HomePostList";
 
 export const metadata = {
   title: 'Trang chủ',
@@ -65,6 +66,7 @@ const Page = () => {
     <>
       <Banner/>
       <ProductList />
+      <HomePostList />
     </>
   );
 };

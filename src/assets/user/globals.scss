@@ -200,3 +200,11 @@ body {
 .swiper-button-next::after, .swiper-button-prev::after {
   font-size: 30px !important;
 }
+
+.zoom-image {
+  transition: transform 0.3s ease;
+}
+
+.zoom:hover .zoom-image {
+  transform: scale(1.05);
+}

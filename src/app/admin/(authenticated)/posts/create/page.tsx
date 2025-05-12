@@ -16,6 +16,7 @@ import { buildCategoryTree } from "@/helper/common"
 import dynamic from 'next/dynamic';
 import { create as createRequest } from '@/api/admin/post'
 import { toast } from 'react-toastify'
+const { TextArea } = Input;
 
 const MyCKEditor = dynamic(() => import('@/components/admin/MyCKEditor'), {
   ssr: false,
@@ -33,7 +34,7 @@ const Page = () => {
       setLoadingSubmit(true)
       await createRequest(values)
       setLoadingSubmit(false)
-      router.push('/admin/products')
+      router.push('/admin/posts')
     } catch (error: any) {
       const statusCode = error.status
       if(statusCode == 422) {
@@ -79,14 +80,14 @@ const Page = () => {
     form.setFieldsValue({ preview_image_id: ids[0] ?? null });
   };
 
-  const onChangeDetailFile = (ids: any) => {
-    form.setFieldsValue({ detail_file_ids: ids });
-  };
-
   const rules: any = {
     name: [
       { required: true },
-      { max: 50 },
+      { max: 100 },
+    ],
+    short_description: [
+      { required: true },
+      { max: 255 },
     ],
     status: [
       { required: true },
@@ -136,6 +137,15 @@ const Page = () => {
                 help={errors?.name ? errors?.name : undefined}
               >
                 <Input size="large" />
+              </Form.Item>
+              <Form.Item
+                name="short_description"
+                label="Mô tả ngắn"
+                rules={rules.short_description}
+                validateStatus={ errors?.short_description ? 'error' : undefined}
+                help={errors?.short_description ? errors?.short_description : undefined}
+              >
+                <TextArea rows={4} placeholder="Tối đa 255 ký tự" />
               </Form.Item>
               <Form.Item
                   name="status"
