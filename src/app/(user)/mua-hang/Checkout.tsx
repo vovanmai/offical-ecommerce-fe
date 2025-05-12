@@ -5,7 +5,7 @@ import { Table, Row, Col, Card, Form, Button, Input, InputNumber, Divider } from
 import numeral from 'numeral';
 import { useRouter } from 'next/navigation';
 import { create as createOrder } from '@/api/user/order'
-
+import Image from 'next/image';
 
 import { useAppDispatch, useAppSelector } from '@/store/user/hooks';
 import { setCarts } from "@/store/user/cartSlice"
@@ -25,7 +25,7 @@ const Checkout = () => {
     if(carts.length === 0) {
       router.push('/gio-hang')
     }
-  }, [])
+  }, [carts, router])
 
   const columns = [
     {
@@ -34,8 +34,11 @@ const Checkout = () => {
       render: (product: any) => {
         return (
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img
+            <Image
               src={`${product.preview_image.data.endpoint_url}/${product.preview_image.path}/${product.preview_image.filename}`}
+              alt={product.name}
+              width={179}
+              height={179}
               style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 4, marginRight: 12 }}
             />
             <span>{product.name}</span>

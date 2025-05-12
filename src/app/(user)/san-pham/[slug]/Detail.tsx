@@ -4,6 +4,8 @@ import React, { useState, useCallback } from "react";
 import { Breadcrumb, Card, Row, Col, InputNumber, Typography, Rate, Button, Space, Form, Input } from 'antd';
 import { HomeOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import Image from 'next/image';
+
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, FreeMode, Navigation, Thumbs } from 'swiper/modules';
@@ -126,7 +128,7 @@ const Detail = ({ product }: Props) => {
       } catch (error) {
         console.error('Error fetching cart:', error);
       }
-    }, []);
+    }, [dispatch]);
 
 
   return (
@@ -155,10 +157,12 @@ const Detail = ({ product }: Props) => {
                 {detail_files.map((item: any, index: number) => (
                   <SwiperSlide key={index}>
                     <div style={{ aspectRatio: '1/1', position: 'relative', width: '100%' }}>
-                      <img
+                      <Image
                         src={`${item.data.endpoint_url}/${item.path}/${item.filename}`}
-                        loading="lazy"
                         alt={product.name}
+                        width={179}
+                        height={179}
+                        quality={100}
                         className="absolute top-0 left-0 w-full h-full object-cover"
                       />
                     </div>
@@ -166,7 +170,6 @@ const Detail = ({ product }: Props) => {
                 ))}
               </Swiper>
 
-              {/* Swiper Thumbs */}
               <Swiper
                 onSwiper={setThumbsSwiper}
                 spaceBetween={10}
@@ -179,10 +182,12 @@ const Detail = ({ product }: Props) => {
                 {detail_files.map((item: any, index: number) => (
                   <SwiperSlide key={index}>
                     <div style={{ aspectRatio: '1/1', position: 'relative', width: '100%' }}>
-                      <img
+                      <Image
                         src={`${item.data.endpoint_url}/${item.path}/${item.filename}`}
-                        loading="lazy"
-                        alt={`Thumb ${index + 1}`}
+                        alt={product.name}
+                        width={179}
+                        height={179}
+                        quality={100}
                         className="absolute top-0 left-0 w-full h-full object-cover"
                       />
                     </div>

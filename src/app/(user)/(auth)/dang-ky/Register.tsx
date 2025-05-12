@@ -63,7 +63,7 @@ const Register = () => {
     if (userToken) {
       router.push('/');
     }
-  }, [])
+  }, [router])
 
   const onFinish = async (values: any) => {
     try {

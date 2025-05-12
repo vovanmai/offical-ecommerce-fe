@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+declare global {
+  interface Window {
+    FB: any;
+  }
+}
 
 const FacebookPagePlugin = () => {
   const isSDKLoaded = useRef(false);

@@ -60,7 +60,7 @@ const Login = () => {
     } catch (error) {
       console.error('Error fetching cart:', error);
     }
-  }, []);
+  }, [dispatch]);
 
   const onFinish = async (values: any) => {
     try {

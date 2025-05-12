@@ -6,16 +6,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { list as listCart, deleteCart, update as updateCart } from '@/api/user/cart';
 import numeral from 'numeral';
 import Link from 'next/link';
-
-
-interface CartItem {
-  id: number;
-  name: string;
-  quantity: number;
-  product: {
-    price: number;
-  };
-}
+import Image from 'next/image';
 
 import { useAppDispatch, useAppSelector } from '@/store/user/hooks';
 import { setCarts } from "@/store/user/cartSlice"
@@ -31,7 +22,7 @@ const Cart = () => {
     } catch (error) {
       console.error('Error fetching cart:', error);
     }
-  }, []);
+  }, [dispatch]);
 
   const onChangeQuantity = async (cartId: Number, value: any) => {
     if(!value) {
@@ -62,10 +53,13 @@ const Cart = () => {
       render: (product: any) => {
         return (
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img
-              src={`${product.preview_image.data.endpoint_url}/${product.preview_image.path}/${product.preview_image.filename}`}
-              style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 4, marginRight: 12 }}
-            />
+            <Image
+                src={`${product.preview_image.data.endpoint_url}/${product.preview_image.path}/${product.preview_image.filename}`}
+                alt={product.name}
+                width={179}
+                height={179}
+                style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 4, marginRight: 12 }}
+              />
             <span>{product.name}</span>
           </div>
         )

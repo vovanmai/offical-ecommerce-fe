@@ -77,7 +77,7 @@ const MiddleHeader = () => {
       } catch (error) {
         console.error('Error fetching cart:', error);
       }
-    }, []);
+    }, [dispatch]);
 
   useEffect(() => {
     const newItems: MenuProps['items'] = isLoggedIn

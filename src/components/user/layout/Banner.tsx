@@ -8,7 +8,7 @@ import 'swiper/css/navigation';
 
 import {list as listBanner} from '@/api/user/banner';
 import { useEffect, useState } from 'react';
-
+import Image from 'next/image';
 
 const Banner = () => {
 
@@ -50,18 +50,19 @@ const Banner = () => {
               width: '100%',
             }}>
               <a href={banner.url}>
+                {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
                 <img
-                src={`${banner.image.data.endpoint_url}/${banner.image.path}/${banner.image.filename}`}
-                loading="lazy"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                }}
-              />
+                  src={`${banner.image.data.endpoint_url}/${banner.image.path}/${banner.image.filename}`}
+                  loading="lazy"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                  }}
+                />
               </a>
             </div>
           </SwiperSlide>
