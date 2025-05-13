@@ -5,10 +5,8 @@ import { Card, Breadcrumb } from 'antd';
 import { HomeOutlined } from "@ant-design/icons";
 import Link from 'next/link';
 
-
 const Trang = (props: any) => {
   const { page } = props;
-
 
   return (
     <div className="container" style={{ marginTop: 12 }}>
