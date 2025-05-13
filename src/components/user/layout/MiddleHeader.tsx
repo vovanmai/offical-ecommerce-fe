@@ -28,6 +28,19 @@ const MiddleHeader = () => {
   const [items, setItems] = useState<MenuProps['items']>([]);
   const [messageApi] = useMessageApi();
   const [cartCount, setCartCount] = useState(0)
+
+  const fetchCart = useCallback(async () => {
+      try {
+        const response = await listCart();
+        const { data } = response;
+        dispatch(setCarts(data));
+        const count = data.reduce((acc: number, item: any) => acc + item.quantity, 0);
+        setCartCount(count);
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+    }, [dispatch]);
+
   useEffect(() => {
     const token = localStorage.getItem('user_token');
     const fetchUserProfile = async () => {
@@ -42,7 +55,7 @@ const MiddleHeader = () => {
       fetchUserProfile();
       fetchCart();
     }
-  }, []);
+  }, [dispatch, fetchCart]);
 
   useEffect(() => {
     const count = carts.reduce((acc: number, item: any) => acc + item.quantity, 0);
@@ -66,18 +79,6 @@ const MiddleHeader = () => {
       console.log(error)
     }
   };
-
-  const fetchCart = useCallback(async () => {
-      try {
-        const response = await listCart();
-        const { data } = response;
-        dispatch(setCarts(data));
-        const count = data.reduce((acc: number, item: any) => acc + item.quantity, 0);
-        setCartCount(count);
-      } catch (error) {
-        console.error('Error fetching cart:', error);
-      }
-    }, [dispatch]);
 
   useEffect(() => {
     const newItems: MenuProps['items'] = isLoggedIn
