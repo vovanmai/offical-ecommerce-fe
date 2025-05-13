@@ -2,6 +2,7 @@
 import { Row, Typography, Col } from 'antd';
 const { Title } = Typography;
 import HighlightPost from './HighlightPost';
+import Post from './Post';
 import {list as listPosts} from '@/api/user/post';
 import { useEffect, useState } from 'react';
 
@@ -25,19 +26,29 @@ export default function HomePostList() {
   }, []);
   
   return (
-    <div className="container" style={{ marginTop: 12 }}>
-      <div className="container__inner">
-        <Title style={{marginTop: 20}} level={4}>Bài viết nổi bật</Title>
-        <Row gutter={[25, 25]}>
-          <Col xs={24} sm={24} md={8}>
-            <HighlightPost
-              post={postHighlight}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={16}>
-            2
-          </Col>
-        </Row>
+    <div style={{ backgroundColor: "#FFFFFF", paddingTop: 15, paddingBottom: 20, marginTop: 20 }}>
+      <div className="container">
+        <div className="container__inner">
+          <Title level={4}>Bài viết nổi bật</Title>
+          <Row gutter={[25, 25]}>
+            <Col xs={24} sm={24} md={7}>
+              <HighlightPost
+                post={postHighlight}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={17}>
+              <Row gutter={[25, 25]}>
+                {posts.map((post, index) => (
+                  <Col xs={24} sm={12} md={12} key={index}>
+                    <Post
+                      post={post}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            </Col>
+          </Row>
+        </div>
       </div>
     </div>
   );

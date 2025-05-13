@@ -17,7 +17,7 @@ body {
 
 
 .container {
-  max-width: 1024px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -207,4 +207,14 @@ body {
 
 .zoom:hover .zoom-image {
   transform: scale(1.05);
+}
+
+.post-card {
+  display: block;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.post-card:hover {
+  background-color: #F1F5F9; /* Màu xám nhạt */
 }
