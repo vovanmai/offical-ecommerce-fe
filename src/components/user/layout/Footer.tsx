@@ -29,13 +29,13 @@ const LayoutFooter = () => {
                 <Badge color="black" text="Phone: 078.249.7116" />
               </div>
             </Col>
-            <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={6}>
+            <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={5}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
                 <Title style={{color: "#00573e", margin: 0}} level={5}>DANH MỤC SẢN PHẨM</Title>
-                <Link style={{color: "inherit"}} href="a">Thực phẩm chức năng</Link>
+                <Link style={{color: "inherit"}} href="a">Sản phẩm khô</Link>
               </div>
             </Col>
-            <Col style={{gap: 8}} xs={24} sm={12} md={6}>
+            <Col style={{gap: 8}} xs={24} sm={12} md={5}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
                 <Title style={{color: "#00573e", margin: 0}} level={5}>CHÍNH SÁCH</Title>
                 <Link style={{color: "inherit"}} href="">Chính sách bán hàng</Link>
@@ -45,7 +45,7 @@ const LayoutFooter = () => {
                 <Link style={{color: "inherit"}} href="">Tuyển dụng</Link>
               </div>
             </Col>
-            <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={6}>
+            <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={8}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
                 <Title style={{color: "#00573e", margin: 0}} level={5}>FANPAGE</Title>
                 <div>
@@ -56,7 +56,7 @@ const LayoutFooter = () => {
           </Row>
           <Divider />
           <div className="copyright">
-            © 2025 - All rights reserved by <Link style={{color: "inherit"}} href="https:lamsfarm.com">https:lamsfarm.com.vn</Link>
+            © 2025 - All rights reserved by <Link style={{color: "inherit"}} href="https://lamsfarm.com.vn">https://lamsfarm.com.vn</Link>
           </div>
         </div>
       </div>
