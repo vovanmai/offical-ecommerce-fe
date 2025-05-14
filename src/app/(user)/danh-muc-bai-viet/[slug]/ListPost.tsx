@@ -72,7 +72,7 @@ const ListPost = () => {
           ]}
         />
         <h3>{category?.name}</h3>
-        <Row gutter={[14, 14]} style={{ marginTop: 12 }}>
+        <Row gutter={[14, 0]} style={{ marginTop: 12 }}>
           {posts.map((post: any, index: any) => (
             <Col xs={24} sm={12} md={8} key={index}>
               <PostByCategory
