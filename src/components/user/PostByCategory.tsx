@@ -44,7 +44,7 @@ export default function PostByCategory(props: any) {
   }
 
   return (
-    <Card className="post-card" style={{ marginBottom: '16px', borderRadius: 12, overflow: 'hidden' }}>
+    <Card className="post-card" style={{ borderRadius: 12, overflow: 'hidden' }}>
       <Link href={`/bai-viet/${post.slug}.html`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <Row>
         <Col span="6">
