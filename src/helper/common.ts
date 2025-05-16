@@ -129,5 +129,6 @@ export const buildCategoryTree = (items: any, parentId: number | null = null) =>
 };
 
 
-
-
+export const getFileLink = (upload: any) => {
+  return `${upload.data.endpoint_url}/${upload.path}/${upload.filename}`;
+}
