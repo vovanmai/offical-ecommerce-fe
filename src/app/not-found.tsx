@@ -7,7 +7,7 @@ export default function NotFound() {
     <Result
       status="404"
       title="404"
-      subTitle="Sorry, the page you visited does not exist."
+      subTitle="Rất tiếc. Trang này không được tìm thấy."
       extra={
         <Link href="/">
           <Button type="primary">Về trang chủ</Button>
