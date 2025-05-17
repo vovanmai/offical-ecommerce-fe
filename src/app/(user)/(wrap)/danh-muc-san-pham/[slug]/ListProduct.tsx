@@ -71,7 +71,16 @@ const ListProduct = ({category}: any) => {
           ]}
         />
         <h3 style={{marginBottom: 20}}>{category?.name}</h3>
-        <Row gutter={[25, 25]}>
+        <Row 
+          gutter={{
+            xs: 12,    // <576px
+            sm: 12,   // ≥576px
+            md: 24,   // ≥768px
+            lg: 24,   // ≥992px
+            xl: 24,   // ≥1200px
+            xxl: 24,  // ≥1600px
+          }}
+        >
           {products.map((product: any, index: any) => (
             <ProductCard
               product={product}

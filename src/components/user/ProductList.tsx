@@ -28,7 +28,16 @@ export default function ProductList() {
     <div className="container" style={{ marginTop: 12 }}>
       <div className="container__inner">
         <Title style={{marginTop: 20}} level={4}>Sản phẩm nội bật</Title>
-        <Row gutter={[25, 25]}>
+        <Row
+          gutter={{
+            xs: 12,    // <576px
+            sm: 12,   // ≥576px
+            md: 24,   // ≥768px
+            lg: 24,   // ≥992px
+            xl: 24,   // ≥1200px
+            xxl: 24,  // ≥1600px
+          }}
+        >
           {products.map((product, index) => (
             <ProductCard
               product={product}
