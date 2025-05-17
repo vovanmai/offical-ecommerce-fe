@@ -38,7 +38,7 @@ export default function NavBarClient({ prodCategories, postCategories, pages }: 
     const postTree = buildCategoryTree(postCategories, null, 'danh-muc-bai-viet');
     const pageItems = pages ?  pages.map((page: any) => ({
       key: `page-${page.id}`,
-      label: <Link href={`/trang/${page.slug}`}>{page.name}</Link>,
+      label: <Link href={`/trang/${page.slug}.html`}>{page.name}</Link>,
     })) : [];
 
     const home = {
