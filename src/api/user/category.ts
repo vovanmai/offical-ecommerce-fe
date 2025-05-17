@@ -4,6 +4,6 @@ export function list(params: object = {}) {
   return api.get('api/categories', { params });
 }
 
-export function getById(id: number) {
-  return api.get(`api/categories/${id}`);
+export function getDetail(slug: string, params: object = {}) {
+  return api.get(`api/categories/${slug}`, params);
 }

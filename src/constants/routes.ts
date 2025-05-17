@@ -1,5 +1,3 @@
-import { POST } from "@/app/api/route";
-
 export const ROUTES = {
   DASHBOARD: '/admin',
   DASHBOARD_ROLE_LIST: '/admin/roles',

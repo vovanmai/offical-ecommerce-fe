@@ -9,9 +9,8 @@ import { listByCategory } from '@/api/user/post';
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import PostByCategory from "@/components/user/PostByCategory";
 
-const ListPost = () => {
+const ListPost = ({category}: any) => {
   const [posts, setPosts] = useState<any>([]);
-  const [category, setCategory] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [paginationTotal, setPaginationTotal] = useState(0);
   const [pageSize, setPageSize] = useState(12);
@@ -37,11 +36,11 @@ const ListPost = () => {
       try {
         const response = await listByCategory(params.slug, parameters);
 
-        const {post_paginate, category} = response.data;
+        const data = response.data;
+        console.log("data", data);
 
-        setPosts(post_paginate.data);
-        setPaginationTotal(post_paginate.last_page);
-        setCategory(category);
+        setPosts(data.data);
+        setPaginationTotal(data.last_page);
       } catch (error) {
         console.error("Error fetching posts:", error);
       } finally {

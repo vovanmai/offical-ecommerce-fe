@@ -1,5 +1,4 @@
 'use client'
-import { Inter } from "next/font/google";
 import "@/assets/user/globals.scss"
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ConfigProvider } from 'antd';
@@ -48,28 +47,23 @@ function ThemeWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-const inter = Inter({ subsets: ["latin"] });
-
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <body className={inter.className} suppressHydrationWarning={true}>
-      <Provider store={store}>
-        <AntdRegistry>
-          <ThemeWrapper>
-            <MessageProvider>
-              <Header/>
-              <NavBar/>
-              <main>
-                {children}
-              </main>
-              <Footer />
-            </MessageProvider>
-          </ThemeWrapper>
-        </AntdRegistry>
-      </Provider>
-    </body>
+    <Provider store={store}>
+      <AntdRegistry>
+        <ThemeWrapper>
+          <MessageProvider>
+            <Header/>
+            <NavBar/>
+            <main>
+              {children}
+            </main>
+            <Footer />
+          </MessageProvider>
+        </ThemeWrapper>
+      </AntdRegistry>
+    </Provider>
   );
 }
