@@ -222,3 +222,14 @@ body {
 .post-card:hover {
   background-color: #DAE9DD; /* Màu xám nhạt */
 }
+
+.menu-mobile {
+  width: 100% !important;
+  border-inline-end: none !important;
+  .ant-drawer-body {
+    padding: 12 !important;
+  }
+  .ant-menu-title-content a {
+  color: black;
+}
+}

@@ -58,7 +58,7 @@ export default function NavBarClient({ prodCategories, postCategories, pages }: 
             menu={{ 
               items: productCategoryTree, 
               selectable: true, 
-              defaultSelectedKeys: ['21'], 
+              defaultSelectedKeys: [''], 
             }}
           >
             <Button 
