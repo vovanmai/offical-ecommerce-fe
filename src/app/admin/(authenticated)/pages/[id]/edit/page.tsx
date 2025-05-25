@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Button, Form, Space, Input, Row, Col, Radio } from "antd"
+import { Card, Button, Form, Space, Input, Row, Col, Radio, Switch } from "antd"
 import { UnorderedListOutlined, ClearOutlined, SaveOutlined } from "@ant-design/icons"
 import Link from 'next/link'
 import React, { useEffect, useState } from "react"
@@ -53,7 +53,9 @@ const Edit = () => {
         form.setFieldsValue({
           name: data.name,
           status: data.status,
-          description: data.description
+          description: data.description,
+          is_display_main_menu: data.is_display_main_menu,
+          is_display_footer: data.is_display_footer,
         })
         setDescription(data.description)
       } catch (error) {
@@ -88,6 +90,12 @@ const Edit = () => {
       { required: true },
     ],
     description: [
+      { required: true },
+    ],
+    is_display_main_menu: [
+      { required: true },
+    ],
+    is_display_footer: [
       { required: true },
     ],
   }
@@ -139,6 +147,28 @@ const Edit = () => {
                   ]}
                 />
                 </Form.Item>
+            </Col>
+            <Col sm={24} md={12}>
+              <Form.Item
+                  name="is_display_main_menu"
+                  label="Hiển thị trên menu chính"
+                  rules={rules.is_display_main_menu}
+                  validateStatus={ errors?.is_display_main_menu ? 'error' : undefined}
+                  help={errors?.is_display_main_menu ? errors?.is_display_main_menu : undefined}
+                >
+                  <Switch />
+              </Form.Item>
+            </Col>
+            <Col sm={24} md={12}>
+              <Form.Item
+                name="is_display_footer"
+                label="Hiển thị dưới footer"
+                rules={rules.is_display_footer}
+                validateStatus={ errors?.is_display_footer ? 'error' : undefined}
+                help={errors?.is_display_footer ? errors?.is_display_footer : undefined}
+              >
+                <Switch />
+              </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
               <Form.Item

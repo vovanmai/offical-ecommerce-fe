@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Button, Form, Space, Input, Row, Col, Radio, InputNumber, TreeSelect } from "antd"
+import { Card, Button, Form, Space, Input, Row, Col, Radio, Switch, TreeSelect } from "antd"
 import { UnorderedListOutlined, ClearOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import Link from 'next/link'
 import React, { useState } from "react"
@@ -73,6 +73,8 @@ const CreatePage = () => {
     status: 1,
     name: null, 
     description: null,
+    is_display_footer: true,
+    is_display_main_menu: true,
   }
 
   const handleEditorChange = (data: string) => {
@@ -123,6 +125,28 @@ const CreatePage = () => {
                     ]}
                   />
                 </Form.Item>
+            </Col>
+            <Col sm={24} md={12}>
+              <Form.Item
+                  name="is_display_main_menu"
+                  label="Hiển thị trên menu chính"
+                  rules={rules.is_display_main_menu}
+                  validateStatus={ errors?.is_display_main_menu ? 'error' : undefined}
+                  help={errors?.is_display_main_menu ? errors?.is_display_main_menu : undefined}
+                >
+                  <Switch />
+              </Form.Item>
+            </Col>
+            <Col sm={24} md={12}>
+              <Form.Item
+                name="is_display_footer"
+                label="Hiển thị dưới footer"
+                rules={rules.is_display_footer}
+                validateStatus={ errors?.is_display_footer ? 'error' : undefined}
+                help={errors?.is_display_footer ? errors?.is_display_footer : undefined}
+              >
+                <Switch />
+              </Form.Item>
             </Col>
             <Col sm={24} md={24}>
               <Form.Item
