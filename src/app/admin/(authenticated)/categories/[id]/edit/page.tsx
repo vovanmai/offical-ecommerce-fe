@@ -42,7 +42,7 @@ const Page = () => {
     setErrors({})
   };
   const tailLayout = {
-    wrapperCol: { offset: 4, span: 20 },
+    wrapperCol: { offset: 6, span: 18 },
   };
   const rules: any = {
     name: [
@@ -58,6 +58,12 @@ const Page = () => {
     description: [
       { required: false },
       { max: 255 },
+    ],
+    is_display_main_menu: [
+      { required: true },
+    ],
+    is_display_footer: [
+      { required: true },
     ],
   }
   const onFinish = async (values: any) => {

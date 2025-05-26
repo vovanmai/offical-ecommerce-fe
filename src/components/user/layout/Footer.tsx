@@ -8,9 +8,25 @@ import Link from 'next/link'
 import Image from 'next/image'
 const { Title } = Typography;
 import FacebookPagePlugin from "@/components/user/FacebookPagePlugin"
+import { useAppSelector } from "@/store/user/hooks"
 
 
 const LayoutFooter = () => {
+  const postCategories = useAppSelector((state) => state.app.postCategories)
+  const productCategories = useAppSelector((state) => state.app.productCategories)
+  const pages = useAppSelector((state) => state.app.pages)
+
+  const fillterPages = pages.filter((page: any) => {
+    return page.is_display_footer;
+  })
+
+  const fillterPostCategories = postCategories.filter((category: any) => {
+    return category.is_display_footer;
+  })
+  const fillterProductCategories = productCategories.filter((category: any) => {
+    return category.is_display_footer;
+  })
+
   return (
     <footer style={{ marginTop: 20 }}>
       <div style={{ background: USER_PRIMARY_COLOR, height: "2rem", marginBottom: 20 }}></div>
@@ -32,17 +48,20 @@ const LayoutFooter = () => {
             <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={5}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
                 <Title style={{color: "#00573e", margin: 0}} level={5}>DANH MỤC SẢN PHẨM</Title>
-                <Link style={{color: "inherit"}} href="a">Sản phẩm khô</Link>
+                { fillterProductCategories && fillterProductCategories.map((category: any) => (
+                  <Link key={category.id} style={{color: "inherit"}} href={`/danh-muc-san-pham/${category.slug}`}>{category.name}</Link>
+                ))}
               </div>
             </Col>
             <Col style={{gap: 8}} xs={24} sm={12} md={5}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
                 <Title style={{color: "#00573e", margin: 0}} level={5}>CHÍNH SÁCH</Title>
-                <Link style={{color: "inherit"}} href="">Chính sách bán hàng</Link>
-                <Link style={{color: "inherit"}} href="">Hướng dẫn mua hàng</Link>
-                <Link style={{color: "inherit"}} href="">Chính sách đổi trả</Link>
-                <Link style={{color: "inherit"}} href="">Giới thiệu</Link>
-                <Link style={{color: "inherit"}} href="">Tuyển dụng</Link>
+                { fillterPages && fillterPages.map((page: any) => (
+                  <Link key={page.id} style={{color: "inherit"}} href={`/trang/${page.slug}.html`}>{page.name}</Link>
+                ))}
+                { fillterPostCategories && fillterPostCategories.map((category: any) => (
+                  <Link key={category.id} style={{color: "inherit"}} href={`/danh-muc-bai-viet/${category.slug}`}>{category.name}</Link>
+                ))}
               </div>
             </Col>
             <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={8}>

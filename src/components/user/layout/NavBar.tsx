@@ -12,6 +12,17 @@ export default function NavBar() {
   const postCategories = useAppSelector((state) => state.app.postCategories)
   const pages = useAppSelector((state) => state.app.pages)
 
+  const fillterPages = pages.filter((page: any) => {
+    return page.is_display_main_menu;
+  })
+
+  const fillterPostCategories = postCategories.filter((category: any) => {
+    return category.is_display_main_menu;
+  })
+  const fillterProductCategories = productCategories.filter((category: any) => {
+    return category.is_display_main_menu;
+  })
+
   
   useEffect(() => {
     const fetchCategories = async () => {
@@ -34,6 +45,6 @@ export default function NavBar() {
   }, []);
 
   return (
-    <NavBarClient prodCategories={productCategories} postCategories={postCategories} pages={pages} />
+    <NavBarClient prodCategories={fillterProductCategories} postCategories={fillterPostCategories} pages={fillterPages} />
   )
 }

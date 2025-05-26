@@ -34,6 +34,17 @@ const MiddleHeader = () => {
   const postCategories = useAppSelector((state) => state.app.postCategories)
   const pages = useAppSelector((state) => state.app.pages)
 
+  const fillterPages = pages.filter((page: any) => {
+    return page.is_display_main_menu;
+  })
+
+  const fillterPostCategories = postCategories.filter((category: any) => {
+    return category.is_display_main_menu;
+  })
+  const fillterProductCategories = productCategories.filter((category: any) => {
+    return category.is_display_main_menu;
+  })
+
   const fetchCart = useCallback(async () => {
       try {
         const response = await listCart();
@@ -203,9 +214,9 @@ const MiddleHeader = () => {
                       label: (<Link href="/">Trang chủ</Link>),
                       icon: <HomeFilled />,
                     },
-                    ...buildCategoryTree(productCategories, null, 'danh-muc-san-pham'),
-                    ...buildCategoryTree(postCategories, null, 'danh-muc-bai-viet'),
-                    ...pages.map((page: any) => ({
+                    ...buildCategoryTree(fillterProductCategories, null, 'danh-muc-san-pham'),
+                    ...buildCategoryTree(fillterPostCategories, null, 'danh-muc-bai-viet'),
+                    ...fillterPages.map((page: any) => ({
                       key: `page-${page.id}`,
                       label: <Link href={`/trang/${page.slug}.html`}>{page.name}</Link>,
                     })),

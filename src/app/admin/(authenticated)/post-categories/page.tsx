@@ -1,5 +1,5 @@
 'use client'
-import {Card, Select, Radio, Button, Table, Tooltip, theme, Row, Col, Form, Space, Input } from "antd"
+import {Card, Select, Radio, Button, Switch, Tooltip, theme, Row, Col, Form, Space, Input } from "antd"
 import { PlusCircleOutlined, ClearOutlined, DeleteOutlined } from "@ant-design/icons"
 import React, { useEffect, useState } from "react"
 import { buildCategoryTree, getCategoryOptions } from "@/helper/common"
@@ -27,8 +27,8 @@ const Page = () => {
   const [deletedId, setDeletedId] = useState<any>(null)
   
   const layout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 20 },
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
   };
   const onReset = () => {
     form.resetFields();
@@ -51,6 +51,12 @@ const Page = () => {
     description: [
       { required: false },
       { max: 255 },
+    ],
+    is_display_main_menu: [
+      { required: true },
+    ],
+    is_display_footer: [
+      { required: true },
     ],
   }
 
@@ -144,7 +150,14 @@ const Page = () => {
                 validateMessages={validateMessages}
                 {...layout}
                 form={form}
-                initialValues={{ status: 1, parent_id: null, name: null, description: null }}
+                initialValues={{ 
+                  status: 1, 
+                  parent_id: null, 
+                  name: null, 
+                  description: null,
+                  is_display_main_menu: true,
+                  is_display_footer: true,
+                }}
                 onFinish={onFinish}
                 style={{ width: '100%' }}
               >
@@ -202,6 +215,25 @@ const Page = () => {
                   help={errors?.description ? errors?.description : undefined}
                 >
                   <TextArea allowClear style={{ height: 100, resize: 'none' }} />
+                </Form.Item>
+
+                <Form.Item
+                  name="is_display_main_menu"
+                  label="Hiển thị trên menu chính"
+                  rules={rules.is_display_main_menu}
+                  validateStatus={ errors?.is_display_main_menu ? 'error' : undefined}
+                  help={errors?.is_display_main_menu ? errors?.is_display_main_menu : undefined}
+                >
+                  <Switch defaultChecked />
+                </Form.Item>
+                <Form.Item
+                  name="is_display_footer"
+                  label="Hiển thị dưới footer"
+                  rules={rules.is_display_footer}
+                  validateStatus={ errors?.is_display_footer ? 'error' : undefined}
+                  help={errors?.is_display_footer ? errors?.is_display_footer : undefined}
+                >
+                  <Switch defaultChecked />
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
