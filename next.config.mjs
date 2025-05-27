@@ -5,7 +5,8 @@ const nextConfig = {
     APP_URL: process.env.APP_URL,
   },
   images: {
-    domains: ['localhost', 'ik.imagekit.io'], // 👈 Thêm hostname tại đây
+    domains: ['localhost', 'ik.imagekit.io'],
+    // unoptimized: true,
   },
 };
 
