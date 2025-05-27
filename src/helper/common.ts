@@ -78,6 +78,10 @@ export const getActiveAdminMenuByRoute = (pathname: string) => {
       regex: /^\/admin\/settings$/,
       path: ADMIN_ROUTES.SETTING
     },
+    {
+      regex: /^\/admin\/users$/,
+      path: ADMIN_ROUTES.USER_LIST
+    },
   ]
 
   const route = matchRoutes.find((route) => {

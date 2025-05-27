@@ -34,6 +34,11 @@ const menus = [
     icon: <FaCircle />
   },
   {
+    key: ADMIN_ROUTES.USER_LIST,
+    label: 'Khách hàng',
+    icon: <FaCircle />
+  },
+  {
     key: ADMIN_ROUTES.SETTING,
     label: 'Cài đặt',
     icon: <FaCircle />

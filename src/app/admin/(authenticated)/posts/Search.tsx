@@ -51,7 +51,7 @@ const Search = ({ formData, onSearch, resetForm }: PropsType) => {
 
   const clearForm = () => {
     form.resetFields();
-    router.push('/admin/products');
+    router.push('/admin/posts');
     resetForm();
   };
 

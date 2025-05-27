@@ -18,4 +18,5 @@ export const ADMIN_ROUTES = {
   CATEGORY_POST_LIST: '/admin/post-categories',
   POST_LIST: '/admin/posts',
   POST_CREATE: '/admin/posts/create',
+  USER_LIST: '/admin/users',
 };
