@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState, useCallback, use, useEffect } from "react";
-import { Breadcrumb, Pagination, Row, Col, InputNumber, Typography, Rate, Button, Space, Form, Input } from 'antd';
+import { Breadcrumb, Pagination, Row, Col, Empty } from 'antd';
 import { HomeOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import Image from 'next/image';
 import { listByCategory } from '@/api/user/post';
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import PostByCategory from "@/components/user/PostByCategory";
@@ -35,10 +34,7 @@ const ListPost = ({category}: any) => {
       setLoading(true);
       try {
         const response = await listByCategory(params.slug, parameters);
-
         const data = response.data;
-        console.log("data", data);
-
         setPosts(data.data);
         setPaginationTotal(data.last_page);
       } catch (error) {
@@ -71,24 +67,28 @@ const ListPost = ({category}: any) => {
           ]}
         />
         <h3>{category?.name}</h3>
-        <Row gutter={[14, 14]} style={{ marginTop: 12 }}>
-          {posts.map((post: any, index: any) => (
-            <Col xs={24} sm={12} md={8} key={index}>
-              <PostByCategory
-                index={index}
-                post={post}
-              />
-            </Col>
-          ))}
-        </Row>
-        <div className="d-flex justify-content-center" style={{ marginTop: 20 }}>
-          <Pagination 
-            defaultCurrent={1} 
-            pageSize={pageSize}
-            total={paginationTotal} 
-            onChange={handlePageChange}
-          />
-        </div>
+
+        {posts.length == 0 && <Empty />}
+        {posts.length > 0 && <div>
+          <Row gutter={[14, 14]} style={{ marginTop: 12 }}>
+            {posts.map((post: any, index: any) => (
+              <Col xs={24} sm={12} md={8} key={index}>
+                <PostByCategory
+                  index={index}
+                  post={post}
+                />
+              </Col>
+            ))}
+          </Row>
+          <div className="d-flex justify-content-center" style={{ marginTop: 20 }}>
+            <Pagination 
+              defaultCurrent={1} 
+              pageSize={pageSize}
+              total={paginationTotal} 
+              onChange={handlePageChange}
+            />
+          </div>
+        </div>}
       </div>
     </div>
   );

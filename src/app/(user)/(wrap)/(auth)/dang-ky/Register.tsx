@@ -1,7 +1,7 @@
 
 'use client'
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { CascaderProps } from 'antd';
 import {
   Button,
@@ -57,6 +57,7 @@ const Register = () => {
   const router = useRouter()
   const [messageApi] = useMessageApi();
   const [form] = Form.useForm();
+  const [errors, setErrors] = useState<Record<string, any>>({})
 
   useEffect(() => {
     const userToken = localStorage.getItem('user_token');
@@ -70,14 +71,19 @@ const Register = () => {
       await register(values)
       messageApi.open({
         type: 'success',
-        content: 'Đăng ký thành công !',
+        content: 'Đăng ký thành công!. Vui lòng vào mail để kích hoạt tài khoản của bạn.',
       })
       router.push('/dang-nhap')
-    } catch (error) {
-      messageApi.open({
-        type: 'error',
-        content: 'Có lỗi xảy ra !',
-      })
+    } catch (error: any) {
+      const statusCode = error.status
+      if(statusCode == 422) {
+        setErrors(error?.data?.errors as Record<string, string>);
+      } else {
+        messageApi.open({
+          type: 'error',
+          content: 'Có lỗi xảy ra !',
+        })
+      }
     }
   };
   
@@ -94,8 +100,6 @@ const Register = () => {
         scrollToFirstError
       >
         <Alert style={{ marginBottom: 25}} showIcon message="Bất kỳ thông tin nào đăng ký không đúng, đều có thể bị khóa tài khoản!" type="warning" />
-
-
         <Form.Item
           name="name"
           label="Họ và tên"
@@ -128,6 +132,8 @@ const Register = () => {
               message: 'Tối đa 50 ký tự'
             },
           ]}
+          help={errors?.email ? errors?.email : undefined}
+          validateStatus={ errors?.email ? 'error' : undefined}
         >
           <Input size="large" />
         </Form.Item>
