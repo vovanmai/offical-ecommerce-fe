@@ -12,7 +12,7 @@ const ListPost = ({category}: any) => {
   const [posts, setPosts] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [paginationTotal, setPaginationTotal] = useState(0);
-  const [pageSize, setPageSize] = useState(12);
+  const pageSize: number = 12
   const params: any = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
