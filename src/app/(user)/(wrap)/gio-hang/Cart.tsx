@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useEffect, useCallback } from 'react';
-import { Table, Row, Col, Card, Space, Button, Tooltip, InputNumber, Divider } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import React, { useCallback } from 'react';
+import { Table, Row, Col, Card, Space, Button, Tooltip, InputNumber, Divider, Breadcrumb, Empty } from 'antd';
+import { DeleteOutlined, HomeOutlined } from '@ant-design/icons';
 import { list as listCart, deleteCart, update as updateCart } from '@/api/user/cart';
 import numeral from 'numeral';
 import Link from 'next/link';
@@ -96,9 +96,29 @@ const Cart = () => {
   ];
 
   return (
-    <div className="container" style={{ marginTop: 24 }}>
+    <div className="container" style={{ marginTop: 12 }}>
       <div className="container__inner">
-        <Row gutter={[20, 20]}>
+        <Breadcrumb
+          style={{ marginBottom: 12 }}
+          items={[
+            { title: <Link href="/"> <HomeOutlined /> Trang chủ</Link> },
+            {
+              title: 'Giỏ hàng',
+            },
+          ]}
+        />
+
+        {carts.length == 0 && <div>
+          <Empty />  
+          <div className="d-flex justify-content-center" style={{ marginTop: 20 }}>
+            <Link href="/">
+              <Button type="primary" size="large">
+                Tiếp tục mua sản phẩm
+              </Button>
+            </Link>
+          </div>
+        </div>}
+        {carts.length > 0 && <Row gutter={[20, 20]}>
           <Col lg={16} xs={24}>
             <Table
               dataSource={carts}
@@ -126,7 +146,7 @@ const Cart = () => {
               </div>
             </Card>
           </Col>
-        </Row>
+        </Row>}
       </div>
     </div>
   );
