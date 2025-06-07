@@ -111,7 +111,7 @@ const Cart = () => {
         {carts.length == 0 && <div>
           <Empty />  
           <div className="d-flex justify-content-center" style={{ marginTop: 20 }}>
-            <Link href="/">
+            <Link href="/" style={{textDecoration: 'none'}}>
               <Button type="primary" size="large">
                 Tiếp tục mua sản phẩm
               </Button>
