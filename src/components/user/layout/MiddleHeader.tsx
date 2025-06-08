@@ -22,6 +22,7 @@ import { useAppDispatch } from '@/store/user/hooks';
 import { setCurrentUser } from "@/store/user/authSlice"
 import { setCarts } from "@/store/user/cartSlice"
 import { useMessageApi } from '@/components/user/MessageProvider';
+import { useRouter } from 'next/navigation';
 
 const MiddleHeader = () => {
   const dispatch = useAppDispatch()
@@ -33,6 +34,7 @@ const MiddleHeader = () => {
   const productCategories = useAppSelector((state) => state.app.productCategories)
   const postCategories = useAppSelector((state) => state.app.postCategories)
   const pages = useAppSelector((state) => state.app.pages)
+  const router = useRouter();
 
   const fillterPages = pages.filter((page: any) => {
     return page.is_display_main_menu;
@@ -102,6 +104,13 @@ const MiddleHeader = () => {
           {
             key: 'profile',
             label: <Link href="/thong-tin-ca-nhan">Thông tin cá nhân</Link>,
+          },
+          {
+            key: 'orders',
+            label: <Link href="/don-hang">Danh sách đơn hàng</Link>,
+          },
+          {
+            type: 'divider',
           },
           {
             key: 'logout',
@@ -184,6 +193,18 @@ const MiddleHeader = () => {
     });
   };
 
+  const onSearchProducts = (value: string) => {
+    if (value.trim() === '') {
+      messageApi.open({
+        type: 'warning',
+        content: 'Vui lòng nhập từ khoá tìm kiếm.',
+      });
+      return;
+    }
+
+    router.push(`/tim-kiem-san-pham?keyword=${encodeURIComponent(value)}`);
+  };
+
   return (
     <div id="middle-header">
       <div className="container">
@@ -224,7 +245,7 @@ const MiddleHeader = () => {
                 />
               </Drawer>
             </div>
-            <Link id="button-search-mobile" href="/">
+            <Link id="button-search-mobile" href="/tim-kiem-san-pham" style={{textDecoration: 'none'}}>
               <Button style={{boxShadow: "none"}} type="primary" shape="circle" icon={<SearchOutlined />} />
             </Link>
             <div className="logo" style={{ padding: '5px 0px' }}>
@@ -238,6 +259,7 @@ const MiddleHeader = () => {
                 allowClear
                 enterButton
                 size="large"
+                onSearch={onSearchProducts}
               />
             </div>
             <div className="d-flex align-items-center">
