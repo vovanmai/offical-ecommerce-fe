@@ -11,7 +11,22 @@ export const metadata = {
   keywords: 'Trang chủ, sản phẩm, dịch vụ',
 };
 
-const Page = () => {
+const getBanners = async () => {
+  const data = await fetch(`${process.env.API_BASE_URL}/api/banners`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const response = await data.json()
+  return response.data;
+}
+
+const Page = async () => {
+
+  const banners = await getBanners();
 
   const items = [
     {
@@ -34,7 +49,7 @@ const Page = () => {
 
   return (
     <>
-      <Banner/>
+      <Banner banners={banners}/>
       <div className="container">
         <div className="container__inner">
           <Row gutter={[14, 14]} style={{ marginTop: 20 }}>
