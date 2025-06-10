@@ -63,8 +63,11 @@ const SearchProduct = () => {
         { !searchParams.get('keyword') && (
           <h3>Vui lòng nhập từ khoá tìm kiếm</h3>
         )}
-        { searchParams.get('keyword') && (
-          <h3 style={{ marginBottom: 20 }}>{total == 0 ? 'Không có' : 'Có ' + total } kết quả tìm kiếm cho từ khoá: '<span style={{ color: 'red' }}>{searchParams.get('keyword')}</span>'</h3>
+        {searchParams.get('keyword') && (
+          <h3>
+            {total === 0 ? 'Không có' : `Có ${total}`} kết quả tìm kiếm cho từ khoá:{' '}
+            <span style={{ color: 'red' }}>{searchParams.get('keyword')}</span>
+          </h3>
         )}
 
         {products.length == 0 && <Empty />}
