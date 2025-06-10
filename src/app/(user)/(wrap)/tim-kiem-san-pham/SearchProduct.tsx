@@ -42,7 +42,7 @@ const SearchProduct = () => {
         keyword: searchParams.get('keyword') || '',
       }
       fetchProducts(parameters);
-    }, [searchParams]);
+    }, [searchParams, pageSize]);
   
     const handlePageChange = (page: number, pageSize: number) => {
       router.push(`/danh-muc-san-pham/${params.slug}?page=${page}`);
