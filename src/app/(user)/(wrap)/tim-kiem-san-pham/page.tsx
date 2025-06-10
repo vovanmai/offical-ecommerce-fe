@@ -11,9 +11,14 @@ export const metadata = {
     type: 'website',
   },
 }
+
+import { Suspense } from 'react';
+
 const Page = () => {
   return (
-    <SearchProduct />
+    <Suspense fallback={''}>
+      <SearchProduct />
+    </Suspense>
   );
 };
 
