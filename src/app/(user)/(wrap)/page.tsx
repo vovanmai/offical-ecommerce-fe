@@ -18,6 +18,7 @@ const getBanners = async () => {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
+    cache: 'no-store',
   });
 
   const response = await data.json()
