@@ -51,8 +51,9 @@ export default function ProductCard(props: ProductCardProps) {
           cover={
             <div
               style={{
+                position: "relative",
                 width: '100%',
-                aspectRatio: '1 / 1', // giữ hình vuông
+                aspectRatio: '1 / 1',
                 overflow: 'hidden',
                 borderTopLeftRadius: 12,
                 borderTopRightRadius: 12,
@@ -62,8 +63,12 @@ export default function ProductCard(props: ProductCardProps) {
                 src={getImageUrl(product.preview_image)}
                 alt={product.name}
                 className="product-image"
-                width={179}
-                height={179}
+                fill
+                style={{
+                  objectFit: "cover",
+                  borderTopLeftRadius: 12,
+                  borderTopRightRadius: 12,
+                }}
               />
             </div>
           }
