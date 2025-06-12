@@ -273,12 +273,12 @@ const MiddleHeader = () => {
             </div>
             <div className="d-flex align-items-center">
                 <Dropdown menu={{ items }}>
-                  <a onClick={(e) => e.preventDefault()}>
-                  <Space>
-                    <FaUserCircle style={{fontSize: 25, color: USER_PRIMARY_COLOR}} />
-                    <DownOutlined style={{color: USER_PRIMARY_COLOR}} />
-                  </Space>
-                </a>
+                  <a href="#" onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      <FaUserCircle style={{fontSize: 25, color: USER_PRIMARY_COLOR}} />
+                      <DownOutlined style={{color: USER_PRIMARY_COLOR}} />
+                    </Space>
+                  </a>
                 </Dropdown>
               </div>
           </div>
