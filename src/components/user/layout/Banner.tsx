@@ -35,6 +35,7 @@ const Banner = ({banners = []}: {banners: any[]}) => {
                   src={getFileLink(banner.image)}
                   alt={banner.name || 'Banner Image'}
                   fill
+                  priority={true}
                   style={{ objectFit: 'cover' }}
                 />
               </a>
