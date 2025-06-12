@@ -64,6 +64,7 @@ export default function ProductCard(props: ProductCardProps) {
                 alt={product.name}
                 className="product-image"
                 fill
+                quality={40}
                 style={{
                   objectFit: "cover",
                   borderTopLeftRadius: 12,

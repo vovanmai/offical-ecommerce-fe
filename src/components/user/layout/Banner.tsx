@@ -29,14 +29,13 @@ const Banner = ({banners = []}: {banners: any[]}) => {
         {banners.map((banner, index) => (
           <SwiperSlide key={index}>
             <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-            <div>
-              <a href={banner.url}>
+            <div className="w-100 h-100">
+              <a className="d-block w-100 h-100" href={banner.url}>
                 <Image
                   src={getFileLink(banner.image)}
                   alt={banner.name || 'Banner Image'}
                   fill
                   style={{ objectFit: 'cover' }}
-                  quality={100}
                 />
               </a>
             </div>
