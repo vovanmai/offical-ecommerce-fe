@@ -36,7 +36,16 @@ const LayoutFooter = () => {
             <Col xs={24} sm={12} md={6}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
                 <Link href="/">
-                  <Image src="/lamsfarm_logo.jpeg" alt="Logo" width={120} height={100} />
+                  <Image 
+                    src="/lamsfarm_logo.jpeg" 
+                    alt="Logo" 
+                    width={100} 
+                    height={100}
+                    style={{
+                      height: 100,
+                      width: 'auto',
+                    }}
+                  />
                 </Link>
                 <Text italic>Lam&apos;s Farm chuyên cung cấp các sản phẩm ngon, uy tín đến quý khách hàng.</Text>
                 <Badge color="black" text="Tên đơn vị: Hợp tác xã Lam Nguyễn" />
