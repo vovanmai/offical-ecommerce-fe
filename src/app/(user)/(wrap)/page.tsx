@@ -7,8 +7,26 @@ import { Col, Row, Card } from "antd";
 import Image from "next/image";
 
 export const metadata = {
-  title: 'Trang chủ',
-  keywords: 'Trang chủ, sản phẩm, dịch vụ',
+  title: "Trang chủ | Hợp tác xã Lam'sFarm chuyên cung cấp sản phẩm ngon đến quý khách hàng",
+  description: "Hợp tác xã Lam'sFarm chuyên cung cấp sản phẩm ngon đến quý khách hàng",
+  keywords: 'Công ty ABC, sản phẩm, dịch vụ, ưu đãi, trang chủ, chất lượng',
+  authors: [{ name: 'Công ty ABC', url: 'https://example.com' }],
+  openGraph: {
+    title: "Trang chủ | Hợp tác xã Lam'sFarm",
+    description: 'Truy cập trang chủ của Công ty ABC để xem các sản phẩm nổi bật và dịch vụ chuyên nghiệp dành cho bạn.',
+    url: 'https://lamsfarm.com.vn',
+    siteName: "Hợp tác xã Lam'sFarm",
+    locale: 'vi_VN',
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 const getBanners = async () => {
