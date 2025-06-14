@@ -130,6 +130,10 @@ body {
   .button-register {
     width: 100%;
   }
+  .float-button-chat {
+    bottom: 30px !important;
+    right: 30px !important;
+  }
 }
 
 @media (min-width: 576px) {
@@ -242,13 +246,6 @@ body {
     padding: 12 !important;
   }
   .ant-menu-title-content a {
-  color: black;
-}
-}
-
-
-.float-button-chat {
-  .ant-float-btn-body {
-    background-color: #27964f !important;
+    color: black;
   }
 }
