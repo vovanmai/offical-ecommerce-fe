@@ -28,7 +28,7 @@ const Banner = ({banners = []}: {banners: any[]}) => {
       >
         {banners.map((banner, index) => (
           <SwiperSlide key={index}>
-            <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+            {/* <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div> */}
             <div className="w-100 h-100">
               <a className="d-block w-100 h-100" href={banner.url}>
                 <Image

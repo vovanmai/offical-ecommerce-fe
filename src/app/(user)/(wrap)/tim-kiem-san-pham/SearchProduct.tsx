@@ -1,12 +1,14 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react';
-import { Breadcrumb, Empty, Row, Pagination } from 'antd';
+import { Breadcrumb, Empty, Row, Pagination, Card, Input } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import { list as listProducts } from '@/api/user/product';
 import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/user/ProductCard';
+const { Search } = Input;
+
 
 const SearchProduct = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -45,11 +47,19 @@ const SearchProduct = () => {
   };
 
   useEffect(() => {
+    console.log(keyword)
     fetchProducts();
   }, [keyword, currentPage, pageSize]);
 
   const handlePageChange = (page: number) => {
     router.push(`/danh-muc-san-pham/${params.slug}?page=${page}&keyword=${keyword}`);
+  };
+  const onSearch = (value: string) => {
+    if (value.trim() === '') {
+      router.push(`/tim-kiem-san-pham`);
+    } else {
+      router.push(`/tim-kiem-san-pham?keyword=${value.trim()}&page=1`);
+    }
   };
 
   return (
@@ -64,14 +74,32 @@ const SearchProduct = () => {
           },
         ]} />
 
-        {!keyword ? (
-          <h3>Vui lòng nhập từ khoá tìm kiếm</h3>
-        ) : (
+        <Card className="search-product-mobile">
+          <div>
+            <Search
+              placeholder="Vui lòng nhập từ khoá tìm kiếm..."
+              allowClear
+              onSearch={onSearch}
+              enterButton
+              size="large"
+            />
+          </div>
+        </Card>
+
+        <div style={{ marginTop: 20, marginBottom: 20 }}>
           <h3 style={{ marginBottom: 20 }}>
-            {total === 0 ? 'Không có' : `Có ${total}`} kết quả tìm kiếm cho từ khoá:{' '}
-            <span style={{ color: 'red' }}>{keyword}</span>
+              { keyword && total > 0 && (
+                <span>
+                  Kết quả tìm kiếm cho từ khoá: <strong style={{color: "red"}}>{keyword}</strong> ({total} sản phẩm)
+                </span>
+              )}
+              { keyword && total === 0 && (
+                <span>
+                  Không tìm thấy sản phẩm nào với từ khoá: <strong style={{color: "red"}}>{keyword}</strong>
+                </span>
+              )}
           </h3>
-        )}
+        </div>
 
         {products.length === 0 ? (
           <Empty />
@@ -86,6 +114,7 @@ const SearchProduct = () => {
                 xl: 24,
                 xxl: 24,
               }}
+              style={{ marginTop: 20 }}
             >
               {products.map((product, index) => (
                 <ProductCard key={index} product={product} />
