@@ -1,8 +1,9 @@
 'use client'
 
 import { USER_PRIMARY_COLOR } from "@/constants/common"
-import { Row, Col, Typography, Badge, Divider } from "antd"
+import { Row, Col, Typography, Badge, Divider, FloatButton } from "antd"
 const { Text } = Typography;
+import FloatButtonChat from "@/components/user/FloatButtonChat"
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -30,6 +31,7 @@ const LayoutFooter = () => {
   return (
     <footer style={{ marginTop: 20 }}>
       <div style={{ background: USER_PRIMARY_COLOR, height: "2rem", marginBottom: 20 }}></div>
+      <FloatButtonChat/>
       <div className="container">
         <div className="container__inner">
           <Row gutter={[16, 16]}>

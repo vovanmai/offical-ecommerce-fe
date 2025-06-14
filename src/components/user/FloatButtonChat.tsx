@@ -1,0 +1,74 @@
+'use client';
+import { USER_PRIMARY_COLOR } from "@/constants/common"
+
+import Image from 'next/image';
+import {Dropdown } from 'antd';
+import Link from 'next/link'
+
+import React from 'react';
+import type { MenuProps } from 'antd';
+
+import type { CSSProperties } from 'react';
+
+const items: MenuProps['items'] = [
+  {
+    key: 'messenger',
+    label: (
+      <Link href="https://m.me/htx.lamsfarm" target="_blank" rel="noopener noreferrer">
+        <Image
+          src="/messenger.webp"
+          alt="Hỗ trợ qua Messenger"
+          height={32}
+          width={32}
+        />
+      </Link>
+    ),
+  },
+  {
+    key: 'zalo',
+    label: (
+      <Link href="https://zalo.me/0782497116" target="_blank" rel="noopener noreferrer">
+        <Image
+        src="/zalo.webp"
+        alt="Hỗ trợ qua Zalo"
+        height={32}
+        width={32}
+      />
+      </Link>
+    ),
+  },
+];
+
+export default function FloatButtonChat() {
+
+  return (
+    <Dropdown menu={{ items }} placement="top" arrow>
+        <div
+            className="float-button-chat"
+            style={{
+            position: "fixed",
+            bottom: 60,
+            right: 40,
+            backgroundColor: USER_PRIMARY_COLOR,
+            color: "#fff",
+            height: 64,
+            width: 64,
+            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+            cursor: "pointer",
+            zIndex: 1000,
+            }}
+        >
+            <Image
+                src="/chat.webp"
+                alt="Liên hệ Hợp tác xã Lam'sFarm"
+                height={32}
+                width={32}
+            />
+        </div>
+    </Dropdown>
+  );
+}
