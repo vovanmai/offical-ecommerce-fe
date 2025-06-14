@@ -143,7 +143,7 @@ const List = () => {
       render: (status) => {
         return (
           <>
-            {status == 1 && <Tag color="#87d068">Unverified</Tag>}
+            {status == 1 && <Tag color="#f50">Unverified</Tag>}
             {status == 2 && <Tag color="#87d068">Active</Tag>}
             {status == 3 && <Tag color="#f50">Inactive</Tag>}
           </>
