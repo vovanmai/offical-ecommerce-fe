@@ -12,9 +12,9 @@ export const metadata = {
   keywords: 'Công ty ABC, sản phẩm, dịch vụ, ưu đãi, trang chủ, chất lượng',
   authors: [{ name: 'Công ty ABC', url: 'https://example.com' }],
   openGraph: {
-    title: "Trang chủ | Hợp tác xã Lam'sFarm",
-    description: 'Truy cập trang chủ của Công ty ABC để xem các sản phẩm nổi bật và dịch vụ chuyên nghiệp dành cho bạn.',
-    url: 'https://lamsfarm.com.vn',
+    title: "Trang chủ | Hợp tác xã Lam'sFarm chuyên cung cấp sản phẩm ngon đến quý khách hàng",
+    description: "Trang chủ | Hợp tác xã Lam'sFarm chuyên cung cấp sản phẩm ngon đến quý khách hàng",
+    url: process.env.APP_URL,
     siteName: "Hợp tác xã Lam'sFarm",
     locale: 'vi_VN',
     type: 'website',
