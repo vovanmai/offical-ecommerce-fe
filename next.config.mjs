@@ -5,8 +5,14 @@ const nextConfig = {
     APP_URL: process.env.APP_URL,
   },
   images: {
-    domains: ['localhost', 'ik.imagekit.io'],
+    // domains: ['localhost', 'ik.imagekit.io'],
     // unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ik.imagekit.io',
+      },
+    ],
   },
 };
 

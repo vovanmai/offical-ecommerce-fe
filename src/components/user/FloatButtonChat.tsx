@@ -14,26 +14,48 @@ const items: MenuProps['items'] = [
   {
     key: 'messenger',
     label: (
-      <Link href="https://m.me/htx.lamsfarm" target="_blank" rel="noopener noreferrer">
+      <Link 
+        href="https://m.me/htx.lamsfarm" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style={{
+            display: 'flex',
+            fontWeight: 'bold',
+            alignItems: 'center',
+            gap: 8,
+        }}
+        >
         <Image
           src="/messenger.webp"
           alt="Hỗ trợ qua Messenger"
           height={32}
           width={32}
         />
+        Messenger
       </Link>
     ),
   },
   {
     key: 'zalo',
     label: (
-      <Link href="https://zalo.me/0782497116" target="_blank" rel="noopener noreferrer">
+      <Link 
+        href="https://zalo.me/0866363652" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style={{
+            display: 'flex',
+            fontWeight: 'bold',
+            alignItems: 'center',
+            gap: 8,
+        }}
+        >
         <Image
         src="/zalo.webp"
         alt="Hỗ trợ qua Zalo"
         height={32}
         width={32}
       />
+      Chat Zalo
       </Link>
     ),
   },
@@ -42,7 +64,7 @@ const items: MenuProps['items'] = [
 export default function FloatButtonChat() {
 
   return (
-    <Dropdown menu={{ items }} placement="top" arrow>
+    <Dropdown menu={{ items }} placement="topRight" arrow>
         <div
             className="float-button-chat"
             style={{
