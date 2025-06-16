@@ -49,11 +49,12 @@ const LayoutFooter = () => {
                     }}
                   />
                 </Link>
-                <Text italic>Lam&apos;s Farm chuyên cung cấp các sản phẩm ngon, uy tín đến quý khách hàng.</Text>
-                <Badge color="black" text="Tên đơn vị: Hợp tác xã Lam Nguyễn" />
-                <Badge color="black" text="Địa chỉ: 526/13 Nguyễn Tri Phương, khối Thanh Nam, phường Cẩm Nam, tp Hội An, Quảng Nam" />
+                <Text italic>Thực phẩm sạch - Cuộc sống xanh</Text>
+                <Badge color="black" text="Tên đơn vị: Hợp tác xã LAM NGUYỄN (LAM'S FARM)" />
+                <Badge color="black" text="GPKD/MST: 4001284739 cấp ngày 19/07/2024 Phòng Tài Chính & Kế Hoạch thành phố Hội An" />
+                <Badge color="black" text="Trụ sở: K526/13 Nguyễn Tri Phương, Thanh Nam, Cẩm Nam, Hội An, Việt Nam" />
+                <Badge color="black" text="Điện thoại (Zalo/Whatsapp): +84 866 363 652" />
                 <Badge color="black" text="Email: nguyenlam.htx@gmail.com" />
-                <Badge color="black" text="Phone: 078.249.7116" />
               </div>
             </Col>
             <Col className="d-flex flex-direction-column" style={{gap: 8}} xs={24} sm={12} md={5}>
