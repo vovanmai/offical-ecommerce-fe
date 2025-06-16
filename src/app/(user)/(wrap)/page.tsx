@@ -71,7 +71,10 @@ const Page = async () => {
       <Banner banners={banners}/>
       <div className="container">
         <div className="container__inner">
-          <Row gutter={[14, 14]} style={{ marginTop: 20 }}>
+          <Row 
+            gutter={[14, 14]} 
+            style={{ marginTop: 20 }}
+          >
             {items.map((item, index) => (
               <Col xs={24} sm={12} md={12} lg={6} key={index}>
                 <Card style={{ textAlign: 'center', borderRadius: 12, padding: 10 }}>

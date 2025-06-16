@@ -66,7 +66,7 @@ const LayoutFooter = () => {
             </Col>
             <Col style={{gap: 8}} xs={24} sm={12} md={5}>
               <div className="d-flex flex-direction-column" style={{gap: 8}}>
-                <Title style={{color: "#00573e", margin: 0}} level={5}>CHÍNH SÁCH</Title>
+                <Title style={{color: "#00573e", margin: 0}} level={5}>HỖ TRỢ KHÁCH HÀNG</Title>
                 { fillterPages && fillterPages.map((page: any) => (
                   <Link key={page.id} style={{color: "inherit"}} href={`/trang/${page.slug}.html`}>{page.name}</Link>
                 ))}

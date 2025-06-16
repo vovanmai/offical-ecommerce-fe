@@ -72,14 +72,10 @@ const ListProduct = ({category}: any) => {
         />
         <h3 style={{marginBottom: 20}}>{category?.name}</h3>
         <Row 
-          gutter={{
-            xs: 12,    // <576px
-            sm: 12,   // ≥576px
-            md: 24,   // ≥768px
-            lg: 24,   // ≥992px
-            xl: 24,   // ≥1200px
-            xxl: 24,  // ≥1600px
-          }}
+          gutter={[
+            { xs: 10, sm: 16, md: 24, lg: 24 },
+            { xs: 10, sm: 16, md: 24, lg: 24 }
+          ]}
         >
           {products.map((product: any, index: any) => (
             <ProductCard

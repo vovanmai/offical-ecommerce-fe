@@ -29,14 +29,10 @@ export default function ProductList() {
       <div className="container__inner">
         <Title style={{marginTop: 20}} level={4}>Sản phẩm nội bật</Title>
         <Row
-          gutter={{
-            xs: 12,    // <576px
-            sm: 12,   // ≥576px
-            md: 24,   // ≥768px
-            lg: 24,   // ≥992px
-            xl: 24,   // ≥1200px
-            xxl: 24,  // ≥1600px
-          }}
+          gutter={[
+            { xs: 10, sm: 16, md: 24, lg: 24 },
+            { xs: 10, sm: 16, md: 24, lg: 24 }
+          ]}
         >
           {products.map((product, index) => (
             <ProductCard
