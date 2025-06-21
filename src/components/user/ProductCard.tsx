@@ -83,7 +83,7 @@ export default function ProductCard(props: ProductCardProps) {
               </Text>
               {product.sale_price && (
                 <Text type="secondary" delete>
-                  {numeral(product.sale_price).format('0,0')} đ
+                  {numeral(product.price).format('0,0')} đ
                 </Text>
               )}
             </div>

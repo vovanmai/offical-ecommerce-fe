@@ -14,7 +14,7 @@ import { setCarts } from "@/store/user/cartSlice"
 const Cart = () => {
   const dispatch = useAppDispatch()
   const carts = useAppSelector((state) => state.cart.carts)
-  const totalPrice = carts.reduce((acc: number, item: any) => acc + item.product.price * item.quantity, 0);
+  const totalPrice = carts.reduce((acc: number, item: any) => acc + (item.product.sale_price ?? item.product.price) * item.quantity, 0);
   const fetchCart = useCallback(async () => {
     try {
       const response = await listCart();
@@ -68,7 +68,7 @@ const Cart = () => {
     {
       title: 'Giá thành',
       render: (record: any) =>
-        `${numeral(record.product.price * record.quantity).format('0,0')} đ`,
+        `${numeral((record.product.sale_price ?? record.product.price) * record.quantity).format('0,0')} đ`,
     },
     {
       title: 'Số lượng',

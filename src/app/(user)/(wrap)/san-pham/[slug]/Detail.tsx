@@ -204,7 +204,7 @@ const Detail = ({ product }: Props) => {
               <div style={{ marginBottom: 15 }}><Rate defaultValue={5} disabled style={{fontSize: '.875rem'}} /></div>
               <div style={{padding: '0.8rem', backgroundColor: '#F9FAFB', marginBottom: 15 }}>
                 <span style={{ fontSize: '1.5rem', color: '#EF4444' }}>
-                  <strong>{product.price.toLocaleString('vi-VN')} đ</strong>
+                  <strong>{(product.sale_price ?? product.price).toLocaleString('vi-VN')} đ</strong>
                 </span>
               </div>
               <div style={{ marginBottom: 15 }}>
