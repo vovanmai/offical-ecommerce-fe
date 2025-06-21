@@ -206,6 +206,11 @@ const Detail = ({ product }: Props) => {
                 <span style={{ fontSize: '1.5rem', color: '#EF4444' }}>
                   <strong>{(product.sale_price ?? product.price).toLocaleString('vi-VN')} đ</strong>
                 </span>
+                {product.sale_price && (
+                  <span style={{ fontSize: '1.2rem', color: '#9CA3AF', textDecoration: 'line-through', marginLeft: 8 }}>
+                    {product.price.toLocaleString('vi-VN')} đ
+                  </span>
+                )}
               </div>
               <div style={{ marginBottom: 15 }}>
                 Đơn vị: <strong>{product.unit}</strong>

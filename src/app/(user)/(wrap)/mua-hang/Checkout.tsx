@@ -1,16 +1,24 @@
 'use client'
 
 import React, { useEffect } from 'react';
-import { Table, Row, Col, Card, Form, Button, Input, InputNumber, Divider } from 'antd';
+import { Table, Row, Col, Card, Form, Button, Input, Radio, Divider } from 'antd';
 import numeral from 'numeral';
 import { useRouter } from 'next/navigation';
 import { create as createOrder } from '@/api/user/order'
 import Image from 'next/image';
+import Link from 'next/link';
+import type { RadioChangeEvent } from 'antd';
 
 import { useAppDispatch, useAppSelector } from '@/store/user/hooks';
 import { setCarts } from "@/store/user/cartSlice"
 import { useMessageApi } from '@/components/user/MessageProvider';
 const { TextArea } = Input;
+
+const style: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 8,
+};
 
 const Checkout = () => {
   const router = useRouter()
@@ -18,7 +26,7 @@ const Checkout = () => {
   const dispatch = useAppDispatch()
   const [form] = Form.useForm();
   const carts = useAppSelector((state) => state.cart.carts)
-  const totalPrice = carts.reduce((acc: number, item: any) => acc + item.product.price * item.quantity, 0);
+  const totalPrice = carts.reduce((acc: number, item: any) => acc + (item.product.sale_price ?? item.product.price) * item.quantity, 0);
   const currentUser: any = useAppSelector((state) => state.auth.currentUser)
 
   useEffect(() => {
@@ -49,7 +57,7 @@ const Checkout = () => {
     {
       title: 'Giá thành',
       render: (record: any) =>
-        `${numeral(record.product.price * record.quantity).format('0,0')} đ`,
+        `${numeral((record.product.sale_price ?? record.product.price) * record.quantity).format('0,0')} đ`,
     },
     {
       title: 'Số lượng',
@@ -111,7 +119,12 @@ const Checkout = () => {
                 {...formItemLayout}
                 form={form}
                 name="register"
-                initialValues={{name: currentUser?.name, email: currentUser?.email, phone: currentUser?.phone}}
+                initialValues={{
+                  name: currentUser?.name, 
+                  email: currentUser?.email, 
+                  phone: currentUser?.phone,
+                  payment_method: 1,
+                }}
                 style={{ maxWidth: "100%" }}
                 scrollToFirstError
               >
@@ -203,6 +216,21 @@ const Checkout = () => {
                       <TextArea rows={4} placeholder="Tối đa 255 ký tự" />
                     </Form.Item>
                 </Card>
+                <Card style={{ width: '100%', marginTop: 24 }}>
+                  <h4 style={{ marginBottom: 15}}>Phương thức thanh toán</h4>
+                    <Form.Item
+                      name="payment_method"
+                      labelCol={{ span: 6 }} // chiếm không gian label
+                      wrapperCol={{ span: 18 }}
+                    >
+                      <Radio.Group
+                        style={style}
+                        options={[
+                          { value: 1, label: 'Tiền mặt' },
+                        ]}
+                      />
+                    </Form.Item>
+                </Card>
             </Form>
           </Col>
           <Col lg={8} xs={24}>
@@ -227,9 +255,14 @@ const Checkout = () => {
               </div>
               <Divider />
               <div>
-                <Button onClick={onSubmit} shape="round" type="primary" size="large" style={{ width: '100%' }}>
+                <Button onClick={onSubmit} shape="round" type="primary" size="large" style={{ width: '100%', marginBottom: 12 }} >
                   Hoàn tất đơn hàng
                 </Button>
+                <Link href="/gio-hang">
+                    <Button shape="round" type="default" size="large" style={{ width: '100%' }}>
+                      Trở về giỏ hàng
+                    </Button>
+                </Link>
               </div>
             </Card>
           </Col>
