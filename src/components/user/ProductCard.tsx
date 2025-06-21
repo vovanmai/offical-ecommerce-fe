@@ -77,10 +77,16 @@ export default function ProductCard(props: ProductCardProps) {
         >
           <div>
             <div style={styleTitle}>{product.name}</div>
-            <span style={stylePrice}>
-              <strong>{numeral(product.price).format('0,0')} đ
-              </strong>
-            </span>
+            <div>
+              <Text strong style={{ color: 'red', marginRight: 8 }}>
+                {numeral(product.sale_price ?? product.price).format('0,0')} đ
+              </Text>
+              {product.sale_price && (
+                <Text type="secondary" delete>
+                  {numeral(product.sale_price).format('0,0')} đ
+                </Text>
+              )}
+            </div>
           </div>
         </Card>
       </Link>

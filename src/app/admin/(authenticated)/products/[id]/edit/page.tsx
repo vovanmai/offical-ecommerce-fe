@@ -71,6 +71,7 @@ const EditProduct = () => {
           unit: data.unit,
           status: data.status,
           price: data.price,
+          sale_price: data.sale_price,
           category_id: data.category_id,
           inventory_quantity: data.inventory_quantity,
           description: data.description
@@ -132,6 +133,9 @@ const EditProduct = () => {
     ],
     price: [
       { required: true },
+    ],
+    sale_price: [
+      { required: false },
     ],
     inventory_quantity: [
       { required: true },
@@ -205,6 +209,15 @@ const EditProduct = () => {
                 rules={rules.price}
                 validateStatus={ errors?.price ? 'error' : undefined}
                 help={errors?.price ? errors?.price : undefined}
+              >
+                <InputNumber size="large" min={1000} style={{ width: "100%" }} />
+              </Form.Item>
+              <Form.Item
+                name="sale_price"
+                label="Giá khuyến mãi"
+                rules={rules.sale_price}
+                validateStatus={ errors?.sale_price ? 'error' : undefined}
+                help={errors?.sale_price ? errors?.sale_price : undefined}
               >
                 <InputNumber size="large" min={1000} style={{ width: "100%" }} />
               </Form.Item>

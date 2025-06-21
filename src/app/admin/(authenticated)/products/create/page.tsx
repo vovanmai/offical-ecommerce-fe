@@ -94,6 +94,9 @@ const CreateProduct = () => {
     price: [
       { required: true },
     ],
+    sale_price: [
+      { required: false },
+    ],
     inventory_quantity: [
       { required: true },
     ],
@@ -174,7 +177,7 @@ const CreateProduct = () => {
                 </Form.Item>
               <Form.Item
                 name="price"
-                label="Giá"
+                label="Giá gốc"
                 rules={rules.price}
                 validateStatus={ errors?.price ? 'error' : undefined}
                 help={errors?.price ? errors?.price : undefined}
@@ -182,13 +185,13 @@ const CreateProduct = () => {
                 <InputNumber size="large" min={1000} style={{ width: "100%" }} />
               </Form.Item>
               <Form.Item
-                name="unit"
-                label="Đơn vị bán"
-                rules={rules.name}
-                validateStatus={ errors?.unit ? 'error' : undefined}
-                help={errors?.unit ? errors?.unit : undefined}
+                name="sale_price"
+                label="Giá khuyến mãi"
+                rules={rules.sale_price}
+                validateStatus={ errors?.sale_price ? 'error' : undefined}
+                help={errors?.sale_price ? errors?.sale_price : undefined}
               >
-                <Input size="large" />
+                <InputNumber size="large" min={1000} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12}>
@@ -220,9 +223,18 @@ const CreateProduct = () => {
                   rules={rules.inventory_quantity}
                   validateStatus={ errors?.inventory_quantity ? 'error' : undefined}
                   help={errors?.inventory_quantity ? errors?.inventory_quantity : undefined}
-              >
-                <InputNumber size="large" min={1} style={{ width: "100%" }} />
-              </Form.Item>
+                >
+                  <InputNumber size="large" min={1} style={{ width: "100%" }} />
+                </Form.Item>
+                <Form.Item
+                  name="unit"
+                  label="Đơn vị bán"
+                  rules={rules.name}
+                  validateStatus={ errors?.unit ? 'error' : undefined}
+                  help={errors?.unit ? errors?.unit : undefined}
+                >
+                  <Input size="large" />
+                </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
               <Form.Item

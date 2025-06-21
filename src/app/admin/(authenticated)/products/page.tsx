@@ -192,12 +192,22 @@ const ProductList = () => {
       }
     },
     {
-      title: 'Giá',
+      title: 'Giá gốc',
       dataIndex: 'price',
       sorter: true,
       render: (text) => {
         return (
           <span>{numeral(text).format('0,0')} đ</span>
+        )
+      }
+    },
+    {
+      title: 'Giá khuyến mãi',
+      dataIndex: 'sale_price',
+      sorter: true,
+      render: (text) => {
+        return (
+          <span>{text ? numeral(text).format('0,0') + ' đ' : ''}</span>
         )
       }
     },
