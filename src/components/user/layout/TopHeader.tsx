@@ -32,7 +32,7 @@ const TopHeader = () => {
             <Col xs={24} sm={23} md={14} lg={12} xl={12} style={{ padding: "7px 0px", textAlign: "right", color: "white", display: "flex", alignItems: "center", justifyContent: "end" }}>
               <div style={{ display: "flex", alignItems: "center", gap: '5px' }}>
                 <FaPhone />
-                <span> Hotline: <a style={{textDecoration: 'none', color: 'inherit' }} href="tel:0782497116">078.249.7116</a></span>
+                <span> Hotline: <a style={{textDecoration: 'none', color: 'inherit' }} href="tel:+84 866 363 652">+84 866 363 652</a></span>
               </div>
               <div style={{padding: '0px 5px'}}>|</div>
               <div style={{ display: "flex", alignItems: "center", gap: '5px' }}>
