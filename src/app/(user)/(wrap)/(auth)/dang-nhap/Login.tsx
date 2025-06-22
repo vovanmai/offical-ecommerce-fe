@@ -75,10 +75,10 @@ const Login = () => {
         content: 'Đăng nhập thành công !',
       })
       router.push('/')
-    } catch (error) {
+    } catch (error: any) {
       messageApi.open({
         type: 'error',
-        content: 'Tài khoản đăng nhập không đúng !',
+        content: error.data.message,
       })
     }
   };
