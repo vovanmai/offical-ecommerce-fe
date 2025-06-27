@@ -5,17 +5,20 @@ import ProductList from "@/components/user/ProductList";
 import HomePostList from "@/components/user/HomePostList";
 import { Col, Row, Card } from "antd";
 import Image from "next/image";
+import { SLOGAN, WEB_NAME, HOSTNAME } from "@/constants/common"; 
 
 export const metadata = {
-  title: "Trang chủ | Hợp tác xã Lam'sFarm chuyên cung cấp sản phẩm ngon đến quý khách hàng",
-  description: "Hợp tác xã Lam'sFarm chuyên cung cấp sản phẩm ngon đến quý khách hàng",
-  keywords: 'Công ty ABC, sản phẩm, dịch vụ, ưu đãi, trang chủ, chất lượng',
-  authors: [{ name: 'Công ty ABC', url: 'https://example.com' }],
+  title: `${WEB_NAME} - ${SLOGAN} - ${HOSTNAME}`,
+  description: `${WEB_NAME} chuyên cung cấp sản phẩm ngon đến quý khách hàng`,
+  keywords: `${WEB_NAME}`,
+  authors: [{ name: `${WEB_NAME}`, url: process.env.APP_URL }],
+  creator: `${WEB_NAME}`,
+  applicationName: `${WEB_NAME}`,
   openGraph: {
-    title: "Trang chủ | Hợp tác xã Lam'sFarm chuyên cung cấp sản phẩm ngon đến quý khách hàng",
-    description: "Trang chủ | Hợp tác xã Lam'sFarm chuyên cung cấp sản phẩm ngon đến quý khách hàng",
+    title: `${WEB_NAME} - ${SLOGAN} - ${HOSTNAME}`,
+    description: `${WEB_NAME} chuyên cung cấp sản phẩm ngon đến quý khách hàng`,
     url: process.env.APP_URL,
-    siteName: "Hợp tác xã Lam'sFarm",
+    siteName: `${WEB_NAME}`,
     locale: 'vi_VN',
     type: 'website',
   },
