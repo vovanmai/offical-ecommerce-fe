@@ -33,10 +33,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   return {
     title: page.name,
-    description: page.name.slice(0, 150),
+    description: String(page.short_description || '').slice(0, 150),
     openGraph: {
       title: page.name,
-      description: page.name.slice(0, 150),
+      description: String(page.short_description || '').slice(0, 150),
       url: `${process.env.APP_URL}/trang/${page.slug}.html`,
       type: 'website',
     },

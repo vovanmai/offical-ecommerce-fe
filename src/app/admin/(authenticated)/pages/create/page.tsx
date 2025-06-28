@@ -62,6 +62,10 @@ const CreatePage = () => {
       { required: true },
       { max: 50 },
     ],
+    short_description: [
+      { required: true },
+      { max: 255 },
+    ],
     status: [
       { required: true },
     ],
@@ -71,7 +75,8 @@ const CreatePage = () => {
   }
   const initialValues={
     status: 1,
-    name: null, 
+    name: null,
+    short_description: null,
     description: null,
     is_display_footer: true,
     is_display_main_menu: true,
@@ -104,6 +109,17 @@ const CreatePage = () => {
                 help={errors?.name ? errors?.name : undefined}
               >
                 <Input size="large" />
+              </Form.Item>
+            </Col>
+            <Col sm={24} md={12}>
+              <Form.Item
+                name="short_description"
+                label="Mô tả ngắn"
+                rules={rules.short_description}
+                validateStatus={errors?.short_description ? 'error' : undefined}
+                help={errors?.short_description ? errors?.short_description : undefined}
+              >
+                <Input.TextArea rows={4} />
               </Form.Item>
             </Col>
             <Col sm={24} md={12}>

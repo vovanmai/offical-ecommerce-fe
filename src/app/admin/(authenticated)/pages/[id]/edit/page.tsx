@@ -56,6 +56,7 @@ const Edit = () => {
           description: data.description,
           is_display_main_menu: data.is_display_main_menu,
           is_display_footer: data.is_display_footer,
+          short_description: data.short_description,
         })
         setDescription(data.description)
       } catch (error) {
@@ -85,6 +86,10 @@ const Edit = () => {
     name: [
       { required: true },
       { max: 50 },
+    ],
+    short_description: [
+      { required: true },
+      { max: 255 },
     ],
     status: [
       { required: true },
@@ -126,6 +131,18 @@ const Edit = () => {
                 help={errors?.name ? errors?.name : undefined}
               >
                 <Input size="large" />
+              </Form.Item>
+            </Col>
+            
+            <Col xs={24} sm={24} md={12}>
+              <Form.Item
+                name="short_description"
+                label="Mô tả ngắn"
+                rules={rules.short_description}
+                validateStatus={errors?.short_description ? 'error' : undefined}
+                help={errors?.short_description ? errors?.short_description : undefined}
+              >
+                <Input.TextArea rows={4} />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12}>
