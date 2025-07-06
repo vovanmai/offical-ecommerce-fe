@@ -64,7 +64,7 @@ const Page = async () => {
       src: '/icon-big-sale.png',
     },
     {
-      alt: 'Đổi trả trong 30 ngày',
+      alt: 'Đổi trả trong 3 ngày',
       src: '/icon-tra-hang.png',
     },
   ]
